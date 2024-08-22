@@ -5,7 +5,7 @@ An ESM linter for Gherkin, inspired by [Gherkin Lint](https://github.com/gherkin
 ```typescript
 import GherkinLinter from 'gherkin-linter'
 
-const error = await GherkinLinter(config, ruleConfig)
+const errors = await GherkinLinter(config, ruleConfig)
 ```
 
 `config` is general configuration for the linter and supports the following values:
@@ -30,10 +30,10 @@ Each rule **must** export a default function. These functions are passed a few a
 | Argument   | Type            | Description                       |
 |------------|-----------------|-----------------------------------|
 | ruleConfig | RuleConfig      | The configuration for rules       |
-| fileName   | string          | The name of the file being linted |
 | document   | GherkinDocument | The Gherkin Document              |
+| fileName   | string          | The name of the file being linted |
 
-Each rule **must** return an array of LintError.  
+Each rule **must** return an array of LintError or an empty array if no errors.  
 
 # Testing
 
