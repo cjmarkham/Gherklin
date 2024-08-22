@@ -55,7 +55,7 @@ describe('Too Many Scenarios', () => {
       document,
     )
     expect(errors.length).to.eq(1)
-    expect(errors[0].message).to.eq('Number of scenarios exceeds allowed.')
+    expect(errors[0].message).to.eq('Number of scenarios exceeds allowed. Got 2, want 1')
     expect(errors[0].rule).to.eq('max-scenarios-per-file')
   })
 })

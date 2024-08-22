@@ -4,7 +4,7 @@
   "description": "A linter for Gherkin syntax",
   "main": "src/index.ts",
   "scripts": {
-    "test": "NODE_OPTIONS=\"--loader ts-node/esm --experimental-specifier-resolution=node --no-warnings\" mocha test/**/*.ts",
+    "test": "NODE_OPTIONS=\"--loader ts-node/esm --experimental-specifier-resolution=node --no-warnings\" mocha",
     "eslint": "node_modules/.bin/eslint",
     "prettier": "node_modules/.bin/prettier --check src/**/*.ts"
   },
