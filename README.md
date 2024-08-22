@@ -42,7 +42,7 @@ Each rule **must** export a default function. These functions are passed a few a
 | document   | `GherkinDocument` | The Gherkin Document              |
 | fileName   | `string`          | The name of the file being linted |
 
-Each rule **must** return an array of LintError or an empty array if no errors.
+Each rule **must** return an array of `LintError` or an empty array if no errors.
 
 # Testing
 
