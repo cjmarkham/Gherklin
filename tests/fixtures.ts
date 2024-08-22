@@ -15,7 +15,7 @@ export const scenario = {
       text: 'Step 1',
       location: {
         line: 1,
-        column: 1,
+        column: 5,
       },
       id: 'f90a0095-55b5-486c-8c85-1db35916fd95',
     },

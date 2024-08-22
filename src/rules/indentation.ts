@@ -52,7 +52,7 @@ export default (ruleConfig: RuleConfig, document: GherkinDocument): Array<LintEr
     child.scenario.steps.forEach((step) => {
       const name = step.keyword.trim()
       const lowerName = name.toLowerCase()
-      const expectedIndent = ruleConfig?.indentation[lowerName] || defaultConfig.indentation[lowerName]
+      const expectedIndent = ruleConfig?.indentation?.[lowerName] || defaultConfig.indentation[lowerName]
       if (step.location.column - 1 !== expectedIndent) {
         errors.push(
           newLintError(
