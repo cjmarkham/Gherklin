@@ -1,6 +1,9 @@
 # Gherkin Linter
 An ESM linter for Gherkin, inspired by [Gherkin Lint](https://github.com/gherkin-lint/gherkin-lint)
 
+![Mocha Tests](https://github.com/cjmarkham/gherkin-lint/actions/workflows/tests.yml/badge.svg)
+![Linting](https://github.com/cjmarkham/gherkin-lint/actions/workflows/linting.yml/badge.svg)
+
 # Usage
 ```typescript
 import GherkinLinter from 'gherkin-linter'
