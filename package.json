@@ -1,0 +1,37 @@
+{
+  "name": "gherkin-linter",
+  "version": "0.0.1",
+  "description": "A linter for Gherkin syntax",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "NODE_OPTIONS=\"--loader ts-node/esm --experimental-specifier-resolution=node --no-warnings\" mocha test/**/*.ts",
+    "eslint": "node_modules/.bin/eslint",
+    "prettier": "node_modules/.bin/prettier --check src/**/*.ts"
+  },
+  "type": "module",
+  "keywords": [],
+  "author": "Carl Markham <doddsey65@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "@cucumber/gherkin": "^29.0.0",
+    "@cucumber/gherkin-utils": "^9.0.0",
+    "chai": "^5.1.1",
+    "chalk": "^5.3.0",
+    "ts-node": "^10.9.2"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.1.0",
+    "@eslint/js": "^9.9.0",
+    "@types/chai": "^4.3.17",
+    "@types/mocha": "^10.0.7",
+    "@types/node": "^22.4.2",
+    "@typescript-eslint/eslint-plugin": "^8.2.0",
+    "@typescript-eslint/parser": "^8.2.0",
+    "eslint": "^9.9.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "globals": "^15.9.0",
+    "mocha": "^10.7.3",
+    "prettier": "^3.3.3"
+  }
+}
