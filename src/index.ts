@@ -9,6 +9,7 @@ import path from 'node:path'
 import { Config } from './config'
 import { configError, LintError } from './error'
 import { Rule } from './rule'
+import { outputErrors } from './output'
 
 const getFiles = async (dir: string, ext: string): Promise<Array<string>> => {
   const dirents = await readdir(path.resolve(dir), { withFileTypes: true, recursive: true }).catch((err) => {
@@ -93,48 +94,9 @@ export default async (config?: Config): Promise<Array<configError>> => {
     }
   }
 
-  let totalErrors = 0
-  let totalWarns = 0
-
+  outputErrors(errors)
   if (errors.size) {
-    errors.forEach((lintErrors: Array<LintError>, file: string): void => {
-      let output = `\n${chalk.underline(file)}`
-      let maxMessageLength = lintErrors.reduce((a, b) => (a.message.length < b.message.length ? b : a)).message.length
-
-      lintErrors.forEach((err: LintError) => {
-        let color = chalk.yellow
-        if (err.severity === 'error') {
-          color = chalk.redBright
-          totalErrors += 1
-        }
-        if (err.severity === 'warn') {
-          totalWarns += 1
-        }
-
-        output += [
-          '\n',
-          `${(err.location.line + ':' + ((err.location.column || 0) - 1)).toString()} ${color(err.severity)}`,
-          // TODO: Fix this padStart mess
-          err.message.padEnd(maxMessageLength + 4).padStart(70),
-          chalk.gray(err.rule),
-        ].join('')
-      })
-
-      console.error(output)
-    })
+    process.exit(1)
   }
-
-  if (totalErrors + totalWarns > 0) {
-    let color = chalk.bold.redBright
-    if (!totalErrors) {
-      color = chalk.bold.yellow
-    }
-    console.log(color(`\nx ${totalErrors + totalWarns} problems (${totalErrors} error(s), ${totalWarns} warning(s))`))
-
-    if (totalErrors) {
-      process.exit(1)
-    }
-  }
-
   process.exit(0)
 }
