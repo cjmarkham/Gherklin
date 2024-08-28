@@ -1,3 +1,7 @@
+import { readdir } from 'node:fs/promises'
+import path from 'node:path'
+import { Dirent } from 'node:fs'
+
 export interface GherkinKeywordNumericals {
   feature?: number
   background?: number
@@ -42,4 +46,20 @@ export interface Config {
 export interface RuleDefinition {
   schema: any
   run: Function
+}
+
+export const getConfigurationFromFile = async (): Promise<Config> => {
+  const dirents = await readdir(path.resolve('.'), { withFileTypes: true })
+
+  const configFile = dirents.find((dirent: Dirent) => dirent.name === 'gherkin-lint.config.ts')
+  if (!configFile) {
+    return
+  }
+
+  const config = (await import(`${configFile.path}/${configFile.name}`)).default
+  return {
+    directory: config.directory,
+    customRulesDir: config.customRulesDir,
+    rules: config.rules,
+  } as Config
 }

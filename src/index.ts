@@ -6,7 +6,7 @@ import { Dirent } from 'node:fs'
 import { readdir } from 'node:fs/promises'
 import chalk from 'chalk'
 import path from 'node:path'
-import { Config } from './config'
+import { Config, getConfigurationFromFile } from './config'
 import { configError, LintError } from './error'
 import { Rule } from './rule'
 import { outputErrors } from './output'
@@ -23,25 +23,9 @@ const getFiles = async (dir: string, ext: string): Promise<Array<string>> => {
   return Array.prototype.concat(...files)
 }
 
-const getConfiguration = async (): Promise<Config> => {
-  const dirents = await readdir(path.resolve('.'), { withFileTypes: true })
-
-  const configFile = dirents.find((dirent: Dirent) => dirent.name === 'gherkin-lint.config.ts')
-  if (!configFile) {
-    return
-  }
-
-  const config = (await import(`${configFile.path}/${configFile.name}`)).default
-  return {
-    directory: config.directory,
-    customRulesDir: config.customRulesDir,
-    rules: config.rules,
-  } as Config
-}
-
 export default async (config?: Config): Promise<Array<configError>> => {
   if (!config) {
-    config = await getConfiguration()
+    config = await getConfigurationFromFile()
     if (!config) {
       console.error('Could not find a gherkin-lint.config.ts configuration file.')
       process.exit(1)
