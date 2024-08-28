@@ -1,5 +1,17 @@
-import { LintError } from './error'
+import { configError, LintError } from './error'
 import chalk from 'chalk'
+
+export const outputSchemaErrors = (schemaErrors: Array<configError>): void => {
+  if (schemaErrors.length) {
+    console.error(chalk.redBright('Invalid configuration options specified!\n'))
+    schemaErrors.forEach((err) => {
+      console.log(chalk.underline(err.rule))
+      err.errors.forEach((e, idx) => {
+        console.log(chalk.dim(`${idx})`), e)
+      })
+    })
+  }
+}
 
 export const outputErrors = (errors: Map<string, Array<LintError>>): void => {
   if (!errors.size) {

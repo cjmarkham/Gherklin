@@ -2,26 +2,12 @@ import Gherkin from '@cucumber/gherkin'
 import { GherkinDocumentWalker } from '@cucumber/gherkin-utils'
 import { IdGenerator } from '@cucumber/messages'
 import fs from 'fs'
-import { Dirent } from 'node:fs'
-import { readdir } from 'node:fs/promises'
 import chalk from 'chalk'
-import path from 'node:path'
 import { Config, getConfigurationFromFile } from './config'
 import { configError, LintError } from './error'
 import { Rule } from './rule'
-import { outputErrors } from './output'
-
-const getFiles = async (dir: string, ext: string): Promise<Array<string>> => {
-  const dirents = await readdir(path.resolve(dir), { withFileTypes: true, recursive: true }).catch((err) => {
-    console.error(chalk.red(`[GherkinLint] Could not load ".${ext}" files from "${dir}".`), err)
-    return []
-  })
-
-  const files = dirents
-    .filter((dirent: Dirent) => dirent.name.endsWith(`.${ext}`))
-    .map((dirent: Dirent) => `${dirent.path}/${dirent.name}`)
-  return Array.prototype.concat(...files)
-}
+import { outputErrors, outputSchemaErrors } from './output'
+import { getFiles } from './utils'
 
 export default async (config?: Config): Promise<Array<configError>> => {
   if (!config) {
@@ -41,15 +27,9 @@ export default async (config?: Config): Promise<Array<configError>> => {
   for (const ruleName in config.rules) {
     const rule = new Rule(ruleName, config.rules[ruleName])
     const schemaErrors: Array<configError> = await rule.validateSchema()
-    if (schemaErrors.length) {
-      console.error(chalk.redBright('Invalid configuration options specified!\n'))
-      schemaErrors.forEach((err) => {
-        console.log(chalk.underline(err.rule))
-        err.errors.forEach((e, idx) => {
-          console.log(chalk.dim(`${idx})`), e)
-        })
-      })
 
+    if (schemaErrors.length) {
+      outputSchemaErrors(schemaErrors)
       return schemaErrors
     }
 
