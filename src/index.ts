@@ -1,39 +1,45 @@
 import Gherkin from '@cucumber/gherkin'
 import { GherkinDocumentWalker } from '@cucumber/gherkin-utils'
 import { IdGenerator } from '@cucumber/messages'
-import fs from 'fs'
-import { Dirent } from 'node:fs'
-import { readdir } from 'node:fs/promises'
-import chalk from 'chalk'
-import path from 'node:path'
-import defaultRules from './rules'
-import { Config, RuleConfig } from './config'
-import { LintError } from './error'
+import fs from 'node:fs'
+import { getConfigurationFromFile, GlobalConfiguration } from './config'
+import { ConfigError, LintError } from './error'
+import { Rule } from './rule'
+import { outputErrors, outputSchemaErrors, Results } from './output'
+import { getFiles } from './utils'
+import { newLogger } from './logger'
 
-const getFiles = async (dir: string, ext: string): Promise<Array<string>> => {
-  const dirents = await readdir(path.resolve(dir), { withFileTypes: true, recursive: true }).catch((err) => {
-    console.error(chalk.red(`[GherkinLint] Could not load ".${ext}" files from "${dir}".`), err)
-    return []
-  })
+export default async (globalConfiguration?: GlobalConfiguration): Promise<Results> => {
+  const logger = newLogger()
 
-  const files = dirents
-    .filter((dirent: Dirent) => dirent.name.endsWith(`.${ext}`))
-    .map((dirent: Dirent) => `${dirent.parentPath}/${dirent.name}`)
-  return Array.prototype.concat(...files)
-}
-
-export default async (config: Config, ruleConfig?: RuleConfig): Promise<Map<string, Array<LintError>>> => {
-  const errors: Map<string, Array<LintError>> = new Map()
-  const gherkinFiles = await getFiles(config.directory, 'feature')
-  const rules = Object.keys(defaultRules).map((key) => defaultRules[key])
-
-  if (config.customRulesDir) {
-    const customRuleFiles = await getFiles(config.customRulesDir, 'ts')
-
-    for (const customRuleFile of customRuleFiles) {
-      const rule = await import(path.resolve(customRuleFile))
-      rules.push(rule.default)
+  let config = globalConfiguration?.config
+  if (!globalConfiguration?.config) {
+    config = await getConfigurationFromFile(globalConfiguration?.configDirectory)
+    if (!config) {
+      throw new Error('Could not find a gherkin-lint.config.ts configuration file.')
     }
+  }
+
+  const errors: Map<string, Array<LintError>> = new Map()
+
+  const gherkinFiles = await getFiles(config.directory, 'feature')
+  const rules: Array<Rule> = []
+
+  // Import and validate all rules
+  for (const ruleName in config.rules) {
+    const rule = new Rule(ruleName, config.rules[ruleName])
+    const schemaErrors: Map<string, Array<ConfigError>> = await rule.validateSchema()
+
+    if (schemaErrors.size) {
+      outputSchemaErrors(schemaErrors, logger)
+      return {
+        success: false,
+        schemaErrors,
+        errors: new Map(),
+      }
+    }
+
+    rules.push(rule)
   }
 
   const walker = new GherkinDocumentWalker()
@@ -41,48 +47,36 @@ export default async (config: Config, ruleConfig?: RuleConfig): Promise<Map<stri
   const matcher = new Gherkin.GherkinClassicTokenMatcher()
   const parser = new Gherkin.Parser(builder, matcher)
 
-  for (const file of gherkinFiles) {
-    const content = fs.readFileSync(file)
+  for (const fileName of gherkinFiles) {
+    const content = fs.readFileSync(fileName)
     const document = parser.parse(content.toString())
     const walk = walker.walkGherkinDocument(document)
 
-    for (const key of Object.keys(rules)) {
-      const ruleErrors: Array<LintError> = rules[key](ruleConfig, walk, file)
+    for (const rule in rules) {
+      const ruleErrors: Array<LintError> = rules[rule].run(walk, fileName)
       if (ruleErrors && ruleErrors.length) {
-        if (errors.has(file)) {
-          errors.set(file, [...ruleErrors, ...errors.get(file)])
+        if (errors.has(fileName)) {
+          errors.set(fileName, [...ruleErrors, ...errors.get(fileName)])
           continue
         }
-        errors.set(file, ruleErrors)
+        errors.set(fileName, ruleErrors)
       }
     }
   }
 
-  let totalErrors = 0
+  outputErrors(errors, logger)
 
   if (errors.size) {
-    errors.forEach((lintErrors: Array<LintError>, file: string): void => {
-      let output = `\n${chalk.underline(file)}`
-      let maxMessageLength = lintErrors.reduce((a, b) => (a.message.length < b.message.length ? b : a)).message.length
-
-      lintErrors.forEach((err: LintError) => {
-        totalErrors += 1
-
-        output += [
-          '\n',
-          `${(err.location.line + ':' + ((err.location.column || 0) - 1)).toString().padEnd(6)}`,
-          err.message.padEnd(maxMessageLength + 4),
-          chalk.gray(err.rule),
-        ].join('')
-      })
-
-      console.error(output)
-    })
+    return {
+      success: false,
+      errors,
+      schemaErrors: new Map(),
+    }
   }
 
-  if (totalErrors > 0) {
-    console.log(chalk.bold.redBright(`\nx ${totalErrors} problems`))
+  return {
+    success: true,
+    errors: new Map(),
+    schemaErrors: new Map(),
   }
-
-  return errors
 }
