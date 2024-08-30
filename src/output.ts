@@ -1,19 +1,28 @@
-import { configError, LintError } from './error'
+import { ConfigError, LintError } from './error'
 import chalk from 'chalk'
+import { Logger } from 'winston'
 
-export const outputSchemaErrors = (schemaErrors: Array<configError>): void => {
-  if (schemaErrors.length) {
-    console.error(chalk.redBright('Invalid configuration options specified!\n'))
-    schemaErrors.forEach((err) => {
-      console.log(chalk.underline(err.rule))
-      err.errors.forEach((e, idx) => {
-        console.log(chalk.dim(`${idx})`), e)
-      })
-    })
-  }
+export interface Results {
+  success: boolean
+  errors?: Map<string, Array<LintError>>
+  schemaErrors?: Map<string, Array<ConfigError>>
 }
 
-export const outputErrors = (errors: Map<string, Array<LintError>>): void => {
+export const outputSchemaErrors = (schemaErrors: Map<string, Array<ConfigError>>, logger: Logger): void => {
+  if (!schemaErrors.size) {
+    return
+  }
+
+  logger.error(chalk.redBright('Invalid configuration options specified!\n'))
+  schemaErrors.forEach((errs, key) => {
+    logger.info(chalk.underline(key))
+    errs.forEach((e, idx) => {
+      logger.info(chalk.gray(`${idx}) `) + e)
+    })
+  })
+}
+
+export const outputErrors = (errors: Map<string, Array<LintError>>, logger: Logger): void => {
   if (!errors.size) {
     return
   }
@@ -44,7 +53,7 @@ export const outputErrors = (errors: Map<string, Array<LintError>>): void => {
       ].join('')
     })
 
-    console.error(output)
+    logger.error(output)
   })
 
   if (totalErrors + totalWarns > 0) {
@@ -52,6 +61,6 @@ export const outputErrors = (errors: Map<string, Array<LintError>>): void => {
     if (!totalErrors) {
       color = chalk.bold.yellow
     }
-    console.log(color(`\nx ${totalErrors + totalWarns} problems (${totalErrors} error(s), ${totalWarns} warning(s))`))
+    logger.info(color(`\nx ${totalErrors + totalWarns} problems (${totalErrors} error(s), ${totalWarns} warning(s))`))
   }
 }

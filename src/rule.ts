@@ -1,7 +1,7 @@
 import { GherkinKeywordNumericals, RuleArguments, RuleDefinition, Severity, Switch } from './config'
 import path from 'node:path'
 import { GherkinDocument } from '@cucumber/messages'
-import { configError, LintError } from './error'
+import { ConfigError, LintError } from './error'
 
 export class Rule {
   public name: string
@@ -56,16 +56,16 @@ export class Rule {
     this.args = this.config
   }
 
-  public validateSchema = async (): Promise<Array<configError>> => {
+  public validateSchema = async (): Promise<Map<string, Array<ConfigError>>> => {
     if (!this.ruleDefinition) {
       await this.load()
     }
 
-    const errors: Array<configError> = []
+    const errors: Map<string, Array<ConfigError>> = new Map()
 
     const result = this.ruleDefinition.schema.safeParse(this.config)
     if (!result.success) {
-      errors.push({ rule: this.name, errors: result.error.format()?._errors })
+      errors.set(this.name, result.error.format()?._errors)
     }
 
     return errors

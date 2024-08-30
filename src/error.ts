@@ -21,7 +21,7 @@ export const newLintError = (rule: string, severity: Severity, message: string, 
   } as LintError
 }
 
-export interface configError {
+export interface ConfigError {
   rule: string
   errors: Array<any>
 }

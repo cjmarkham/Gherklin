@@ -1,19 +1,22 @@
 import Gherkin from '@cucumber/gherkin'
 import { GherkinDocumentWalker } from '@cucumber/gherkin-utils'
 import { IdGenerator } from '@cucumber/messages'
-import fs from 'fs'
-import { Config, getConfigurationFromFile } from './config'
-import { configError, LintError } from './error'
+import fs from 'node:fs'
+import { getConfigurationFromFile, GlobalConfiguration } from './config'
+import { ConfigError, LintError } from './error'
 import { Rule } from './rule'
-import { outputErrors, outputSchemaErrors } from './output'
+import { outputErrors, outputSchemaErrors, Results } from './output'
 import { getFiles } from './utils'
+import { newLogger } from './logger'
 
-export default async (config?: Config): Promise<Array<configError>> => {
-  if (!config) {
-    config = await getConfigurationFromFile()
+export default async (globalConfiguration?: GlobalConfiguration): Promise<Results> => {
+  const logger = newLogger()
+
+  let config = globalConfiguration?.config
+  if (!globalConfiguration?.config) {
+    config = await getConfigurationFromFile(globalConfiguration?.configDirectory)
     if (!config) {
-      console.error('Could not find a gherkin-lint.config.ts configuration file.')
-      process.exit(1)
+      throw new Error('Could not find a gherkin-lint.config.ts configuration file.')
     }
   }
 
@@ -25,11 +28,15 @@ export default async (config?: Config): Promise<Array<configError>> => {
   // Import and validate all rules
   for (const ruleName in config.rules) {
     const rule = new Rule(ruleName, config.rules[ruleName])
-    const schemaErrors: Array<configError> = await rule.validateSchema()
+    const schemaErrors: Map<string, Array<ConfigError>> = await rule.validateSchema()
 
-    if (schemaErrors.length) {
-      outputSchemaErrors(schemaErrors)
-      return schemaErrors
+    if (schemaErrors.size) {
+      outputSchemaErrors(schemaErrors, logger)
+      return {
+        success: false,
+        schemaErrors,
+        errors: new Map(),
+      }
     }
 
     rules.push(rule)
@@ -57,9 +64,19 @@ export default async (config?: Config): Promise<Array<configError>> => {
     }
   }
 
-  outputErrors(errors)
+  outputErrors(errors, logger)
+
   if (errors.size) {
-    process.exit(1)
+    return {
+      success: false,
+      errors,
+      schemaErrors: new Map(),
+    }
   }
-  process.exit(0)
+
+  return {
+    success: true,
+    errors: new Map(),
+    schemaErrors: new Map(),
+  }
 }

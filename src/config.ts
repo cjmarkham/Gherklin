@@ -2,6 +2,11 @@ import { readdir } from 'node:fs/promises'
 import path from 'node:path'
 import { Dirent } from 'node:fs'
 
+export interface GlobalConfiguration {
+  config?: Config
+  configDirectory?: string
+}
+
 export interface GherkinKeywordNumericals {
   feature?: number
   background?: number
@@ -48,10 +53,18 @@ export interface RuleDefinition {
   run: Function
 }
 
-export const getConfigurationFromFile = async (): Promise<Config> => {
-  const dirents = await readdir(path.resolve('.'), { withFileTypes: true })
+// Look for a configuration file in the root, or using the directory passed in
+export const getConfigurationFromFile = async (directory?: string): Promise<Config> => {
+  if (!directory) {
+    directory = '.'
+  }
+  const dirents = await readdir(path.resolve(directory), { withFileTypes: true }).catch((err) => {
+    return []
+  })
 
-  const configFile = dirents.find((dirent: Dirent) => dirent.name === 'gherkin-lint.config.ts')
+  const configFile = dirents.find((dirent: Dirent) => {
+    return dirent.name === 'gherkin-lint.config.ts'
+  })
   if (!configFile) {
     return
   }
