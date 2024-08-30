@@ -1,14 +1,13 @@
 import { GherkinDocument } from '@cucumber/messages'
-import { z } from 'zod'
 import { LintError, newLintError } from '../error'
 import { Rule } from '../rule'
-import { Severity, Switch } from '../config'
+import { switchOrSeveritySchema } from '../schema'
 
 /**
  * Allowed:
  * off | on | error | warn
  */
-export const schema = z.union([z.nativeEnum(Switch), z.nativeEnum(Severity)])
+export const schema = switchOrSeveritySchema
 
 export const run = (rule: Rule, document: GherkinDocument): Array<LintError> => {
   if (!document || (document && !document.feature)) {
