@@ -1,4 +1,4 @@
-# Gherkin Linter
+# Gherklin, a Gherkin Linter
 
 An ESM linter for Gherkin, inspired by [Gherkin Lint](https://github.com/gherkin-lint/gherkin-lint)
 
@@ -15,34 +15,19 @@ const errors = await Runner(config, ruleConfig)
 
 `config` is general configuration for the linter and supports the following values:
 
-| Key            | Type     | Description                                    |
-|----------------|----------|------------------------------------------------|
-| directory      | `string` | The directory that contains your feature files |
-| customRulesDir | `string` | A directory containing custom rules            |
-
-`ruleConfig` is configuration for specific rules. It supports the following values:
-
 | Key                 | Type                    | Description                                              |
 |---------------------|-------------------------|----------------------------------------------------------|
+| directory           | `string`                | The directory that contains your feature files           |
+| customRulesDir      | `string`                | A directory containing custom rules                      |
+| rules               | `RuleConfiguration`     | Individual config for each rule                          |
+
+RuleConfiguration supports the following values:
+
+| Key                 | Type                    | Description                                              |
 | allowedTags         | `Array<string>`         | A list of allowed tags                                   |
 | indentation         | `NumericalKeywordValue` | The indentation for each Gherkin keyword                 |
 | maxScenariosPerFile | `number`                | The maximum number of scenarios allowed per feature file |
-| nameLength          | `NumericalKeywordValue` | The max length for each Gherkin keyword name             |
 
-# Custom Rules
-
-The linter supports the loading of custom rules. By specifying a `customRulesDir`, it will load each
-TypeScript file in that directory and use them as lint validation. See the [built in rules](./src/rules) for examples.
-
-Each rule **must** export a default function. These functions are passed a few arguments:
-
-| Argument   | Type              | Description                       |
-|------------|-------------------|-----------------------------------|
-| ruleConfig | `RuleConfig`      | The configuration for rules       |
-| document   | `GherkinDocument` | The Gherkin Document              |
-| fileName   | `string`          | The name of the file being linted |
-
-Each rule **must** return an array of `LintError` or an empty array if no errors.
 
 # Testing
 
