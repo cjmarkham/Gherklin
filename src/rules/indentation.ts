@@ -1,7 +1,7 @@
 import { GherkinDocument } from '@cucumber/messages'
 import { LintError, newLintError } from '../error'
 import { offOrKeywordIntsOrSeverityAndKeywordInts } from '../schema'
-import { Rule } from '../rule'
+import Rule from '../rule'
 import { GherkinKeywordNumericals } from '../config'
 
 /**

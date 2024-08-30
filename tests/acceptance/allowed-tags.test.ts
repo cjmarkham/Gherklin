@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import GherkinLinter from '../../src/index'
+import { Runner } from '../../src/index'
 
 describe('Allowed Tags Rule Schemas', () => {
   it('returns an error when using a completely invalid value', async () => {
@@ -7,7 +7,7 @@ describe('Allowed Tags Rule Schemas', () => {
       'allowed-tags': 'nope',
     } as any
 
-    const result = await GherkinLinter({
+    const result = await Runner({
       config: {
         directory: 'tests/features',
         rules,
@@ -27,7 +27,7 @@ describe('Allowed Tags Rule Schemas', () => {
       'allowed-tags': 'error',
     } as any
 
-    const result = await GherkinLinter({
+    const result = await Runner({
       config: {
         directory: 'tests/features',
         rules,
@@ -47,7 +47,7 @@ describe('Allowed Tags Rule Schemas', () => {
       'allowed-tags': 'on',
     } as any
 
-    const result = await GherkinLinter({
+    const result = await Runner({
       config: {
         directory: 'tests/features',
         rules,
@@ -67,7 +67,7 @@ describe('Allowed Tags Rule Schemas', () => {
       'allowed-tags': ['on', ['@development']],
     } as any
 
-    const result = await GherkinLinter({
+    const result = await Runner({
       config: {
         directory: 'tests/features',
         rules,
@@ -85,7 +85,7 @@ describe('Allowed Tags Rule Schemas', () => {
       'allowed-tags': 'off',
     } as any
 
-    const result = await GherkinLinter({
+    const result = await Runner({
       config: {
         directory: 'tests/features',
         rules,
@@ -99,7 +99,7 @@ describe('Allowed Tags Rule Schemas', () => {
       'allowed-tags': ['error', ['@development']],
     } as any
 
-    const result = await GherkinLinter({
+    const result = await Runner({
       config: {
         directory: 'tests/features',
         rules,
@@ -113,7 +113,7 @@ describe('Allowed Tags Rule Schemas', () => {
       'allowed-tags': ['@development'],
     } as any
 
-    const result = await GherkinLinter({
+    const result = await Runner({
       config: {
         directory: 'tests/features',
         rules,
@@ -129,7 +129,7 @@ describe('Allowed Tags Validation', () => {
       'allowed-tags': ['error', ['@development']],
     } as any
 
-    const result = await GherkinLinter({
+    const result = await Runner({
       config: {
         directory: 'tests/acceptance/features/allowed-tags',
         rules,
@@ -147,7 +147,7 @@ describe('Allowed Tags Validation', () => {
       'allowed-tags': ['error', ['@testing']],
     } as any
 
-    const result = await GherkinLinter({
+    const result = await Runner({
       config: {
         directory: 'tests/acceptance/features/allowed-tags',
         rules,

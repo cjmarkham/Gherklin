@@ -1,6 +1,6 @@
 import { ConfigError, LintError } from './error'
 import chalk from 'chalk'
-import { Logger } from 'winston'
+import logger from './logger'
 
 export interface Results {
   success: boolean
@@ -8,7 +8,7 @@ export interface Results {
   schemaErrors?: Map<string, Array<ConfigError>>
 }
 
-export const outputSchemaErrors = (schemaErrors: Map<string, Array<ConfigError>>, logger: Logger): void => {
+export const outputSchemaErrors = (schemaErrors: Map<string, Array<ConfigError>>): void => {
   if (!schemaErrors.size) {
     return
   }
@@ -22,7 +22,7 @@ export const outputSchemaErrors = (schemaErrors: Map<string, Array<ConfigError>>
   })
 }
 
-export const outputErrors = (errors: Map<string, Array<LintError>>, logger: Logger): void => {
+export const outputErrors = (errors: Map<string, Array<LintError>>): void => {
   if (!errors.size) {
     return
   }

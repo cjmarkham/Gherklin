@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import GherkinLinter from '../../src/index'
+import { Runner } from '../../src/index'
 
 describe('No Background Only Rule Schemas', () => {
   it('returns an error when using a completely invalid value', async () => {
@@ -7,7 +7,7 @@ describe('No Background Only Rule Schemas', () => {
       'no-background-only': 'nope',
     } as any
 
-    const result = await GherkinLinter({
+    const result = await Runner({
       config: {
         directory: 'tests/features',
         rules,
@@ -27,7 +27,7 @@ describe('No Background Only Rule Schemas', () => {
       'no-background-only': 'error',
     } as any
 
-    const result = await GherkinLinter({
+    const result = await Runner({
       config: {
         directory: 'tests/features',
         rules,
@@ -42,7 +42,7 @@ describe('No Background Only Rule Schemas', () => {
       'no-background-only': 'on',
     } as any
 
-    const result = await GherkinLinter({
+    const result = await Runner({
       config: {
         directory: 'tests/features',
         rules,
@@ -57,7 +57,7 @@ describe('No Background Only Rule Schemas', () => {
       'no-background-only': ['on', ['some-argument']],
     } as any
 
-    const result = await GherkinLinter({
+    const result = await Runner({
       config: {
         directory: 'tests/features',
         rules,
@@ -79,7 +79,7 @@ describe('No Background Only Validation', () => {
       'no-background-only': 'warn',
     } as any
 
-    const result = await GherkinLinter({
+    const result = await Runner({
       config: {
         directory: 'tests/acceptance/features/no-background-only/invalid',
         rules,
@@ -97,7 +97,7 @@ describe('No Background Only Validation', () => {
       'no-background-only': 'error',
     } as any
 
-    const result = await GherkinLinter({
+    const result = await Runner({
       config: {
         directory: 'tests/acceptance/features/no-background-only/valid',
         rules,

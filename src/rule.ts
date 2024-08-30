@@ -1,8 +1,11 @@
 import { GherkinKeywordNumericals, RuleArguments, RuleDefinition, Severity, Switch } from './config'
 import { GherkinDocument } from '@cucumber/messages'
 import { ConfigError, LintError } from './error'
+import logger from './logger'
+import fs from 'node:fs'
+import path from 'node:path'
 
-export class Rule {
+export default class Rule {
   public name: string
 
   public enabled: boolean
@@ -22,8 +25,25 @@ export class Rule {
     this.parseRule()
   }
 
-  public load = async (): Promise<void> => {
-    this.ruleDefinition = await import(`./rules/${this.name}.ts`)
+  public load = async (customDir?: string): Promise<Error> => {
+    const defaultDirectory = 'src/rules/'
+
+    // If this rule doesn't appear in the defaults, we'll need to look for it in the custom rules dir
+    let location = `${defaultDirectory}${this.name}.ts`
+
+    if (!fs.existsSync(location)) {
+      if (customDir) {
+        const customLocation = path.join(customDir, `${this.name}.ts`)
+        if (!fs.existsSync(customLocation)) {
+          return new Error(`could not find rule ${this.name} in ${location} or ${customLocation}`)
+        }
+        location = path.relative(import.meta.dirname, customLocation)
+      } else {
+        return new Error(`could not find rule ${this.name} in ${location}`)
+      }
+    }
+
+    this.ruleDefinition = await import(location.replace('.ts', ''))
   }
 
   private parseRule = (): void => {

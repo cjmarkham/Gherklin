@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "experimentalDecorators": true,
-    "module": "ES2022",
+    "module": "ESNext",
     "target": "ES6",
     "moduleResolution": "Node",
     "allowSyntheticDefaultImports": true,

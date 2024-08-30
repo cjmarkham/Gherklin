@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import GherkinLinter from '../../src/index'
+import { Runner } from '../../src/index'
 
 describe('Indentation Rule Schemas', () => {
   it('returns an error when using a completely invalid value', async () => {
@@ -7,7 +7,7 @@ describe('Indentation Rule Schemas', () => {
       indentation: 'nope',
     } as any
 
-    const result = await GherkinLinter({
+    const result = await Runner({
       config: {
         directory: 'tests/features',
         rules,
@@ -45,7 +45,7 @@ describe('Indentation Validation', () => {
       ],
     } as any
 
-    const result = await GherkinLinter({
+    const result = await Runner({
       config: {
         directory: 'tests/acceptance/features/indentation/invalid',
         rules,
@@ -88,7 +88,7 @@ describe('Indentation Validation', () => {
       ],
     } as any
 
-    const result = await GherkinLinter({
+    const result = await Runner({
       config: {
         directory: 'tests/acceptance/features/indentation/valid',
         rules,
