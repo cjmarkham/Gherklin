@@ -4,8 +4,6 @@ import { LintError, newLintError } from '../error'
 import { severitySchema } from '../schema'
 import { Rule } from '../rule'
 
-const ruleName = 'allowed-tags'
-
 /**
  * Allowed:
  * off
@@ -31,13 +29,31 @@ export const run = (rule: Rule, document: GherkinDocument): Array<LintError> => 
   document.feature.tags.forEach((tag) => {
     if (!allowedTags.includes(tag.name)) {
       const error = newLintError(
-        ruleName,
+        rule.name,
         rule.severity,
-        `Found a tag that is not allowed. Got ${tag.name}, wanted ${Array.isArray(allowedTags) ? allowedTags.join(', ') : allowedTags}`,
+        `Found a feature tag that is not allowed. Got ${tag.name}, wanted ${Array.isArray(allowedTags) ? allowedTags.join(', ') : allowedTags}`,
         tag.location,
       )
       errors.push(error)
     }
+  })
+
+  document.feature.children.forEach((child) => {
+    if (!child.scenario) {
+      return
+    }
+
+    child.scenario.tags.forEach((tag) => {
+      if (!allowedTags.includes(tag.name)) {
+        const error = newLintError(
+          rule.name,
+          rule.severity,
+          `Found a scenario tag that is not allowed. Got ${tag.name}, wanted ${Array.isArray(allowedTags) ? allowedTags.join(', ') : allowedTags}`,
+          tag.location,
+        )
+        errors.push(error)
+      }
+    })
   })
 
   return errors

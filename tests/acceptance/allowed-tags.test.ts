@@ -136,9 +136,10 @@ describe('Validation', () => {
       },
     })
 
-    expect(result.errors.size).to.eq(1)
+    expect(result.errors.size).to.eq(2)
     const errors = [...result.errors.values()]
-    expect(errors[0][0].message).to.eq('Found a tag that is not allowed. Got @testing, wanted @development')
+    expect(errors[0][0].message).to.eq('Found a feature tag that is not allowed. Got @testing, wanted @development')
+    expect(errors[1][0].message).to.eq('Found a scenario tag that is not allowed. Got @testing, wanted @development')
   })
 
   it('does not return an error if the tag is allowed', async () => {
