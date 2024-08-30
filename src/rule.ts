@@ -26,10 +26,8 @@ export default class Rule {
   }
 
   public load = async (customDir?: string): Promise<Error> => {
-    const defaultDirectory = 'src/rules/'
-
     // If this rule doesn't appear in the defaults, we'll need to look for it in the custom rules dir
-    let location = `${defaultDirectory}${this.name}.ts`
+    let location = path.resolve(import.meta.dirname, `./rules/${this.name}.ts`)
 
     if (!fs.existsSync(location)) {
       if (customDir) {
