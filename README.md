@@ -8,9 +8,9 @@ An ESM linter for Gherkin, inspired by [Gherkin Lint](https://github.com/gherkin
 # Usage
 
 ```typescript
-import { Runner } from 'gherkin-linter'
+import GherkinLinter from 'gherkin-linter'
 
-const errors = await Runner(config)
+const errors = await GherkinLinter(config)
 ```
 
 `config` is general configuration for the linter and supports the following values:
