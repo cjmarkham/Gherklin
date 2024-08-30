@@ -67,7 +67,7 @@ describe('Allowed Tags', () => {
 
     const errors = run(rule, document)
     expect(errors.length).to.eq(1)
-    expect(errors[0].message).to.eq('Found a tag that is not allowed. Got @development, wanted @testing')
+    expect(errors[0].message).to.eq('Found a feature tag that is not allowed. Got @development, wanted @testing')
   })
 
   it('returns no error if the tag exists in a list', () => {
@@ -133,7 +133,34 @@ describe('Allowed Tags', () => {
     const errors = run(rule, document)
     expect(errors.length).to.eq(1)
     expect(errors[0].message).to.eq(
-      'Found a tag that is not allowed. Got @development, wanted @staging, @testing, @production',
+      'Found a feature tag that is not allowed. Got @development, wanted @staging, @testing, @production',
+    )
+  })
+
+  it('returns an error for invalid tags on the scenario', () => {
+    scenario.tags = [{ id: '', name: '@invalid', location: { line: 1, column: 1 } }]
+    const document: GherkinDocument = {
+      feature: {
+        name: 'Allowed Tags',
+        description: '',
+        language: '',
+        keyword: '',
+        location: {
+          line: 0,
+          column: 0,
+        },
+        tags: [],
+        children: [{ scenario }],
+      },
+      comments: [],
+    }
+
+    const rule: Rule = new Rule('allowed-tags', ['@staging', '@testing', '@production'])
+
+    const errors = run(rule, document)
+    expect(errors.length).to.eq(1)
+    expect(errors[0].message).to.eq(
+      'Found a scenario tag that is not allowed. Got @invalid, wanted @staging, @testing, @production',
     )
   })
 })
