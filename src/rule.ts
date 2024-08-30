@@ -24,7 +24,7 @@ export class Rule {
   }
 
   public load = async (): Promise<void> => {
-    this.ruleDefinition = await import(path.resolve(`./src/rules/${this.name}.ts`))
+    this.ruleDefinition = await import(`./rules/${this.name}.ts`)
   }
 
   private parseRule = (): void => {
