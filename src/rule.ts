@@ -1,5 +1,4 @@
 import { GherkinKeywordNumericals, RuleArguments, RuleDefinition, Severity, Switch } from './config'
-import path from 'node:path'
 import { GherkinDocument } from '@cucumber/messages'
 import { ConfigError, LintError } from './error'
 
@@ -24,7 +23,7 @@ export class Rule {
   }
 
   public load = async (): Promise<void> => {
-    this.ruleDefinition = await import(path.resolve(`./src/rules/${this.name}.ts`))
+    this.ruleDefinition = await import(`./rules/${this.name}.ts`)
   }
 
   private parseRule = (): void => {

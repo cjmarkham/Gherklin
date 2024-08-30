@@ -32,7 +32,6 @@ export const outputErrors = (errors: Map<string, Array<LintError>>, logger: Logg
 
   errors.forEach((lintErrors: Array<LintError>, file: string): void => {
     let output = `\n${chalk.underline(file)}`
-    let maxMessageLength = lintErrors.reduce((a, b) => (a.message.length < b.message.length ? b : a)).message.length
 
     lintErrors.forEach((err: LintError) => {
       let color = chalk.yellow
@@ -44,11 +43,24 @@ export const outputErrors = (errors: Map<string, Array<LintError>>, logger: Logg
         totalWarns += 1
       }
 
+      const errorWithLongestMessage = lintErrors.reduce((a, b) => (a.message.length < b.message.length ? b : a))
+      const errorWithLongestLocation = lintErrors.reduce((a, b) =>
+        a.location.column.toString().length + a.location.line.toString().length <
+        b.location.column.toString().length + b.location.line.toString().length
+          ? b
+          : a,
+      )
+      const maxMessageLength = errorWithLongestMessage.message.length
+      const maxLocationLength =
+        errorWithLongestLocation.location.column.toString().length +
+        errorWithLongestLocation.location.line.toString().length
+
+      const location = (err.location.line + ':' + (err.location.column || 0)).toString().padEnd(maxLocationLength + 1)
       output += [
         '\n',
-        `${(err.location.line + ':' + ((err.location.column || 0) - 1)).toString()} ${color(err.severity)}`,
+        `${location} ${color(err.severity).padEnd(5)} `,
         // TODO: Fix this padStart mess
-        err.message.padEnd(maxMessageLength + 4).padStart(70),
+        err.message.padEnd(maxMessageLength + 1),
         chalk.gray(err.rule),
       ].join('')
     })
@@ -61,6 +73,10 @@ export const outputErrors = (errors: Map<string, Array<LintError>>, logger: Logg
     if (!totalErrors) {
       color = chalk.bold.yellow
     }
-    logger.info(color(`\nx ${totalErrors + totalWarns} problems (${totalErrors} error(s), ${totalWarns} warning(s))`))
+    logger.info(
+      color(
+        `\nx ${totalErrors + totalWarns} problems (${totalErrors} error${totalErrors ? 's' : ''}, ${totalWarns} warning${totalWarns ? 's' : ''})`,
+      ),
+    )
   }
 }
