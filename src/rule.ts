@@ -1,5 +1,4 @@
 import { GherkinKeywordNumericals, RuleArguments, RuleDefinition, Severity, Switch } from './config'
-import path from 'node:path'
 import { GherkinDocument } from '@cucumber/messages'
 import { ConfigError, LintError } from './error'
 
