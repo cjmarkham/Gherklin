@@ -13,12 +13,13 @@ export interface GherkinKeywordNumericals {
   scenario?: number
   step?: number
   examples?: number
-  example?: number
   given?: number
   when?: number
   then?: number
   and?: number
   but?: number
+  exampleTableHeader?: number
+  exampleTableBody?: number
 }
 
 export enum Switch {

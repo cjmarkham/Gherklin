@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import GherkinLinter from '../../src/index'
 
-describe('Rule Schemas', () => {
+describe('Allowed Tags Rule Schemas', () => {
   it('returns an error when using a completely invalid value', async () => {
     const rules = {
       'allowed-tags': 'nope',
@@ -123,7 +123,7 @@ describe('Rule Schemas', () => {
   })
 })
 
-describe('Validation', () => {
+describe('Allowed Tags Validation', () => {
   it('returns an error if the tag is not allowed', async () => {
     const rules = {
       'allowed-tags': ['error', ['@development']],

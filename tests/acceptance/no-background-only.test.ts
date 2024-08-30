@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import GherkinLinter from '../../src/index'
 
-describe('Rule Schemas', () => {
+describe('No Background Only Rule Schemas', () => {
   it('returns an error when using a completely invalid value', async () => {
     const rules = {
       'no-background-only': 'nope',
@@ -73,7 +73,7 @@ describe('Rule Schemas', () => {
   })
 })
 
-describe('Validation', () => {
+describe('No Background Only Validation', () => {
   it('returns an error if the feature only has a background', async () => {
     const rules = {
       'no-background-only': 'warn',
