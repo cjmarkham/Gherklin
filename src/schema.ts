@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { Severity, Switch } from './config'
 
 export const keywordSpecificNumbers = z
   .object({
@@ -19,3 +20,9 @@ export const keywordSpecificNumbers = z
 
 export const severitySchema = z.union([z.literal('warn'), z.literal('error')])
 export const switchSchema = z.union([z.literal('on'), z.literal('off')])
+export const switchOrSeveritySchema = z.union([z.nativeEnum(Switch), z.nativeEnum(Severity)])
+export const offOrStringArrayOrSeverityAndStringArray = z.union([
+  z.literal('off'),
+  z.string().array(),
+  z.tuple([severitySchema, z.string().array()]),
+])

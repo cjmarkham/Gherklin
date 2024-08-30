@@ -1,7 +1,6 @@
 import { GherkinDocument } from '@cucumber/messages'
-import { z } from 'zod'
 import { LintError, newLintError } from '../error'
-import { severitySchema } from '../schema'
+import { offOrStringArrayOrSeverityAndStringArray } from '../schema'
 import { Rule } from '../rule'
 
 /**
@@ -10,7 +9,7 @@ import { Rule } from '../rule'
  * [@tag1]
  * ['error', [@tag1]]
  */
-export const schema = z.union([z.literal('off'), z.string().array(), z.tuple([severitySchema, z.string().array()])])
+export const schema = offOrStringArrayOrSeverityAndStringArray
 
 export const run = (rule: Rule, document: GherkinDocument): Array<LintError> => {
   if (!document || (document && !document.feature)) {
