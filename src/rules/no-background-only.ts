@@ -1,7 +1,6 @@
 import { GherkinDocument } from '@cucumber/messages'
 import { z } from 'zod'
 import { LintError, newLintError } from '../error'
-import { severitySchema } from '../schema'
 import { Rule } from '../rule'
 import { Severity, Switch } from '../config'
 
