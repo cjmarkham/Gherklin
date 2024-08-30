@@ -58,7 +58,7 @@ export const getConfigurationFromFile = async (directory?: string): Promise<Conf
   if (!directory) {
     directory = '.'
   }
-  const dirents = await readdir(path.resolve(directory), { withFileTypes: true }).catch((err) => {
+  const dirents = await readdir(path.resolve(directory), { withFileTypes: true }).catch(() => {
     return []
   })
 
