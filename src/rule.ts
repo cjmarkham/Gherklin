@@ -1,7 +1,6 @@
 import { GherkinKeywordNumericals, RuleArguments, RuleDefinition, Severity, Switch } from './config'
 import { GherkinDocument } from '@cucumber/messages'
 import { ConfigError, LintError } from './error'
-import logger from './logger'
 import fs from 'node:fs'
 import path from 'node:path'
 

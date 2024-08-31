@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import { GherkinKeywordNumericals, RuleConfiguration, Severity, Switch } from '../../src/config'
-import { Rule } from '../../src/rule'
+import Rule from '../../src/rule'
 
 describe('parseRule', () => {
   it('returns a valid rule when using only severity', async () => {

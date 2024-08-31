@@ -2,7 +2,7 @@ import { expect } from 'chai'
 import { GherkinDocument } from '@cucumber/messages'
 import { scenario } from '../fixtures'
 import { run } from '../../src/rules/allowed-tags'
-import { Rule } from '../../src/rule'
+import Rule from '../../src/rule'
 
 describe('Allowed Tags', () => {
   it('does not return an error if tags are allowed', () => {
