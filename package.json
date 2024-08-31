@@ -1,5 +1,5 @@
 {
-  "name": "gherkin-linter",
+  "name": "gherklin",
   "version": "0.0.1",
   "description": "A linter for Gherkin syntax",
   "main": "src/index.ts",
@@ -9,7 +9,6 @@
     "prettier": "node_modules/.bin/prettier --check src/**/*.ts"
   },
   "type": "module",
-  "keywords": [],
   "author": "Carl Markham <doddsey65@gmail.com>",
   "license": "ISC",
   "dependencies": {
@@ -37,7 +36,6 @@
     "eslint-plugin-prettier": "^5.2.1",
     "globals": "^15.9.0",
     "mocha": "^10.7.3",
-    "prettier": "^3.3.3",
-    "sinon": "^18.0.0"
+    "prettier": "^3.3.3"
   }
 }
