@@ -1,4 +1,4 @@
-# Gherklin, a Gherkin Linter
+# Gherklin
 
 An ESM linter for Gherkin, inspired by [Gherkin Lint](https://github.com/gherkin-lint/gherkin-lint)
 
@@ -8,7 +8,7 @@ An ESM linter for Gherkin, inspired by [Gherkin Lint](https://github.com/gherkin
 # Usage
 
 ```typescript
-import { Runner } from 'gherkin-linter'
+import { Runner } from 'gherklin'
 
 const errors = await Runner(config, ruleConfig)
 ```
