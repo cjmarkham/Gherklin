@@ -7,7 +7,7 @@ describe('Custom Rules', () => {
     const result = await Runner({
       config: {
         directory: 'tests/acceptance/features',
-        customRulesDir: './custom-rules',
+        customRulesDir: 'tests/acceptance/custom-rules',
         rules: {
           'no-empty-files': Severity.error,
         },
