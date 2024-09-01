@@ -4,6 +4,8 @@ import { ConfigError, LintError } from './error'
 import fs from 'node:fs'
 import path from 'node:path'
 import { z } from 'zod'
+import callerCallsite from 'caller-callsite'
+import callsites from 'callsites'
 
 export default class Rule {
   public name: string
@@ -18,9 +20,13 @@ export default class Rule {
 
   private ruleDefinition: RuleDefinition
 
-  constructor(ruleName: string, config: RuleArguments) {
+  private caller: string
+
+  constructor(ruleName: string, config: RuleArguments, caller?: string) {
     this.name = ruleName
     this.config = config
+
+    this.caller = caller
 
     this.parseRule()
   }
@@ -31,11 +37,14 @@ export default class Rule {
 
     if (!fs.existsSync(location)) {
       if (customDir) {
-        const customLocation = path.join(customDir, `${this.name}.ts`)
-        if (!fs.existsSync(customLocation)) {
-          return new Error(`could not find rule ${this.name} in ${location} or ${customLocation}`)
+        const fileName = this.caller.replace('file://', '')
+        const dirName = path.dirname(fileName)
+        const resolved = path.join(dirName, customDir, `${this.name}.ts`)
+
+        if (!fs.existsSync(resolved)) {
+          return new Error(`could not find rule ${this.name} in ${location} or ${resolved}`)
         }
-        location = path.relative(import.meta.dirname, customLocation)
+        location = resolved
       } else {
         return new Error(
           `could not find rule ${this.name} in default rules.\nIf this is a custom rule, please specify a customRuleDir in the config.`,

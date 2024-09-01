@@ -7,8 +7,11 @@ import { ConfigError, LintError } from './error'
 import Rule from './rule'
 import { outputErrors, outputSchemaErrors, Results } from './output'
 import { getFiles } from './utils'
+import callerCallsite from 'caller-callsite'
 
 export default async (globalConfiguration?: GlobalConfiguration): Promise<Results> => {
+  const callingFile = callerCallsite().getFileName()
+
   let config = globalConfiguration?.config
   if (!globalConfiguration?.config) {
     config = await getConfigurationFromFile(globalConfiguration?.configDirectory)
@@ -24,7 +27,7 @@ export default async (globalConfiguration?: GlobalConfiguration): Promise<Result
 
   // Import and validate all default rules
   for (const ruleName in config.rules) {
-    const rule = new Rule(ruleName, config.rules[ruleName])
+    const rule = new Rule(ruleName, config.rules[ruleName], callingFile)
     const loadError = await rule.load(config.customRulesDir)
     if (loadError) {
       throw loadError

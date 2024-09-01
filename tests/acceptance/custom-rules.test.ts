@@ -6,8 +6,8 @@ describe('Custom Rules', () => {
   it('loads the custom rules', async () => {
     const result = await Runner({
       config: {
-        directory: 'tests/acceptance/features',
-        customRulesDir: 'tests/acceptance/custom-rules',
+        directory: './features/allowed-tags',
+        customRulesDir: './custom-rules',
         rules: {
           'no-empty-files': Severity.error,
         },
@@ -19,8 +19,8 @@ describe('Custom Rules', () => {
   it('returns an error if there is no run export', async () => {
     const result = await Runner({
       config: {
-        directory: 'tests/acceptance/features',
-        customRulesDir: 'tests/acceptance/custom-rules',
+        directory: './features/allowed-tags',
+        customRulesDir: './custom-rules',
         rules: {
           'no-run-func': Severity.error,
         },
@@ -34,8 +34,8 @@ describe('Custom Rules', () => {
   it('returns an error if there is no schema export', async () => {
     const result = await Runner({
       config: {
-        directory: 'tests/acceptance/features',
-        customRulesDir: 'tests/acceptance/custom-rules',
+        directory: './features',
+        customRulesDir: './custom-rules',
         rules: {
           'no-schema': Severity.error,
         },
