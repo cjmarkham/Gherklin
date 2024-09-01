@@ -5,10 +5,10 @@ import logger from './logger'
 export interface Results {
   success: boolean
   errors?: Map<string, Array<LintError>>
-  schemaErrors?: Map<string, Array<ConfigError>>
+  schemaErrors?: Map<string, Array<string>>
 }
 
-export const outputSchemaErrors = (schemaErrors: Map<string, Array<ConfigError>>): void => {
+export const outputSchemaErrors = (schemaErrors: Map<string, Array<string>>): void => {
   if (!schemaErrors.size) {
     return
   }

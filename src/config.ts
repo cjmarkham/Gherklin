@@ -1,6 +1,9 @@
 import { readdir } from 'node:fs/promises'
 import path from 'node:path'
 import { Dirent } from 'node:fs'
+import callerCallsite from 'caller-callsite'
+import callsites from 'callsites'
+import { getCallSite } from './utils'
 
 export interface GlobalConfiguration {
   config?: Config
@@ -44,6 +47,7 @@ export interface RuleConfiguration {
 }
 
 export interface Config {
+  configLocation: string
   customRulesDir?: string
   directory: string
   rules: RuleConfiguration
@@ -59,7 +63,12 @@ export const getConfigurationFromFile = async (directory?: string): Promise<Conf
   if (!directory) {
     directory = '.'
   }
-  const dirents = await readdir(path.resolve(directory), { withFileTypes: true }).catch(() => {
+
+  const callingFile = getCallSite()
+  const dirName = path.dirname(callingFile)
+  const resolved = path.join(dirName, directory)
+
+  const dirents = await readdir(resolved, { withFileTypes: true }).catch(() => {
     return []
   })
 
@@ -72,6 +81,7 @@ export const getConfigurationFromFile = async (directory?: string): Promise<Conf
 
   const config = (await import(`${configFile.path}/${configFile.name}`)).default
   return {
+    configLocation: configFile.path,
     directory: config.directory,
     customRulesDir: config.customRulesDir,
     rules: config.rules,

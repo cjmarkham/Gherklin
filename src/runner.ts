@@ -3,15 +3,12 @@ import { GherkinDocumentWalker } from '@cucumber/gherkin-utils'
 import { IdGenerator } from '@cucumber/messages'
 import fs from 'node:fs'
 import { getConfigurationFromFile, GlobalConfiguration } from './config'
-import { ConfigError, LintError } from './error'
+import { LintError } from './error'
 import Rule from './rule'
 import { outputErrors, outputSchemaErrors, Results } from './output'
 import { getFiles } from './utils'
-import callerCallsite from 'caller-callsite'
 
 export default async (globalConfiguration?: GlobalConfiguration): Promise<Results> => {
-  const callingFile = callerCallsite().getFileName()
-
   let config = globalConfiguration?.config
   if (!globalConfiguration?.config) {
     config = await getConfigurationFromFile(globalConfiguration?.configDirectory)
@@ -22,18 +19,22 @@ export default async (globalConfiguration?: GlobalConfiguration): Promise<Result
 
   const errors: Map<string, Array<LintError>> = new Map()
 
+  if (!config.directory) {
+    throw new Error('no directory specified for feature files. Please set `config.directory`')
+  }
+
   const gherkinFiles = await getFiles(config.directory, 'feature')
   const rules: Array<Rule> = []
 
   // Import and validate all default rules
   for (const ruleName in config.rules) {
-    const rule = new Rule(ruleName, config.rules[ruleName], callingFile)
-    const loadError = await rule.load(config.customRulesDir)
+    const rule = new Rule(ruleName, config.rules[ruleName])
+    const loadError = await rule.load(config.configLocation, config.customRulesDir)
     if (loadError) {
       throw loadError
     }
 
-    const schemaErrors: Map<string, Array<ConfigError>> = await rule.validateSchema()
+    const schemaErrors = await rule.validateSchema()
 
     if (schemaErrors.size) {
       outputSchemaErrors(schemaErrors)

@@ -4,8 +4,7 @@ import { ConfigError, LintError } from './error'
 import fs from 'node:fs'
 import path from 'node:path'
 import { z } from 'zod'
-import callerCallsite from 'caller-callsite'
-import callsites from 'callsites'
+import { getCallSite } from './utils'
 
 export default class Rule {
   public name: string
@@ -20,26 +19,21 @@ export default class Rule {
 
   private ruleDefinition: RuleDefinition
 
-  private caller: string
-
-  constructor(ruleName: string, config: RuleArguments, caller?: string) {
+  constructor(ruleName: string, config: RuleArguments) {
     this.name = ruleName
     this.config = config
-
-    this.caller = caller
 
     this.parseRule()
   }
 
-  public load = async (customDir?: string): Promise<Error> => {
+  public load = async (configLocation: string, customDir?: string): Promise<Error> => {
     // If this rule doesn't appear in the defaults, we'll need to look for it in the custom rules dir
     let location = path.resolve(import.meta.dirname, `./rules/${this.name}.ts`)
 
     if (!fs.existsSync(location)) {
       if (customDir) {
-        const fileName = this.caller.replace('file://', '')
-        const dirName = path.dirname(fileName)
-        const resolved = path.join(dirName, customDir, `${this.name}.ts`)
+        // Import files relative to the location of the config file
+        const resolved = path.join(configLocation, customDir, `${this.name}.ts`)
 
         if (!fs.existsSync(resolved)) {
           return new Error(`could not find rule ${this.name} in ${location} or ${resolved}`)
@@ -84,22 +78,25 @@ export default class Rule {
     this.args = this.config
   }
 
-  public validateSchema = async (): Promise<Map<string, Array<ConfigError>>> => {
+  public validateSchema = async (): Promise<Map<string, Array<string>>> => {
     if (!this.ruleDefinition) {
-      await this.load()
+      throw new Error('rule definition has not been loaded yet!')
     }
 
-    const errors: Map<string, Array<ConfigError>> = new Map()
+    const errors: Map<string, Array<string>> = new Map()
 
     if (!this.ruleDefinition.schema) {
-      errors.set(this.name, [{ rule: this.name, errors: ['rule is missing a schema'] } as ConfigError])
+      errors.set(this.name, ['rule is missing a schema'])
       return errors
     }
 
     const testSchema = z.instanceof(z.ZodSchema)
     const parseErr = testSchema.safeParse(this.ruleDefinition.schema)
     if (!parseErr.success) {
-      errors.set(this.name, [{ rule: this.name, errors: [parseErr] } as ConfigError])
+      errors.set(
+        this.name,
+        parseErr.error.errors.map((e) => e.message),
+      )
       return errors
     }
 
@@ -109,7 +106,7 @@ export default class Rule {
     }
 
     if (typeof this.ruleDefinition.run !== 'function') {
-      errors.set(this.name, [{ rule: this.name, errors: ['rule has no export named "run"'] } as ConfigError])
+      errors.set(this.name, ['rule has no export named "run"'])
     }
 
     return errors

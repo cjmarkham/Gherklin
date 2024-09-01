@@ -14,7 +14,7 @@
   "dependencies": {
     "@cucumber/gherkin": "^29.0.0",
     "@cucumber/gherkin-utils": "^9.0.0",
-    "caller-callsite": "^5.0.0",
+    "callsites": "^4.2.0",
     "chai": "^5.1.1",
     "chalk": "^5.3.0",
     "ts-node": "^10.9.2",
