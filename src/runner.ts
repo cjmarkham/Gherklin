@@ -2,34 +2,23 @@ import Gherkin from '@cucumber/gherkin'
 import { GherkinDocumentWalker } from '@cucumber/gherkin-utils'
 import { IdGenerator } from '@cucumber/messages'
 import fs from 'node:fs'
-import { getConfigurationFromFile, GlobalConfiguration } from './config'
+import { getConfigurationFromFile } from './config'
 import { LintError } from './error'
 import Rule from './rule'
 import { outputErrors, outputSchemaErrors, Results } from './output'
 import { getFiles } from './utils'
+import path from 'node:path'
 
-export default async (globalConfiguration?: GlobalConfiguration): Promise<Results> => {
-  let config = globalConfiguration?.config
-  if (!globalConfiguration?.config) {
-    config = await getConfigurationFromFile(globalConfiguration?.configDirectory)
-    if (!config) {
-      throw new Error('Could not find a gherkin-lint.config.ts configuration file.')
-    }
-  }
-
+export default async (): Promise<Results> => {
+  const config = await getConfigurationFromFile()
   const errors: Map<string, Array<LintError>> = new Map()
-
-  if (!config.directory) {
-    throw new Error('no directory specified for feature files. Please set `config.directory`')
-  }
-
-  const gherkinFiles = await getFiles(config.directory, 'feature')
+  const gherkinFiles = await getFiles(path.resolve(config.configDirectory, config.featureDirectory), 'feature')
   const rules: Array<Rule> = []
 
   // Import and validate all default rules
   for (const ruleName in config.rules) {
     const rule = new Rule(ruleName, config.rules[ruleName])
-    const loadError = await rule.load(config.configLocation, config.customRulesDir)
+    const loadError = await rule.load(config.configDirectory, config.customRulesDirectory)
     if (loadError) {
       throw loadError
     }

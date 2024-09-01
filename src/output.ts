@@ -1,4 +1,4 @@
-import { ConfigError, LintError } from './error'
+import { LintError } from './error'
 import chalk from 'chalk'
 import logger from './logger'
 

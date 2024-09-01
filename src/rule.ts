@@ -1,10 +1,9 @@
 import { GherkinKeywordNumericals, RuleArguments, RuleDefinition, Severity, Switch } from './config'
 import { GherkinDocument } from '@cucumber/messages'
-import { ConfigError, LintError } from './error'
+import { LintError } from './error'
 import fs from 'node:fs'
 import path from 'node:path'
 import { z } from 'zod'
-import { getCallSite } from './utils'
 
 export default class Rule {
   public name: string
@@ -36,12 +35,12 @@ export default class Rule {
         const resolved = path.join(configLocation, customDir, `${this.name}.ts`)
 
         if (!fs.existsSync(resolved)) {
-          return new Error(`could not find rule ${this.name} in ${location} or ${resolved}`)
+          return new Error(`could not find rule "${this.name}" in "${location}" or "${resolved}"`)
         }
         location = resolved
       } else {
         return new Error(
-          `could not find rule ${this.name} in default rules.\nIf this is a custom rule, please specify a customRuleDir in the config.`,
+          `could not find rule "${this.name}" in default rules.\nIf this is a custom rule, please specify a customRuleDir in the config.`,
         )
       }
     }

@@ -1,14 +1,4 @@
-import { readdir } from 'node:fs/promises'
 import path from 'node:path'
-import { Dirent } from 'node:fs'
-import callerCallsite from 'caller-callsite'
-import callsites from 'callsites'
-import { getCallSite } from './utils'
-
-export interface GlobalConfiguration {
-  config?: Config
-  configDirectory?: string
-}
 
 export interface GherkinKeywordNumericals {
   feature?: number
@@ -47,10 +37,10 @@ export interface RuleConfiguration {
 }
 
 export interface Config {
-  configLocation: string
-  customRulesDir?: string
-  directory: string
-  rules: RuleConfiguration
+  configDirectory?: string
+  customRulesDirectory?: string
+  featureDirectory?: string
+  rules?: RuleConfiguration
 }
 
 export interface RuleDefinition {
@@ -58,32 +48,32 @@ export interface RuleDefinition {
   run: Function
 }
 
-// Look for a configuration file in the root, or using the directory passed in
-export const getConfigurationFromFile = async (directory?: string): Promise<Config> => {
-  if (!directory) {
-    directory = '.'
+const validateConfiguration = (configuration: Config): void => {
+  if (!configuration) {
+    throw new Error(`Could not find a gherkin-lint.config.ts configuration file.`)
   }
 
-  const callingFile = getCallSite()
-  const dirName = path.dirname(callingFile)
-  const resolved = path.join(dirName, directory)
-
-  const dirents = await readdir(resolved, { withFileTypes: true }).catch(() => {
-    return []
-  })
-
-  const configFile = dirents.find((dirent: Dirent) => {
-    return dirent.name === 'gherkin-lint.config.ts'
-  })
-  if (!configFile) {
-    return
+  if (!configuration.featureDirectory) {
+    throw new Error(`Could not find a featureDirectory configuration option.`)
   }
 
-  const config = (await import(`${configFile.path}/${configFile.name}`)).default
-  return {
-    configLocation: configFile.path,
-    directory: config.directory,
-    customRulesDir: config.customRulesDir,
-    rules: config.rules,
-  } as Config
+  if (!configuration.rules) {
+    throw new Error(`Could not find a rules configuration option.`)
+  }
+}
+
+// Get the config file from the current directory
+export const getConfigurationFromFile = async (): Promise<Config> => {
+  const importPath = path.join(process.cwd(), 'gherklin.config.ts')
+  const module = await import(importPath)
+  if (!('default' in module)) {
+    throw new Error(`config file at ${importPath} did not export a default function!`)
+  }
+
+  const config = module.default as Config
+  config.configDirectory = process.cwd()
+
+  validateConfiguration(config)
+
+  return config
 }
