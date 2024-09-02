@@ -1,15 +1,26 @@
 {
-  "name": "gherkin-linter",
+  "name": "gherklin",
   "version": "0.0.1",
   "description": "A linter for Gherkin syntax",
-  "main": "src/index.ts",
   "scripts": {
     "test": "NODE_ENV=testing NODE_OPTIONS=\"--loader ts-node/esm --experimental-specifier-resolution=node --no-warnings\" mocha",
     "eslint": "node_modules/.bin/eslint",
     "prettier": "node_modules/.bin/prettier --check src/**/*.ts"
   },
+  "engines": {
+    "node": ">=22"
+  },
+  "main": "./src/index.ts",
+  "bin": "./bin/gherklin",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "default": "./src/index.ts"
+    }
+  },
   "type": "module",
-  "keywords": [],
   "author": "Carl Markham <doddsey65@gmail.com>",
   "license": "ISC",
   "dependencies": {
@@ -24,6 +35,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.1.0",
     "@eslint/js": "^9.9.0",
+    "@humanwhocodes/module-importer": "^1.0.1",
     "@types/chai": "^4.3.17",
     "@types/chai-as-promised": "^8.0.0",
     "@types/mocha": "^10.0.7",
@@ -38,6 +50,7 @@
     "globals": "^15.9.0",
     "mocha": "^10.7.3",
     "prettier": "^3.3.3",
-    "sinon": "^18.0.0"
+    "sinon": "^18.0.0",
+    "typescript": "^5.5.4"
   }
 }

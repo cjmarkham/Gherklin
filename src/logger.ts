@@ -1,11 +1,11 @@
-import winston, { Logger, format } from 'winston'
+import winston, { format } from 'winston'
 const { printf, colorize, combine } = format
 
 const simpleWithoutPrefix = printf((info): string => {
   return info.message
 })
 
-export const newLogger = (): Logger => {
+const logger = (): winston.Logger => {
   return winston.createLogger({
     level: 'info',
     format: combine(colorize(), simpleWithoutPrefix),
@@ -13,3 +13,5 @@ export const newLogger = (): Logger => {
     silent: process.env.NODE_ENV === 'testing',
   })
 }
+
+export default logger()

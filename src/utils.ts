@@ -1,11 +1,10 @@
 import { readdir } from 'node:fs/promises'
-import path from 'node:path'
 import chalk from 'chalk'
 import { Dirent } from 'node:fs'
 
 export const getFiles = async (dir: string, ext: string): Promise<Array<string>> => {
-  const dirents = await readdir(path.resolve(dir), { withFileTypes: true, recursive: true }).catch((err) => {
-    console.error(chalk.red(`[GherkinLint] Could not load ".${ext}" files from "${dir}".`), err)
+  const dirents = await readdir(dir, { withFileTypes: true, recursive: true }).catch(() => {
+    console.error(chalk.red(`[GherkinLint] Could not load ".${ext}" files from ${dir}`))
     return []
   })
 

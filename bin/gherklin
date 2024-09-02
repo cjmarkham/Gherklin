@@ -1,0 +1,5 @@
+#!/usr/bin/env node
+
+import { Runner } from '../src/index'
+
+await Runner()

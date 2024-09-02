@@ -1,11 +1,4 @@
-import { readdir } from 'node:fs/promises'
 import path from 'node:path'
-import { Dirent } from 'node:fs'
-
-export interface GlobalConfiguration {
-  config?: Config
-  configDirectory?: string
-}
 
 export interface GherkinKeywordNumericals {
   feature?: number
@@ -44,9 +37,10 @@ export interface RuleConfiguration {
 }
 
 export interface Config {
-  customRulesDir?: string
-  directory: string
-  rules: RuleConfiguration
+  configDirectory?: string
+  customRulesDirectory?: string
+  featureDirectory?: string
+  rules?: RuleConfiguration
 }
 
 export interface RuleDefinition {
@@ -54,26 +48,32 @@ export interface RuleDefinition {
   run: Function
 }
 
-// Look for a configuration file in the root, or using the directory passed in
-export const getConfigurationFromFile = async (directory?: string): Promise<Config> => {
-  if (!directory) {
-    directory = '.'
-  }
-  const dirents = await readdir(path.resolve(directory), { withFileTypes: true }).catch(() => {
-    return []
-  })
-
-  const configFile = dirents.find((dirent: Dirent) => {
-    return dirent.name === 'gherkin-lint.config.ts'
-  })
-  if (!configFile) {
-    return
+const validateConfiguration = (configuration: Config): void => {
+  if (!configuration) {
+    throw new Error(`Could not find a gherkin-lint.config.ts configuration file.`)
   }
 
-  const config = (await import(`${configFile.path}/${configFile.name}`)).default
-  return {
-    directory: config.directory,
-    customRulesDir: config.customRulesDir,
-    rules: config.rules,
-  } as Config
+  if (!configuration.featureDirectory) {
+    throw new Error(`Could not find a featureDirectory configuration option.`)
+  }
+
+  if (!configuration.rules) {
+    throw new Error(`Could not find a rules configuration option.`)
+  }
+}
+
+// Get the config file from the current directory
+export const getConfigurationFromFile = async (): Promise<Config> => {
+  const importPath = path.join(process.cwd(), 'gherklin.config.ts')
+  const module = await import(importPath)
+  if (!('default' in module)) {
+    throw new Error(`config file at ${importPath} did not export a default function!`)
+  }
+
+  const config = module.default as Config
+  config.configDirectory = process.cwd()
+
+  validateConfiguration(config)
+
+  return config
 }

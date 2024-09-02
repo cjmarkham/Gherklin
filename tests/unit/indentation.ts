@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import { GherkinDocument } from '@cucumber/messages'
 import { run } from '../../src/rules/indentation'
-import { Rule } from '../../src/rule'
+import Rule from '../../src/rule'
 
 describe('Indentation', () => {
   it('returns an error for an invalid feature indentation', () => {

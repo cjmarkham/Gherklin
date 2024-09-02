@@ -1,4 +1,4 @@
-# Gherklin, a Gherkin Linter
+# Gherklin
 
 An ESM linter for Gherkin, inspired by [Gherkin Lint](https://github.com/gherkin-lint/gherkin-lint)
 
@@ -7,27 +7,34 @@ An ESM linter for Gherkin, inspired by [Gherkin Lint](https://github.com/gherkin
 
 # Usage
 
-```typescript
-import GherkinLinter from 'gherkin-linter'
-
-const errors = await GherkinLinter(config)
+```shell
+npx tsx gherklin
 ```
 
-`config` is general configuration for the linter and supports the following values:
+# Configuration
 
-| Key                 | Type                    | Description                                              |
-|---------------------|-------------------------|----------------------------------------------------------|
-| directory           | `string`                | The directory that contains your feature files           |
-| customRulesDir      | `string`                | A directory containing custom rules                      |
-| rules               | `RuleConfiguration`     | Individual config for each rule                          |
+Gherklin will look for a `gherklin.config.ts` file in the same directory as your `package.json` file.
 
-RuleConfiguration supports the following values:
+This file should default export an object, which contains the parameters for Gherklin.
 
-| Key                 | Type                    | Description                                              |
-| allowedTags         | `Array<string>`         | A list of allowed tags                                   |
-| indentation         | `NumericalKeywordValue` | The indentation for each Gherkin keyword                 |
-| maxScenariosPerFile | `number`                | The maximum number of scenarios allowed per feature file |
+### Example
+```typescript
+export default {
+  featureDirectory: './features',
+  customRulesDirectory: './custom-rules',
+  rules: {
+    'allowed-tags': 'off',
+  },
+}
+```
 
+| Parameter                     | Type     | Description                                |
+|-------------------------------|----------|--------------------------------------------|
+| `featureDirectory` (required) | `string` | The folder where your Gherkin features are |
+| `customRulesDirectory`        | string   | The directory where your custom rules are  |
+| `rules`                       | `object` | Configuration per rule                     |
+
+`rules` contains the configuration for each rule, whether built in or custom. Check [rules](./src/rules) for a list of built in rules.
 
 # Testing
 

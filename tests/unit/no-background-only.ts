@@ -2,8 +2,7 @@ import { expect } from 'chai'
 import { GherkinDocument } from '@cucumber/messages'
 import { background, scenario } from '../fixtures'
 import { run } from '../../src/rules/no-background-only'
-import { Rule } from '../../src/rule'
-import { Severity, Switch } from '../../src/config'
+import { Rule, Severity, Switch } from '../../src'
 
 describe('No Background Only', () => {
   it('does not return an error if there are scenarios', () => {
