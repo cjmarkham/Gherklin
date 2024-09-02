@@ -30,7 +30,8 @@ export type RuleArguments =
   | Switch
   | GherkinKeywordNumericals
   | Array<string>
-  | [string, GherkinKeywordNumericals | Array<string>]
+  | [string, GherkinKeywordNumericals | Array<string> | number]
+  | number
 
 export interface RuleConfiguration {
   [ruleName: string]: RuleArguments

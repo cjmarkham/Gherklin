@@ -1,6 +1,7 @@
-import { LintError } from './error'
 import chalk from 'chalk'
+
 import logger from './logger'
+import { LintError } from './error'
 
 export interface Results {
   success: boolean
@@ -59,7 +60,6 @@ export const outputErrors = (errors: Map<string, Array<LintError>>): void => {
       output += [
         '\n',
         `${location} ${color(err.severity).padEnd(5)} `,
-        // TODO: Fix this padStart mess
         err.message.padEnd(maxMessageLength + 1),
         chalk.gray(err.rule),
       ].join('')

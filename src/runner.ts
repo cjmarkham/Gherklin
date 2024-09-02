@@ -2,12 +2,13 @@ import Gherkin from '@cucumber/gherkin'
 import { GherkinDocumentWalker } from '@cucumber/gherkin-utils'
 import { IdGenerator } from '@cucumber/messages'
 import fs from 'node:fs'
+import path from 'node:path'
+
 import { getConfigurationFromFile } from './config'
 import { LintError } from './error'
 import Rule from './rule'
 import { outputErrors, outputSchemaErrors, Results } from './output'
 import { getFiles } from './utils'
-import path from 'node:path'
 
 export default async (): Promise<Results> => {
   const config = await getConfigurationFromFile()
@@ -46,10 +47,21 @@ export default async (): Promise<Results> => {
     const content = fs.readFileSync(fileName)
     const document = parser.parse(content.toString())
     const walk = walker.walkGherkinDocument(document)
+    if (!document || (document && !document.feature)) {
+      continue
+    }
 
-    for (const rule in rules) {
-      const ruleErrors: Array<LintError> = rules[rule].run(walk, fileName)
+    for (const rule of rules) {
+      if (!rule.enabled) {
+        continue
+      }
+      const ruleErrors: Array<LintError> = rule.run(walk, fileName)
       if (ruleErrors && ruleErrors.length) {
+        ruleErrors.forEach((_, index) => {
+          ruleErrors[index].severity = rule.severity
+          ruleErrors[index].rule = rule.name
+        })
+
         if (errors.has(fileName)) {
           errors.set(fileName, [...ruleErrors, ...errors.get(fileName)])
           continue
