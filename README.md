@@ -1,9 +1,26 @@
-# Gherklin
+<h2 align="center">Gherklin</h2>
 
-An ESM linter for Gherkin, inspired by [Gherkin Lint](https://github.com/gherkin-lint/gherkin-lint)
+<p align="center">
+    A linter for Gherkin, using TypeScript and ESM.
+</p>
 
-![Mocha Tests](https://github.com/cjmarkham/gherkin-lint/actions/workflows/tests.yml/badge.svg)
-![Linting](https://github.com/cjmarkham/gherkin-lint/actions/workflows/linting.yml/badge.svg)
+<p align="center">
+<a href="https://github.com/cjmarkham/Gherklin/actions/workflows/tests.yml">
+    <img src="https://github.com/cjmarkham/gherkin-lint/actions/workflows/tests.yml/badge.svg">
+</a>
+
+<a href="https://github.com/cjmarkham/Gherklin/actions/workflows/linting.yml">
+    <img src="https://github.com/cjmarkham/gherkin-lint/actions/workflows/linting.yml/badge.svg">
+</a>
+
+<a href="https://github.com/prettier/prettier/tree/c067d27673c6d97d9037eb9b13b74bd8c9324be2?tab=readme-ov-file#badge">
+    <img src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier">
+</a>
+</p>
+
+<p align="center">
+Lint your Gherkin files, with an extensible list of rules. Use the built in rules or create your own. Go nuts, go <strong>Gherklin</strong>.
+</p>
 
 # Usage
 
