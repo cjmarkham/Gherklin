@@ -53,6 +53,17 @@ export default {
 
 `rules` contains the configuration for each rule, whether built in or custom. Check [rules](./src/rules) for a list of built in rules.
 
+# Automatic Fixing
+**Gherklin** doesn't support automatic fixes that you may be used to with things like ESLint and Prettier.
+
+Why? It's not so simple to fix Gherkin. 
+Let's say we have a rule for allowed tags and you have a feature file with a tag that's not allowed. Gherklin
+**could** remove this tag, but then that could break the semantic coupling between Gherkin and your step definitions.
+
+Let's take another example, max scenarios. If **Gherklin** finds that a file has too many scenarios, should it delete the whole scenario?
+
+These are a few of the reasons why **Gherklin** doesn't support automatic fix ups.
+
 # Custom Rules
 Custom rules can be loaded by setting the `customRulesDirectory` parameter in your config file.
 
