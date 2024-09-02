@@ -1,6 +1,6 @@
+import { Dirent } from 'node:fs'
 import { readdir } from 'node:fs/promises'
 import chalk from 'chalk'
-import { Dirent } from 'node:fs'
 
 export const getFiles = async (dir: string, ext: string): Promise<Array<string>> => {
   const dirents = await readdir(dir, { withFileTypes: true, recursive: true }).catch(() => {

@@ -1,5 +1,5 @@
 export { default as Runner } from './runner'
 export { default as Rule } from './rule'
-export { newLintError } from './error'
+export { LintError } from './error'
 export * as Schemas from './schema'
 export { Severity, Switch } from './config'

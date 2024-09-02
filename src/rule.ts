@@ -1,9 +1,10 @@
-import { GherkinKeywordNumericals, RuleArguments, RuleDefinition, Severity, Switch } from './config'
 import { GherkinDocument } from '@cucumber/messages'
-import { LintError } from './error'
 import fs from 'node:fs'
 import path from 'node:path'
 import { z } from 'zod'
+
+import { GherkinKeywordNumericals, RuleArguments, RuleDefinition, Severity, Switch } from './config'
+import { LintError } from './error'
 
 export default class Rule {
   public name: string
@@ -12,7 +13,7 @@ export default class Rule {
 
   public severity: Severity
 
-  public args: GherkinKeywordNumericals | Array<string>
+  public args: GherkinKeywordNumericals | Array<string> | number
 
   public config: RuleArguments
 

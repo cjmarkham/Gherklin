@@ -1,4 +1,5 @@
 import { z } from 'zod'
+
 import { Severity, Switch } from './config'
 
 export const keywordInts = z
@@ -34,4 +35,9 @@ export const offOrKeywordIntsOrSeverityAndKeywordInts = z.union([
   z.literal(Switch.off),
   keywordInts,
   z.tuple([z.nativeEnum(Severity), keywordInts]),
+])
+export const offOrNumberOrSeverityAndNumber = z.union([
+  z.literal(Switch.off),
+  z.number(),
+  z.tuple([z.nativeEnum(Severity), z.number()]),
 ])
