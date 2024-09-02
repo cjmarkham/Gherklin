@@ -14,6 +14,7 @@ describe('Allowed Tags Rule Schemas', () => {
 
     expect(result.schemaErrors.size).to.eq(1)
     const errors = result.schemaErrors.get('allowed-tags')
+    expect(errors.length).to.eq(3)
     expect(errors[0]).to.eq('Invalid literal value, expected "off"')
     expect(errors[1]).to.eq('Expected array, received string')
     expect(errors[2]).to.eq('Expected array, received string')
@@ -26,7 +27,7 @@ describe('Allowed Tags Rule Schemas', () => {
 
     expect(result.schemaErrors.size).to.eq(1)
     const errors = result.schemaErrors.get('allowed-tags')
-    // TODO: These errors could be improved
+    expect(errors.length).to.eq(3)
     expect(errors[0]).to.eq('Invalid literal value, expected "off"')
     expect(errors[1]).to.eq('Expected array, received string')
     expect(errors[2]).to.eq('Expected array, received string')
@@ -39,7 +40,7 @@ describe('Allowed Tags Rule Schemas', () => {
 
     expect(result.schemaErrors.size).to.eq(1)
     const errors = result.schemaErrors.get('allowed-tags')
-    // TODO: These errors could be improved
+    expect(errors.length).to.eq(3)
     expect(errors[0]).to.eq('Invalid literal value, expected "off"')
     expect(errors[1]).to.eq('Expected array, received string')
     expect(errors[2]).to.eq('Expected array, received string')
@@ -51,7 +52,7 @@ describe('Allowed Tags Rule Schemas', () => {
 
     expect(result.schemaErrors.size).to.eq(1)
     const errors = result.schemaErrors.get('allowed-tags')
-    // TODO: These errors could be improved
+    expect(errors.length).to.eq(1)
     expect(errors[0]).to.eq('Invalid literal value, expected "off"')
   })
 
