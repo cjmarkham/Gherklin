@@ -16,6 +16,11 @@
 <a href="https://github.com/prettier/prettier/tree/c067d27673c6d97d9037eb9b13b74bd8c9324be2?tab=readme-ov-file#badge">
     <img src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier">
 </a>
+
+<a href="https://www.npmjs.com/package/gherklin">
+    <img alt="npm version" src="https://img.shields.io/npm/v/gherklin.svg">
+</a>
+
 </p>
 
 <p align="center">
