@@ -30,7 +30,7 @@ Lint your Gherkin files, with an extensible list of rules. Use the built in rule
 # Usage
 
 ```shell
-npx tsx gherklin
+npx tsx ./node_modules/.bin/gherklin
 ```
 
 # Configuration
