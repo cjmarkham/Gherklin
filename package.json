@@ -1,6 +1,6 @@
 {
   "name": "gherklin",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A linter for Gherkin syntax",
   "scripts": {
     "test": "NODE_ENV=testing NODE_OPTIONS=\"--loader ts-node/esm --experimental-specifier-resolution=node --no-warnings\" mocha",
@@ -13,7 +13,7 @@
   "main": "./src/index.ts",
   "bin": "./bin/gherklin",
   "files": [
-    "dist"
+    "src"
   ],
   "exports": {
     ".": {
