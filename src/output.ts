@@ -24,6 +24,8 @@ export const outputSchemaErrors = (schemaErrors: Map<string, Array<string>>): vo
 }
 
 export const outputErrors = (errors: Map<string, Array<LintError>>): void => {
+  chalk.level = 2
+
   if (!errors.size) {
     return
   }
@@ -65,7 +67,7 @@ export const outputErrors = (errors: Map<string, Array<LintError>>): void => {
       ].join('')
     })
 
-    console.log(output)
+    logger.error(output)
   })
 
   if (totalErrors + totalWarns > 0) {
@@ -73,7 +75,7 @@ export const outputErrors = (errors: Map<string, Array<LintError>>): void => {
     if (!totalErrors) {
       color = chalk.bold.yellow
     }
-    console.log(
+    logger.info(
       color(
         `\nx ${totalErrors + totalWarns} problems (${totalErrors} error${totalErrors ? 's' : ''}, ${totalWarns} warning${totalWarns ? 's' : ''})`,
       ),
