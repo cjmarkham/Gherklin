@@ -86,7 +86,7 @@ export default class Runner {
           continue
         }
 
-        const ruleErrors: Array<LintError> = rule.run(walk, fileName)
+        const ruleErrors: Array<LintError> = await rule.run(walk, fileName)
         if (ruleErrors && ruleErrors.length) {
           ruleErrors.forEach((_, index) => {
             ruleErrors[index].severity = rule.schema.severity

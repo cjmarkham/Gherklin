@@ -64,7 +64,7 @@ export default class Rule {
     return errors
   }
 
-  public run(document: GherkinDocument, filename: string): Array<LintError> {
-    return this.ruleDefinition.run(this, document, filename)
+  public async run(document: GherkinDocument, filename: string): Promise<Array<LintError>> {
+    return await this.ruleDefinition.run(this, document, filename)
   }
 }
