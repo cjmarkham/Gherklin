@@ -13,6 +13,10 @@ import Rule from '../rule'
 export const schema = offOrStringArrayOrSeverityAndStringArray
 
 export const run = (rule: Rule, document: GherkinDocument): Array<LintError> => {
+  if (!document || (document && !document.feature)) {
+    return []
+  }
+
   const errors: Array<LintError> = []
   let allowedTags = rule.schema.args as Array<string>
   if (!allowedTags.length) {

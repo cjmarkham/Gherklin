@@ -13,6 +13,10 @@ import Rule from '../rule'
 export const schema = offOrNumberOrSeverityAndNumber
 
 export const run = (rule: Rule, document: GherkinDocument): Array<LintError> => {
+  if (!document || (document && !document.feature)) {
+    return []
+  }
+
   const errors: Array<LintError> = []
 
   let scenarioCount = 0

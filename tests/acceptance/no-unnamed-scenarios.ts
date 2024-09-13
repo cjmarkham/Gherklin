@@ -10,7 +10,7 @@ describe('No Unnamed Scenarios', () => {
       configDirectory: '.',
       featureDirectory,
       rules: {
-        'no-unnamed-scenarios': Severity.warn,
+        'no-unnamed-scenarios': Severity.error,
       },
     })
 

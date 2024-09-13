@@ -10,7 +10,7 @@ describe('Max Scenarios', () => {
       configDirectory: '.',
       featureDirectory,
       rules: {
-        'max-scenarios': 1,
+        'max-scenarios': ['error', 1],
       },
     })
 

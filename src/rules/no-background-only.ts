@@ -10,6 +10,10 @@ import { switchOrSeveritySchema } from '../schemas'
 export const schema = switchOrSeveritySchema
 
 export const run = (rule: Rule, document: GherkinDocument): Array<LintError> => {
+  if (!document || (document && !document.feature)) {
+    return []
+  }
+
   const errors: Array<LintError> = []
 
   document.feature.children.forEach((child) => {

@@ -10,7 +10,7 @@ describe('Allowed Tags', () => {
       configDirectory: '.',
       featureDirectory,
       rules: {
-        'allowed-tags': ['@development'],
+        'allowed-tags': ['error', '@development'],
       },
     })
 
