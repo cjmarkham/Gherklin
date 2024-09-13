@@ -1,7 +1,7 @@
 import { GherkinDocument } from '@cucumber/messages'
 
 import { LintError } from '../error'
-import { offOrStringArrayOrSeverityAndStringArray } from '../schema'
+import { offOrStringArrayOrSeverityAndStringArray } from '../schemas'
 import Rule from '../rule'
 
 /**
@@ -14,7 +14,7 @@ export const schema = offOrStringArrayOrSeverityAndStringArray
 
 export const run = (rule: Rule, document: GherkinDocument): Array<LintError> => {
   const errors: Array<LintError> = []
-  let allowedTags = rule.args as Array<string>
+  let allowedTags = rule.schema.args as Array<string>
   if (!allowedTags.length) {
     return []
   }

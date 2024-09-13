@@ -1,4 +1,4 @@
-import { Severity } from './config'
+import { Severity } from './types'
 
 interface Location {
   line: number

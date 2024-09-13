@@ -1,8 +1,8 @@
 import { GherkinDocument } from '@cucumber/messages'
 import { LintError } from '../error'
-import { offOrKeywordIntsOrSeverityAndKeywordInts } from '../schema'
+import { offOrKeywordIntsOrSeverityAndKeywordInts } from '../schemas'
 import Rule from '../rule'
-import { GherkinKeywordNumericals } from '../config'
+import { GherkinKeywordNumericals } from '../types'
 
 /**
  * Allowed:
@@ -15,7 +15,7 @@ export const schema = offOrKeywordIntsOrSeverityAndKeywordInts
 export const run = (rule: Rule, document: GherkinDocument): Array<LintError> => {
   const errors: Array<LintError> = []
 
-  const args = rule.args as GherkinKeywordNumericals
+  const args = rule.schema.args as GherkinKeywordNumericals
 
   if (args.feature !== undefined) {
     if (document.feature.location.column !== args.feature) {

@@ -1,29 +1,21 @@
-import { GherkinDocument } from '@cucumber/messages'
 import fs from 'node:fs'
 import path from 'node:path'
-import { z } from 'zod'
+import { GherkinDocument } from '@cucumber/messages'
 
-import { GherkinKeywordNumericals, RuleArguments, RuleDefinition, Severity, Switch } from './config'
 import { LintError } from './error'
+import Schema from './schema'
+import { RawSchema, RuleDefinition } from './types'
 
 export default class Rule {
-  public name: string
+  public schema: Schema
 
-  public enabled: boolean
+  public readonly name: string
 
-  public severity: Severity
+  public ruleDefinition: RuleDefinition
 
-  public args: GherkinKeywordNumericals | Array<string> | number
-
-  public config: RuleArguments
-
-  private ruleDefinition: RuleDefinition
-
-  constructor(ruleName: string, config: RuleArguments) {
+  constructor(ruleName: string, ruleSchema: RawSchema) {
     this.name = ruleName
-    this.config = config
-
-    this.parseRule()
+    this.schema = new Schema(ruleSchema)
   }
 
   public load = async (configLocation: string, customDir?: string): Promise<Error> => {
@@ -49,64 +41,24 @@ export default class Rule {
     this.ruleDefinition = await import(location.replace('.ts', ''))
   }
 
-  private parseRule = (): void => {
-    this.severity = Severity.warn
-    this.enabled = true
-
-    if (typeof this.config === 'string') {
-      if ([Severity.error.toString(), Severity.warn.toString()].includes(this.config)) {
-        this.severity = this.config as Severity
-        this.enabled = true
-      } else {
-        this.enabled = this.config === Switch.on
-      }
-
-      return
-    }
-
-    if (Array.isArray(this.config)) {
-      if ([Severity.warn, Severity.error, Switch.on, Switch.off].includes(this.config[0] as Severity | Switch)) {
-        this.severity = this.config[0] as Severity
-        this.args = this.config[1] as GherkinKeywordNumericals | Array<string>
-      } else {
-        this.args = this.config as GherkinKeywordNumericals | Array<string>
-      }
-
-      return
-    }
-
-    this.args = this.config
-  }
-
-  public validateSchema = async (): Promise<Map<string, Array<string>>> => {
+  public validate(): Map<string, Array<string>> {
     if (!this.ruleDefinition) {
-      throw new Error('rule definition has not been loaded yet!')
+      throw new Error('rule definition has not been loaded yet')
     }
 
     const errors: Map<string, Array<string>> = new Map()
 
     if (!this.ruleDefinition.schema) {
       errors.set(this.name, ['rule is missing a schema'])
-      return errors
-    }
-
-    const testSchema = z.instanceof(z.ZodSchema)
-    const parseErr = testSchema.safeParse(this.ruleDefinition.schema)
-    if (!parseErr.success) {
-      errors.set(
-        this.name,
-        parseErr.error.errors.map((e) => e.message),
-      )
-      return errors
-    }
-
-    const result = this.ruleDefinition.schema.safeParse(this.config)
-    if (!result.success) {
-      errors.set(this.name, result.error.format()?._errors)
     }
 
     if (typeof this.ruleDefinition.run !== 'function') {
-      errors.set(this.name, ['rule has no export named "run"'])
+      errors.set(this.name, ['rule has no export named "run"', ...errors.get(this.name)])
+    }
+
+    const schemaErrors = this.schema.validate(this.ruleDefinition.schema)
+    if (schemaErrors.length) {
+      errors.set(this.name, [...schemaErrors, ...errors.get(this.name)])
     }
 
     return errors
