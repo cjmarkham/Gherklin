@@ -32,7 +32,7 @@ export const outputErrors = (errors: Map<string, Array<LintError>>): void => {
   let totalWarns = 0
 
   errors.forEach((lintErrors: Array<LintError>, file: string): void => {
-    let output = `\n${chalk.underline(file)}`
+    let output = `\n\n${chalk.underline(file)}`
 
     lintErrors.forEach((err: LintError) => {
       let color = chalk.yellow
