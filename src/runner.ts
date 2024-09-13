@@ -9,7 +9,7 @@ import Rule from './rule'
 import { outputErrors, outputSchemaErrors, Results } from './output'
 import { getFiles } from './utils'
 import Config from './config'
-import { GherklinConfiguration } from './types'
+import { GherklinConfiguration, Severity } from './types'
 
 export default class Runner {
   private errors: Map<string, Array<LintError>> = new Map()
@@ -102,8 +102,18 @@ export default class Runner {
     outputErrors(this.errors)
 
     if (this.errors.size) {
+      let allWarns = true
+
+      for (const key of this.errors.keys()) {
+        const errors = this.errors.get(key)
+        const hasErrorSeverity = errors.some((err) => err.severity === Severity.error)
+        if (hasErrorSeverity) {
+          allWarns = false
+        }
+      }
+
       return {
-        success: false,
+        success: allWarns === true,
         errors: this.errors,
         schemaErrors: new Map(),
       }

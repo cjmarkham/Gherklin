@@ -5,7 +5,8 @@
   "scripts": {
     "test": "NODE_ENV=testing mocha",
     "eslint": "node_modules/.bin/eslint",
-    "prettier": "node_modules/.bin/prettier --check src/**/*.ts"
+    "prettier": "node_modules/.bin/prettier --check src/**/*.ts",
+    "gherklin": "npx tsx ./bin/gherklin"
   },
   "engines": {
     "node": ">=22"
@@ -52,6 +53,7 @@
     "eslint": "^9.9.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
+    "gherklin": "^0.2.2",
     "globals": "^15.9.0",
     "mocha": "^10.7.3",
     "prettier": "^3.3.3",
