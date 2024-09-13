@@ -32,7 +32,7 @@ export const outputErrors = (errors: Map<string, Array<LintError>>): void => {
   let totalWarns = 0
 
   errors.forEach((lintErrors: Array<LintError>, file: string): void => {
-    let output = `\n\n${chalk.underline(file)}`
+    let output = `\n${chalk.underline(file)}`
 
     lintErrors.forEach((err: LintError) => {
       let color = chalk.yellow
@@ -65,7 +65,7 @@ export const outputErrors = (errors: Map<string, Array<LintError>>): void => {
       ].join('')
     })
 
-    logger.error(output)
+    console.log(output)
   })
 
   if (totalErrors + totalWarns > 0) {
@@ -73,7 +73,7 @@ export const outputErrors = (errors: Map<string, Array<LintError>>): void => {
     if (!totalErrors) {
       color = chalk.bold.yellow
     }
-    logger.info(
+    console.log(
       color(
         `\nx ${totalErrors + totalWarns} problems (${totalErrors} error${totalErrors ? 's' : ''}, ${totalWarns} warning${totalWarns ? 's' : ''})`,
       ),
