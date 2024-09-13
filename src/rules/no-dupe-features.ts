@@ -15,6 +15,10 @@ export const schema = switchOrSeveritySchema
 const features: Map<string, Array<string>> = new Map()
 
 export const run = (rule: Rule, document: GherkinDocument, fileName: string): Array<LintError> => {
+  if (!document || (document && !document.feature)) {
+    return []
+  }
+
   const errors: Array<LintError> = []
 
   const featureName = document.feature.name

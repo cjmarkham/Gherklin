@@ -13,6 +13,10 @@ import { GherkinKeywordNumericals } from '../types'
 export const schema = offOrKeywordIntsOrSeverityAndKeywordInts
 
 export const run = (rule: Rule, document: GherkinDocument): Array<LintError> => {
+  if (!document || (document && !document.feature)) {
+    return []
+  }
+
   const errors: Array<LintError> = []
 
   const args = rule.schema.args as GherkinKeywordNumericals
