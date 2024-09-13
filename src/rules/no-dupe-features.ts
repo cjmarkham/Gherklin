@@ -1,8 +1,9 @@
+import path from 'node:path'
 import { GherkinDocument } from '@cucumber/messages'
+
 import { LintError } from '../error'
 import Rule from '../rule'
 import { switchOrSeveritySchema } from '../schemas'
-import path from 'node:path'
 
 /**
  * Allowed:
