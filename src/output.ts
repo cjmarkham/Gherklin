@@ -24,7 +24,7 @@ export const outputSchemaErrors = (schemaErrors: Map<string, Array<string>>): vo
 }
 
 export const outputErrors = (errors: Map<string, Array<LintError>>): void => {
-  chalk.level = 2
+  chalk.level = 3
 
   if (!errors.size) {
     return
