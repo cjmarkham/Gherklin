@@ -77,9 +77,6 @@ export default class Runner {
 
       const document = parser.parse(content.toString())
       const walk = walker.walkGherkinDocument(document)
-      if (!document || (document && !document.feature)) {
-        continue
-      }
 
       for (const rule of this.rules) {
         if (!rule.schema.enabled) {
