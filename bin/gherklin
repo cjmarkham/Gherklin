@@ -7,4 +7,8 @@ const init = await runner.init()
 if (!init.success) {
   throw init.schemaErrors
 }
-await runner.run()
+const result = await runner.run()
+if (!result.success) {
+  process.exit(1)
+}
+process.exit(0)
