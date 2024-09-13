@@ -2,7 +2,7 @@ export default {
   featureDirectory: './tests/acceptance/features',
   rules: {
     indentation: [
-      'warn',
+      'error',
       {
         feature: 1,
         background: 3,
