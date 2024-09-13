@@ -11,6 +11,7 @@ describe('Config', () => {
 
   describe('fromFile', () => {
     it('can handle no file found', async () => {
+      sinon.stub(process, 'cwd').value(() => './invalid/path')
       await expect(config.fromFile()).to.be.rejectedWith(Error, 'could not find gherklin.config.ts')
     })
 

@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { Runner, Switch } from '../../src/index'
+import { Runner, Severity } from '../../src/index'
 import path from 'node:path'
 
 describe('No Background Only', () => {
@@ -10,7 +10,7 @@ describe('No Background Only', () => {
       configDirectory: '.',
       featureDirectory,
       rules: {
-        'no-background-only': Switch.on,
+        'no-background-only': Severity.error,
       },
     })
 

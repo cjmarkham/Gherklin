@@ -10,7 +10,7 @@ describe('No Empty File', () => {
       configDirectory: '.',
       featureDirectory,
       rules: {
-        'no-empty-file': Severity.warn,
+        'no-empty-file': Severity.error,
       },
     })
 
