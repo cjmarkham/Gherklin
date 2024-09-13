@@ -2,4 +2,9 @@
 
 import { Runner } from '../src/index'
 
-await Runner()
+const runner = new Runner()
+const init = await runner.init()
+if (!init.success) {
+  throw init.schemaErrors
+}
+await runner.run()

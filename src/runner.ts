@@ -1,89 +1,121 @@
+import fs from 'node:fs/promises'
+import path from 'node:path'
 import Gherkin from '@cucumber/gherkin'
 import { GherkinDocumentWalker } from '@cucumber/gherkin-utils'
 import { IdGenerator } from '@cucumber/messages'
-import fs from 'node:fs'
-import path from 'node:path'
 
-import { getConfigurationFromFile } from './config'
 import { LintError } from './error'
 import Rule from './rule'
 import { outputErrors, outputSchemaErrors, Results } from './output'
 import { getFiles } from './utils'
+import Config from './config'
+import { GherklinConfiguration } from './types'
 
-export default async (): Promise<Results> => {
-  const config = await getConfigurationFromFile()
-  const errors: Map<string, Array<LintError>> = new Map()
-  const gherkinFiles = await getFiles(path.resolve(config.configDirectory, config.featureDirectory), 'feature')
-  const rules: Array<Rule> = []
+export default class Runner {
+  private errors: Map<string, Array<LintError>> = new Map()
 
-  // Import and validate all default rules
-  for (const ruleName in config.rules) {
-    const rule = new Rule(ruleName, config.rules[ruleName])
-    const loadError = await rule.load(config.configDirectory, config.customRulesDirectory)
-    if (loadError) {
-      throw loadError
+  public gherkinFiles: Array<string> = []
+
+  private rules: Array<Rule> = []
+
+  private config: GherklinConfiguration
+
+  constructor(gherklinConfig?: GherklinConfiguration) {
+    if (gherklinConfig) {
+      this.config = new Config().fromInline(gherklinConfig)
     }
-
-    const schemaErrors = await rule.validateSchema()
-
-    if (schemaErrors.size) {
-      outputSchemaErrors(schemaErrors)
-      return {
-        success: false,
-        schemaErrors,
-        errors: new Map(),
-      }
-    }
-
-    rules.push(rule)
   }
 
-  const walker = new GherkinDocumentWalker()
-  const builder = new Gherkin.AstBuilder(IdGenerator.uuid())
-  const matcher = new Gherkin.GherkinClassicTokenMatcher()
-  const parser = new Gherkin.Parser(builder, matcher)
-
-  for (const fileName of gherkinFiles) {
-    const content = fs.readFileSync(fileName)
-    const document = parser.parse(content.toString())
-    const walk = walker.walkGherkinDocument(document)
-    if (!document || (document && !document.feature)) {
-      continue
+  public init = async (): Promise<Results> => {
+    if (!this.config) {
+      this.config = await new Config().fromFile()
     }
 
-    for (const rule of rules) {
-      if (!rule.enabled) {
+    this.gherkinFiles = await getFiles(
+      path.resolve(this.config.configDirectory, this.config.featureDirectory),
+      'feature',
+    )
+
+    // Import and validate all default rules
+    for (const ruleName in this.config.rules) {
+      const rule = new Rule(ruleName, this.config.rules[ruleName])
+      const loadError = await rule.load(this.config.configDirectory, this.config.customRulesDirectory)
+      if (loadError) {
+        throw loadError
+      }
+      const validationErrors = rule.validate()
+
+      if (validationErrors.size) {
+        outputSchemaErrors(validationErrors)
+        return {
+          success: false,
+          schemaErrors: validationErrors,
+          errors: new Map(),
+        }
+      }
+
+      this.rules.push(rule)
+    }
+
+    return {
+      success: true,
+      schemaErrors: new Map(),
+      errors: new Map(),
+    }
+  }
+
+  public run = async (): Promise<Results> => {
+    const walker = new GherkinDocumentWalker()
+    const builder = new Gherkin.AstBuilder(IdGenerator.uuid())
+    const matcher = new Gherkin.GherkinClassicTokenMatcher()
+    const parser = new Gherkin.Parser(builder, matcher)
+
+    for (const fileName of this.gherkinFiles) {
+      const content = await fs.readFile(fileName).catch((): never => {
+        throw new Error(`Could not open the feature file at ${fileName}. Does it exist?`)
+      })
+
+      const document = parser.parse(content.toString())
+      const walk = walker.walkGherkinDocument(document)
+      if (!document || (document && !document.feature)) {
         continue
       }
-      const ruleErrors: Array<LintError> = rule.run(walk, fileName)
-      if (ruleErrors && ruleErrors.length) {
-        ruleErrors.forEach((_, index) => {
-          ruleErrors[index].severity = rule.severity
-          ruleErrors[index].rule = rule.name
-        })
 
-        if (errors.has(fileName)) {
-          errors.set(fileName, [...ruleErrors, ...errors.get(fileName)])
+      for (const rule of this.rules) {
+        if (!rule.schema.enabled) {
           continue
         }
-        errors.set(fileName, ruleErrors)
+
+        const ruleErrors: Array<LintError> = rule.run(walk, fileName)
+        if (ruleErrors && ruleErrors.length) {
+          ruleErrors.forEach((_, index) => {
+            ruleErrors[index].severity = rule.schema.severity
+            ruleErrors[index].rule = rule.name
+          })
+
+          if (this.errors.has(fileName)) {
+            this.errors.set(fileName, [...ruleErrors, ...this.errors.get(fileName)])
+            continue
+          }
+          this.errors.set(fileName, ruleErrors)
+        }
       }
     }
-  }
 
-  outputErrors(errors)
+    outputErrors(this.errors)
 
-  if (errors.size) {
+    if (this.errors.size) {
+      return {
+        success: false,
+        errors: this.errors,
+        schemaErrors: new Map(),
+      }
+    }
+
     return {
-      success: false,
-      errors,
+      success: true,
+      errors: new Map(),
       schemaErrors: new Map(),
     }
-  }
-
-  return {
-    success: true,
-    errors: new Map(),
-    schemaErrors: new Map(),
   }
 }

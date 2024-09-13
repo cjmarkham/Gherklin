@@ -5,6 +5,8 @@
     "target": "ES2022",
     "moduleResolution": "Node",
     "allowSyntheticDefaultImports": true,
-    "alwaysStrict": true
+    "alwaysStrict": true,
+    "sourceMap": true,
+    "inlineSourceMap": true
   }
 }

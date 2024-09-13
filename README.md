@@ -29,8 +29,27 @@ Lint your Gherkin files, with an extensible list of rules. Use the built in rule
 
 # Usage
 
+Gherklin includes a bin file, which can be ran with the following
 ```shell
 npx tsx ./node_modules/.bin/gherklin
+```
+
+Gherklin also has an API that can be invoked. A simple example of which is:
+```typescript
+import { Runner } from 'gherklin'
+
+;(async () => {
+  const runner = new Runner()
+  const init = await runner.init()
+  if (!init.success) {
+    throw init.schemaErrors
+  }
+  const result = await runner.run()
+  if (!result.success) {
+    process.exit(1)
+  }
+  process.exit(0)
+})()
 ```
 
 # Configuration
@@ -105,11 +124,3 @@ Unit tests test the rule function by calling it directly with parameters.
 
 Acceptance tests test the rule and its schema, using test feature files and test config files.
 [Sinon](https://sinonjs.org/) is used to stub the current working directory (`cwd`) so we can target specific configuration files.
-
-If you are running tests via an IDE such as IntelliJ, you will need to set some Node options:
-
-```shell
-NODE_OPTIONS="--loader ts-node/esm --experimental-specifier-resolution=node --no-warnings"
-```
-
-More info as to why can be found on the [ts-node repository](https://github.com/TypeStrong/ts-node/issues/1007)

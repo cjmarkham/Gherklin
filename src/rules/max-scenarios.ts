@@ -1,7 +1,7 @@
 import { GherkinDocument } from '@cucumber/messages'
 
 import { LintError } from '../error'
-import { offOrNumberOrSeverityAndNumber } from '../schema'
+import { offOrNumberOrSeverityAndNumber } from '../schemas'
 import Rule from '../rule'
 
 /**
@@ -22,7 +22,7 @@ export const run = (rule: Rule, document: GherkinDocument): Array<LintError> => 
     }
   })
 
-  const expected = rule.args as number
+  const expected = rule.schema.args as number
   if (scenarioCount > expected) {
     errors.push({
       message: `Expected max ${expected} scenarios per file. Found ${scenarioCount}.`,
