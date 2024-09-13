@@ -17,7 +17,7 @@ export default class Schema {
     this.parse()
   }
 
-  private parse() {
+  private parse(): void {
     // If it's a string, it's a severity or switch
     if (typeof this.rawSchema === 'string') {
       if ([Severity.error.toString(), Severity.warn.toString()].includes(this.rawSchema)) {
