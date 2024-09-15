@@ -78,8 +78,25 @@ export default class Runner {
       const document = parser.parse(content.toString())
       const walk = walker.walkGherkinDocument(document)
 
+      const inlineDisabled = []
+      document.comments.forEach((comment) => {
+        const rulesToDisable = comment.text.replace(/#\s?gherklin-disable\s?/, '')
+        if (rulesToDisable.length) {
+          inlineDisabled.push(...rulesToDisable.split(', '))
+        }
+      })
+
+      // Check for gherklin-disable and no arguments, which means we disable
+      // Gherklin for the whole file
+      const disableCheck = document.comments[0]?.text?.indexOf('gherklin-disable')
+      if (disableCheck !== undefined && disableCheck > -1) {
+        if (inlineDisabled.length === 0) {
+          continue
+        }
+      }
+
       for (const rule of this.rules) {
-        if (!rule.schema.enabled) {
+        if (!rule.schema.enabled || inlineDisabled.includes(rule.name)) {
           continue
         }
 
