@@ -1,6 +1,7 @@
 #!/bin/node
 
 import { readdirSync, readFileSync } from 'node:fs'
+import chalk from 'chalk'
 
 const fileLocation = './src/rules/README.md'
 const rules = readdirSync('./src/rules')
@@ -14,7 +15,7 @@ rules.forEach((rule) => {
   // Look for the rule in the index
   const indexIndex = content.indexOf(`[${rule}](#${rule})`)
   if (indexIndex === -1) {
-    errors.push(`Could not find rule ${rule} in README index`)
+    errors.push(chalk.redBright(`Could not find rule ${rule} in README index`))
   }
 
   const smallWords = ['at', 'in']
@@ -35,7 +36,7 @@ rules.forEach((rule) => {
 
   const index = content.indexOf(`### ${ruleTitlized}`)
   if (index === -1) {
-    errors.push(`Could not find entry for ${ruleTitlized} in README`)
+    errors.push(chalk.redBright(`Could not find entry for ${ruleTitlized} in README`))
   }
 })
 
