@@ -1,4 +1,8 @@
 export default {
+  reporter: {
+    type: 'html',
+    title: 'Test Reporter',
+  },
   featureDirectory: './tests/acceptance/features',
   rules: {
     indentation: [

@@ -1,3 +1,9 @@
+export interface ReporterConfig {
+  type?: string
+  title?: string
+  configDirectory: string
+}
+
 export interface GherkinKeywordNumericals {
   feature?: number
   background?: number
@@ -46,6 +52,7 @@ export interface GherklinConfiguration {
   customRulesDirectory?: string
   featureDirectory?: string
   rules?: RuleConfiguration
+  reporter?: ReporterConfig
 }
 
 export interface RuleDefinition {

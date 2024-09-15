@@ -6,19 +6,21 @@ import { IdGenerator } from '@cucumber/messages'
 
 import { LintError } from './error'
 import Rule from './rule'
-import { outputErrors, outputSchemaErrors, Results } from './output'
+import { outputSchemaErrors, Results } from './output'
 import { getFiles } from './utils'
 import Config from './config'
-import { GherklinConfiguration, Severity } from './types'
+import { GherklinConfiguration, ReporterConfig, Severity } from './types'
+import Reporter from './reporters/reporter'
+import HTMLReporter from './reporters/html_reporter'
 
 export default class Runner {
-  private errors: Map<string, Array<LintError>> = new Map()
-
   public gherkinFiles: Array<string> = []
 
   private rules: Array<Rule> = []
 
   private config: GherklinConfiguration
+
+  private reporter: Reporter
 
   constructor(gherklinConfig?: GherklinConfiguration) {
     if (gherklinConfig) {
@@ -30,6 +32,12 @@ export default class Runner {
     if (!this.config) {
       this.config = await new Config().fromFile()
     }
+
+    const reporterConfig = Object.assign({}, this.config?.reporter, {
+      configDirectory: this.config.configDirectory,
+    }) as ReporterConfig
+
+    this.reporter = new HTMLReporter(reporterConfig)
 
     this.gherkinFiles = await getFiles(
       path.resolve(this.config.configDirectory, this.config.featureDirectory),
@@ -107,31 +115,27 @@ export default class Runner {
             ruleErrors[index].rule = rule.name
           })
 
-          if (this.errors.has(fileName)) {
-            this.errors.set(fileName, [...ruleErrors, ...this.errors.get(fileName)])
-            continue
-          }
-          this.errors.set(fileName, ruleErrors)
+          this.reporter.addErrors(fileName, ruleErrors)
         }
       }
     }
 
-    outputErrors(this.errors)
-
-    if (this.errors.size) {
+    if (this.reporter.errors.size) {
       let allWarns = true
 
-      for (const key of this.errors.keys()) {
-        const errors = this.errors.get(key)
+      for (const key of this.reporter.errors.keys()) {
+        const errors = this.reporter.errors.get(key)
         const hasErrorSeverity = errors.some((err) => err.severity === Severity.error)
         if (hasErrorSeverity) {
           allWarns = false
         }
       }
 
+      this.reporter.write()
+
       return {
         success: allWarns === true,
-        errors: this.errors,
+        errors: this.reporter.errors,
         schemaErrors: new Map(),
       }
     }

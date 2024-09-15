@@ -135,6 +135,12 @@ The `run` function accepts two arguments
 
 The `run` function must return an array of [LintError](./src/error.ts) (or an empty array for no errors).
 
+# Reporting
+
+By default, Gherklin outputs to STDOUT. You can change this by specifying the reporter in your `gherklin.config.ts` file or inline configuration.
+
+Currently, only the HTML and STDOUT reporter are available.
+
 # Contributing
 
 If you are adding new rules, they must follow the same format as existing rules (see [Custom Rules](#custom-rules)).

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<head>
+  <title>{{title}}</title>
+
+  <style>
+      body{background:#fefefe;padding:0;margin:0;font-family:Verdana,Arial,sans-serif;font-size:1rem;}
+      header{padding:1rem;background:cornflowerblue;color:white;text-align:center;}
+      .container{padding:1rem;display:flex;flex-direction:row;}
+      #file-links{flex:0.4;}
+      #file-contents{flex:0.6;}
+      .file-content{border-bottom:1px solid #ccc;background:#fff;margin-bottom:2rem;display:flex;}
+      .gutter{width:2rem;background:#eee;text-align:right;border-right:1px solid #ccc;color:#777;}
+      .content,.gutter{padding:0.5rem;font-family:monospace;}
+      .gutter p, .content p{margin:0.2rem 0;}
+      .line{position:relative;}
+      .line.has-error{text-decoration:red wavy underline;cursor:pointer;}
+      .error{position:absolute;width:20rem;text-align:left;background:white;border:1px solid #ccc;padding:0.2rem;bottom:1rem;display:none;}
+      .error .rule{color:#888;}
+      .keyword{color:cornflowerblue;}
+      .severity-warn{color:darkorange}
+      .severity-error{color:indianred}
+      .file-name{text-decoration:underline;color:#777;}
+  </style>
+</head>
+<body>
+<header>
+  <h1>Gherklin Report</h1>
+</header>
+<div class="container">
+  <section id="file-links">
+    <nav>
+      <ul>
+        {{#each files}}
+          <li>
+            <a href="#{{this.anchor}}">
+              {{this.name}}
+            </a>
+          </li>
+        {{/each}}
+      </ul>
+    </nav>
+  </section>
+  <section id="file-contents">
+    {{#each files}}
+      <p class="file-name">{{this.name}}</p>
+      <div class="file-content" id="{{this.anchor}}">
+        <div class="gutter">
+          {{#each this.lines}}
+            <p>{{this.lineNumber}}</p>
+          {{/each}}
+        </div>
+        <div class="content">
+          {{#each this.lines}}
+            <div class="line {{#if this.hasError}}has-error{{/if}}" style="padding-left: {{this.padding}}rem" onclick="showError(this)">
+              {{#if this.hasError}}
+              <div class="error">
+                {{#each this.errors}}
+                  <p class="rule">
+                    <span class="severity severity-{{this.severity}}">{{this.severity}}</span>
+                    {{this.rule}}
+                  </p>
+                  {{this.message}}
+                {{/each}}
+              </div>
+              {{/if}}
+              <p>
+                {{this.content}}&nbsp;
+              </p>
+            </div>
+          {{/each}}
+        </div>
+      </div>
+    {{/each}}
+  </section>
+</div>
+
+<script>
+  const showError = (e) => {
+    const errElement = e.querySelector('.error')
+    errElement.style.display = errElement.style.display === 'block' ? 'none' : 'block';
+  }
+</script>
+</body>
