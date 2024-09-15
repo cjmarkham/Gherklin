@@ -20,6 +20,7 @@ If a rule does not specify a severity, it will default to `warn`.
 * [no-empty-file](#no-empty-file)
 * [no-trailing-spaces](#no-trailing-spaces)
 * [no-unnamed-scenarios](#no-unnamed-scenarios)
+* [keywords-in-logical-order](#keywords-in-logical-order)
 
 ### Allowed Tags
 
@@ -307,6 +308,30 @@ Enable the rule and set severity
 export default {
   rules: {
     'no-unnamed-scenarios': 'error',
+  }
+}
+```
+
+### Keywords in Logical Order
+
+Asserts that keywords follow the logical order or Given, When, Then.
+
+**Examples**
+
+Enable the rule
+
+```typescript
+export default {
+  rules: {
+    'keywords-in-logical-order': 'on', 
+  }
+}
+```
+Enable the rule and set severity
+```typescript
+export default {
+  rules: {
+    'keywords-in-logical-order': 'error',
   }
 }
 ```
