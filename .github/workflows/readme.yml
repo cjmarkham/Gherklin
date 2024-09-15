@@ -1,0 +1,19 @@
+name: Check README for rule entry
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [22.x]
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run README checker
+        run: npx tsx .github/readme-checker.ts
