@@ -3,6 +3,7 @@ import { GherkinDocument } from '@cucumber/messages'
 import { LintError } from '../error'
 import { switchOrSeveritySchema } from '../schemas'
 import Rule from '../rule'
+import { lineDisabled } from '../utils'
 
 /**
  * Allowed:
@@ -18,6 +19,10 @@ export const run = (rule: Rule, document: GherkinDocument): Array<LintError> => 
 
   document.feature.children.forEach((child) => {
     if (!child.scenario) {
+      return
+    }
+
+    if (lineDisabled(document.comments, child.scenario.location.line)) {
       return
     }
 

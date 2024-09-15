@@ -79,6 +79,32 @@ export default {
 
 `rules` contains the configuration for each rule, whether built in or custom. Check [rules](./src/rules/README.md) for a list of built in rules.
 
+# Disabling Rules
+
+Gherklin rules can be disabled on a per line or per file basis.
+
+Adding `gherklin-disable` at the top of a file in a comment will disable Gherklin rules for that file.
+
+### Example
+```gherkin
+# gherklin-disable
+Feature: All disabled
+  Scenario: Nothing here will be linted
+```
+
+Adding `gherklin-disable-next-line` will disable Gherklin for the next line.
+
+### Example
+```gherkin
+Feature: The below tag is invalid
+  # gherklin-disable-next-line
+  @invalid-tag
+  Scenario: The above tag is invalid
+```
+
+While `gherklin-disable` works for every rule, `gherklin-disable-next-line` only works for rules where it makes sense.
+For example, using `gherklin-disable-next-line` does not make sense for the `no-empty-file` rule.
+
 # Automatic Fixing
 **Gherklin** doesn't support automatic fixes that you may be used to with things like ESLint and Prettier.
 

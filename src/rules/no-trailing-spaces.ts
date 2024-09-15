@@ -23,7 +23,15 @@ export const run = async (rule: Rule, document: GherkinDocument, fileName: strin
   })
 
   let lineNumber = 1
+  let previousLine = undefined
+
   for await (const line of rl) {
+    if (previousLine !== undefined) {
+      const disableCheck = previousLine.match(/#\s?gherklin-disable-next-line/)
+      if (disableCheck) {
+        continue
+      }
+    }
     if (line.charCodeAt(line.length - 1) === 32) {
       errors.push({
         message: 'Found trailing whitespace',
@@ -34,6 +42,7 @@ export const run = async (rule: Rule, document: GherkinDocument, fileName: strin
       } as LintError)
     }
     lineNumber += 1
+    previousLine = line
   }
 
   return errors

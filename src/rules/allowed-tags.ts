@@ -3,6 +3,7 @@ import { GherkinDocument } from '@cucumber/messages'
 import { LintError } from '../error'
 import { offOrStringArrayOrSeverityAndStringArray } from '../schemas'
 import Rule from '../rule'
+import { lineDisabled } from '../utils'
 
 /**
  * Allowed:
@@ -24,6 +25,10 @@ export const run = (rule: Rule, document: GherkinDocument): Array<LintError> => 
   }
 
   document.feature.tags.forEach((tag) => {
+    if (lineDisabled(document.comments, tag.location.line)) {
+      return
+    }
+
     if (!allowedTags.includes(tag.name)) {
       errors.push({
         message: `Found a feature tag that is not allowed. Got ${tag.name}, wanted ${Array.isArray(allowedTags) ? allowedTags.join(', ') : allowedTags}`,
@@ -38,6 +43,10 @@ export const run = (rule: Rule, document: GherkinDocument): Array<LintError> => 
     }
 
     child.scenario.tags.forEach((tag) => {
+      if (lineDisabled(document.comments, tag.location.line)) {
+        return
+      }
+
       if (!allowedTags.includes(tag.name)) {
         errors.push({
           message: `Found a scenario tag that is not allowed. Got ${tag.name}, wanted ${Array.isArray(allowedTags) ? allowedTags.join(', ') : allowedTags}`,
