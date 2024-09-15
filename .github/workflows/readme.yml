@@ -16,4 +16,4 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Run README checker
-        run: npx tsx ../readme-checker.ts
+        run: npx tsx .github/readme-checker.ts
