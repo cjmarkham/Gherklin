@@ -15,9 +15,7 @@
   },
   "keywords": [
     "gherkin",
-    "lint",
-    "cucumberjs",
-    "cucumber"
+    "linter"
   ],
   "main": "./src/index.ts",
   "bin": "./bin/gherklin",
@@ -30,7 +28,7 @@
     }
   },
   "type": "module",
-  "author": "Carl Markham <doddsey65@gmail.com>",
+  "author": "Carl Markham <admin@gherklin.com>",
   "license": "ISC",
   "dependencies": {
     "@cucumber/gherkin": "^29.0.0",
