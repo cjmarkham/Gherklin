@@ -1,12 +1,12 @@
+<h1 class="user-content-gherklin" align="center">Gherklin</h1>
 <div align="right">
-  <img align="left" src=".github/gherkie.png" alt="Gherkie" width="200" height="200">
-  <h1 align="center">Gherklin</h1>
+  <img align="left" src=".github/gherkie.png" alt="Gherkie" width="120" height="120">
   
-  <p align="center">
+  <p align="left">
       A linter for Gherkin, using TypeScript and ESM.
   </p>
   
-  <p align="center">
+  <p align="left">
     <a href="https://github.com/cjmarkham/Gherklin/actions/workflows/tests.yml">
         <img src="https://github.com/cjmarkham/gherkin-lint/actions/workflows/tests.yml/badge.svg">
     </a>
@@ -20,7 +20,7 @@
         <img alt="npm version" src="https://img.shields.io/npm/v/gherklin.svg">
     </a>
   </p>
-  <p align="center">
+  <p align="left">
     Lint your Gherkin files, with an extensible list of rules. Use the built in rules or create your own. Go nuts, go <strong>Gherklin</strong>.
   </p>
 </div>
