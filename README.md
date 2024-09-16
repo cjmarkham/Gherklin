@@ -1,6 +1,6 @@
 <div align="right">
   <img align="left" src=".github/gherkie.png" alt="Gherkie" width="200" height="200">
-  <h2 align="center">Gherklin</h2>
+  <h1 align="center">Gherklin</h1>
   
   <p align="center">
       A linter for Gherkin, using TypeScript and ESM.
