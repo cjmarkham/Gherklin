@@ -3,7 +3,7 @@
   <img align="left" src=".github/gherkie.png" alt="Gherkie" width="120" height="120">
   
   <p align="left">
-      A linter for Gherkin, using TypeScript and ESM.
+      <em>Always clean your Gherkin!</em>
   </p>
   
   <p align="left">
@@ -21,7 +21,7 @@
     </a>
   </p>
   <p align="left">
-    Lint your Gherkin files, with an extensible list of rules. Use the built in rules or create your own. Go nuts, go <strong>Gherklin</strong>.
+    Use Gherklin. The number 1 brand of Gherkin cleaner, recommended by Gherkin washers everywhere.
   </p>
 </div>
 
