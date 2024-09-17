@@ -22,46 +22,48 @@ export const run = (rule: Rule, document: GherkinDocument): Array<LintError> => 
 
   const errors: Array<LintError> = []
 
-  document.feature.children.forEach((child, index) => {
+  document.feature.children.forEach((child) => {
     if (!child.scenario) {
-      return
-    }
-    const nextChild = document.feature.children[index + 1]
-    if (!nextChild) {
       return
     }
 
     const { steps: thisSteps } = child.scenario
-    const { steps: nextSteps } = nextChild.scenario
+    const otherScenarios = document.feature.children
+      .filter((c) => c.scenario !== undefined)
+      .filter((c) => c.scenario.id !== child.scenario.id)
+      .map((c) => c.scenario)
+
     let totalLev = 0
     let maxPossibleLev = 0
 
-    totalLev += thisSteps
-      .map((step, i): number => {
-        const nextStep = nextSteps[i]
-        if (!nextStep) {
-          return 0
-        }
+    otherScenarios.forEach((other) => {
+      totalLev += thisSteps
+        .map((step, i): number => {
+          const nextStep = other.steps[i]
+          if (!nextStep) {
+            return 0
+          }
 
-        const comparison = [`${step.keyword}${step.text}`, `${nextStep.keyword}${nextStep.text}`]
-        maxPossibleLev += comparison[0].length + comparison[1].length
-        return levenshtein(comparison[0], comparison[1])
-      })
-      .reduce((a, b) => a + b)
+          const comparison = [`${step.keyword}${step.text}`, `${nextStep.keyword}${nextStep.text}`]
+          maxPossibleLev += comparison[0].length + comparison[1].length
+          return levenshtein(comparison[0], comparison[1])
+        })
+        .reduce((a, b) => a + b)
 
-    const percentage = 100 - (totalLev / maxPossibleLev) * 100
+      const percentage = 100 - (totalLev / maxPossibleLev) * 100
 
-    let threshold = defaultThreshold
-    if (rule.schema.args) {
-      threshold = rule.schema.args as number
-    }
+      let threshold = defaultThreshold
+      if (rule.schema.args) {
+        threshold = rule.schema.args as number
+      }
 
-    if (percentage > threshold) {
-      errors.push({
-        message: `Scenario "${child.scenario.name}" is too similar (> ${percentage.toFixed(2)}%) to scenario "${nextChild.scenario.name}"`,
-        location: child.scenario.location,
-      } as LintError)
-    }
+      if (percentage > threshold) {
+        errors.push({
+          message: `Scenario "${child.scenario.name}" is too similar (> ${percentage.toFixed(2)}%) to scenario "${other.name}"`,
+          location: child.scenario.location,
+        } as LintError)
+      }
+    })
   })
 
   return errors
