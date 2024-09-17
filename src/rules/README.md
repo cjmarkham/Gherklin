@@ -21,7 +21,7 @@ If a rule does not specify a severity, it will default to `warn`.
 * [no-trailing-spaces](#no-trailing-spaces)
 * [no-unnamed-scenarios](#no-unnamed-scenarios)
 * [keywords-in-logical-order](#keywords-in-logical-order)
-* [no-similar-scenarios](#no-similar-sceharios)
+* [no-similar-scenarios](#no-similar-scenarios)
 
 ### Allowed Tags
 

@@ -1,7 +1,7 @@
 import { GherkinDocument } from '@cucumber/messages'
 
 import { LintError } from '../error'
-import { offOrNumberOrSeverityAndNumber, offOrNumberOrSeverityOrSeverityAndNumber } from '../schemas'
+import { offOrNumberOrSeverityOrSeverityAndNumber } from '../schemas'
 import Rule from '../rule'
 import { levenshtein } from '../utils'
 
