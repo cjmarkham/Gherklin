@@ -58,7 +58,11 @@ export default class Rule {
 
     const schemaErrors = this.schema.validate(this.ruleDefinition.schema)
     if (schemaErrors.length) {
-      errors.set(this.name, [...schemaErrors, ...errors.get(this.name)])
+      if (errors.get(this.name)) {
+        errors.set(this.name, [...schemaErrors, ...errors.get(this.name)])
+      } else {
+        errors.set(this.name, schemaErrors)
+      }
     }
 
     return errors
