@@ -3,81 +3,266 @@
   <title>{{title}}</title>
 
   <style>
-      body{background:#fefefe;padding:0;margin:0;font-family:Verdana,Arial,sans-serif;font-size:1rem;}
-      header{padding:1rem;background:cornflowerblue;color:white;text-align:center;}
-      .container{padding:1rem;display:flex;flex-direction:row;}
-      #file-links{flex:0.4;}
-      #file-contents{flex:0.6;}
-      .file-content{border-bottom:1px solid #ccc;background:#fff;margin-bottom:2rem;display:flex;}
-      .gutter{width:2rem;background:#eee;text-align:right;border-right:1px solid #ccc;color:#777;}
-      .content,.gutter{padding:0.5rem;font-family:monospace;}
-      .gutter p, .content p{margin:0.2rem 0;}
-      .line{position:relative;}
-      .line.has-error{text-decoration:red wavy underline;cursor:pointer;}
-      .error{position:absolute;width:20rem;text-align:left;background:white;border:1px solid #ccc;padding:0.2rem;bottom:1rem;display:none;}
-      .error .rule{color:#888;}
-      .keyword{color:cornflowerblue;}
-      .severity-warn{color:darkorange}
-      .severity-error{color:indianred}
-      .file-name{text-decoration:underline;color:#777;}
+      :root {
+          --color-primary: #5B21B6;
+          --color-secondary: #4C1D95;
+          --color-accent: #FCD34D;
+          --color-text: #FFFFFF;
+          --color-background: #F3F4F6;
+          --color-card-bg: #FFFFFF;
+          --color-text-dark: #1F2937;
+          --color-feature-bg: #3C1361;
+          --color-feature-accent: #FFD700;
+          --color-code-bg: #F8F8F8;
+          --color-code-text: #24292e;
+          --color-code-keyword: cornflowerblue;
+          --color-code-string: #22863a;
+          --color-code-number: #005cc5;
+          --color-code-comment: #6a737d;
+      }
+      body {
+          font-family: Arial, sans-serif;
+          line-height: 1.6;
+          color: var(--color-text-dark);
+          margin: 0;
+          padding: 0;
+          background-color: var(--color-feature-bg);
+      }
+      .main-content {
+          padding: 20px;
+          width: 1170px;
+          height: 100vh;
+          margin: 0 auto;
+      }
+      header > div {
+          width: 1170px;
+          margin: 0 auto;
+      }
+      header {
+          background: var(--color-secondary);
+          padding: 2rem;
+      }
+      header h1 {
+          color: var(--color-text);
+          margin: 0;
+      }
+      h1, h2 {
+          color: var(--color-primary);
+      }
+
+      .code-snippet {
+          background-color: var(--color-code-bg);
+          overflow: hidden;
+          position: relative;
+      }
+      .code-snippet pre {
+          margin: 0;
+          padding: 0;
+          font-family: 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
+          font-size: 14px;
+          line-height: 1.5;
+      }
+      .line {
+          display: flex;
+          color: var(--color-code-text);
+          min-height: 1.2em;
+      }
+      .gutter {
+          user-select: none;
+          padding: 0 10px;
+          text-align: right;
+          min-width: 40px;
+          background-color: rgba(0, 0, 0, 0.2);
+          display: flex;
+          justify-content: flex-end;
+          align-items: center;
+      }
+      .line-number {
+          color: var(--color-code-comment);
+          font-size: 12px;
+      }
+      .gutter svg{
+          color: indianred;
+          cursor: pointer;
+          margin-right: 5px;
+          width: 20px;
+      }
+      .code-content {
+          padding: 0 10px;
+      }
+      .code-snippet pre {
+          margin: 0;
+          padding: 0;
+          font-family: 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
+      }
+      .error-details {
+          display: none;
+          background-color: var(--color-feature-bg);
+          color: var(--color-text);
+          border: 1px solid var(--color-feature-accent);
+          padding: 10px;
+          position: absolute;
+          left: 60px;
+          top: 20px;
+          width: 250px;
+          z-index: 10;
+          box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      }
+      .error-title {
+          font-weight: bold;
+          margin-bottom: 5px;
+          color: var(--color-feature-accent);
+      }
+      .issue-count {
+          background-color: var(--color-feature-accent);
+          color: var(--color-text-dark);
+          border-radius: 50%;
+          width: 24px;
+          height: 24px;
+          display: inline-flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 0.8em;
+          margin-left: 5px;
+      }
+      .keyword { color: var(--color-code-keyword); }
+      .collapsible {
+          background-color: var(--color-card-bg);
+          color: var(--color-text-dark);
+          cursor: pointer;
+          padding: 18px;
+          width: 100%;
+          border: none;
+          text-align: left;
+          outline: none;
+          font-size: 15px;
+          transition: 0.4s;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          flex: 1;
+      }
+      .active, .collapsible:hover {
+          background-color: var(--color-background);
+      }
+      .content {
+          max-height: 0;
+          overflow: hidden;
+          transition: max-height 0.2s ease-out;
+          background-color: var(--color-card-bg);
+      }
+      .up-arrow {
+          display: none;
+      }
+      .underline {
+          text-decoration: indianred wavy underline;
+      }
+      .hidden {
+          display: none;
+      }
   </style>
 </head>
 <body>
 <header>
-  <h1>Gherklin Report</h1>
+  <div>
+    <h1>{{title}}</h1>
+  </div>
 </header>
-<div class="container">
-  <section id="file-links">
-    <nav>
-      <ul>
-        {{#each files}}
-          <li>
-            <a href="#{{this.anchor}}">
-              {{this.name}}
-            </a>
-          </li>
-        {{/each}}
-      </ul>
-    </nav>
-  </section>
-  <section id="file-contents">
-    {{#each files}}
-      <p class="file-name">{{this.name}}</p>
-      <div class="file-content" id="{{this.anchor}}">
-        <div class="gutter">
-          {{#each this.lines}}
-            <p>{{this.lineNumber}}</p>
-          {{/each}}
-        </div>
-        <div class="content">
-          {{#each this.lines}}
-            <div class="line {{#if this.hasError}}has-error{{/if}}" style="padding-left: {{this.padding}}rem" onclick="showError(this)">
-              {{#if this.hasError}}
-              <div class="error">
-                {{#each this.errors}}
-                  <p class="rule">
-                    <span class="severity severity-{{this.severity}}">{{this.severity}}</span>
-                    {{this.rule}}
-                  </p>
-                  {{this.message}}
-                {{/each}}
-              </div>
-              {{/if}}
-              <p>
-                {{this.content}}&nbsp;
-              </p>
-            </div>
-          {{/each}}
-        </div>
+
+<div class="main-content">
+  {{#each files}}
+    <div id="file1">
+    <button class="collapsible">
+      <span class="issue-count">3</span>
+      <span>{{this.name}}</span>
+      <span class="down-arrow">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+             stroke-linejoin="round" class="lucide lucide-arrow-down"><path d="M12 5v14" /><path
+          d="m19 12-7 7-7-7" /></svg>
+      </span>
+      <span class="up-arrow">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+             stroke-linejoin="round" class="lucide lucide-arrow-up"><path d="m5 12 7-7 7 7" /><path
+          d="M12 19V5" /></svg>
+      </span>
+    </button>
+    <div class="content">
+      <div class="code-snippet">
+        <pre><code>{{#each this.lines}}<div class="line {{#if this.hasError}}underline{{/if}}"><div class="gutter"><svg data-error="error-{{this.id}}" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x {{#if this.hasError}}{{else}}hidden{{/if}}"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">{{this.number}}</span></div><div class="code-content"><span class="keyword" style="padding-left:{{this.padding}}px;">{{this.keyword}}</span>{{this.content}}</div></div>{{/each}}</code></pre>
       </div>
-    {{/each}}
-  </section>
+    </div>
+  </div>
+  {{/each}}
 </div>
 
+{{#each files}}
+  {{#each this.lines }}
+    <div id="error-{{this.id}}" class="error-details">
+      <div class="error-title">{{this.error.severity}}: {{this.error.rule}}</div>
+      <div>{{this.error.message}}</div>
+    </div>
+  {{/each}}
+{{/each}}
+
 <script>
-  const showError = (e) => {
-    const errElement = e.querySelector('.error')
-    errElement.style.display = errElement.style.display === 'block' ? 'none' : 'block';
+  document.querySelectorAll('.gutter > svg').forEach((icon) => {
+    icon.addEventListener('click', (e) => {
+      e.stopPropagation()
+      const errorId = icon.getAttribute('data-error')
+      const errorDetails = document.getElementById(errorId)
+
+      // Hide all other error details
+      document.querySelectorAll('.error-details').forEach((detail) => {
+        if (detail.id !== errorId) {
+          detail.style.display = 'none'
+        }
+      })
+
+      // Toggle the clicked error detail
+      if (errorDetails.style.display === 'block') {
+        errorDetails.style.display = 'none'
+      } else {
+        const rect = icon.getBoundingClientRect()
+        console.log(rect)
+        errorDetails.style.display = 'block'
+        errorDetails.style.left = `${rect.left + 30}px`
+        errorDetails.style.top = `${rect.top}px`
+      }
+    })
+  })
+
+  // Close error details when clicking outside
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.error-details').forEach((detail) => {
+      detail.style.display = 'none'
+    })
+  })
+
+  // Collapsible functionality
+  const collapsibles = document.getElementsByClassName('collapsible')
+
+  for (let col of collapsibles) {
+    col.addEventListener('click', () => {
+      col.classList.toggle('active')
+      const content = col.nextElementSibling
+      if (content.style.maxHeight) {
+        content.style.maxHeight = null
+      } else {
+        content.style.maxHeight = content.scrollHeight + 'px'
+      }
+
+      const downArrow = col.getElementsByClassName('down-arrow')[0]
+      const upArrow = col.getElementsByClassName('up-arrow')[0]
+      if (col.classList.contains('active')) {
+        upArrow.style.display = 'block'
+        downArrow.style.display = 'none'
+      } else {
+        upArrow.style.display = 'none'
+        downArrow.style.display = 'block'
+      }
+    })
   }
 </script>
 </body>

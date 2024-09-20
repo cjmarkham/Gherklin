@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<head>
+  <title>Test Reporter</title>
+
+  <style>
+      :root {
+          --color-primary: #5B21B6;
+          --color-secondary: #4C1D95;
+          --color-accent: #FCD34D;
+          --color-text: #FFFFFF;
+          --color-background: #F3F4F6;
+          --color-card-bg: #FFFFFF;
+          --color-text-dark: #1F2937;
+          --color-feature-bg: #3C1361;
+          --color-feature-accent: #FFD700;
+          --color-code-bg: #F8F8F8;
+          --color-code-text: #24292e;
+          --color-code-keyword: cornflowerblue;
+          --color-code-string: #22863a;
+          --color-code-number: #005cc5;
+          --color-code-comment: #6a737d;
+      }
+      body {
+          font-family: Arial, sans-serif;
+          line-height: 1.6;
+          color: var(--color-text-dark);
+          margin: 0;
+          padding: 0;
+          background-color: var(--color-feature-bg);
+      }
+      .main-content {
+          padding: 20px;
+          width: 1170px;
+          height: 100vh;
+          margin: 0 auto;
+      }
+      header > div {
+          width: 1170px;
+          margin: 0 auto;
+      }
+      header {
+          background: var(--color-secondary);
+          padding: 2rem;
+      }
+      header h1 {
+          color: var(--color-text);
+          margin: 0;
+      }
+      h1, h2 {
+          color: var(--color-primary);
+      }
+
+      .code-snippet {
+          background-color: var(--color-code-bg);
+          overflow: hidden;
+          position: relative;
+      }
+      .code-snippet pre {
+          margin: 0;
+          padding: 0;
+          font-family: 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
+          font-size: 14px;
+          line-height: 1.5;
+      }
+      .line {
+          display: flex;
+          color: var(--color-code-text);
+          min-height: 1.2em;
+      }
+      .gutter {
+          user-select: none;
+          padding: 0 10px;
+          text-align: right;
+          min-width: 40px;
+          background-color: rgba(0, 0, 0, 0.2);
+          display: flex;
+          justify-content: flex-end;
+          align-items: center;
+      }
+      .line-number {
+          color: var(--color-code-comment);
+          font-size: 12px;
+      }
+      .gutter svg{
+          color: indianred;
+          cursor: pointer;
+          margin-right: 5px;
+          width: 20px;
+      }
+      .code-content {
+          padding: 0 10px;
+      }
+      .code-snippet pre {
+          margin: 0;
+          padding: 0;
+          font-family: 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
+      }
+      .error-details {
+          display: none;
+          background-color: var(--color-feature-bg);
+          color: var(--color-text);
+          border: 1px solid var(--color-feature-accent);
+          padding: 10px;
+          position: absolute;
+          left: 60px;
+          top: 20px;
+          width: 250px;
+          z-index: 10;
+          box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      }
+      .error-title {
+          font-weight: bold;
+          margin-bottom: 5px;
+          color: var(--color-feature-accent);
+      }
+      .issue-count {
+          background-color: var(--color-feature-accent);
+          color: var(--color-text-dark);
+          border-radius: 50%;
+          width: 24px;
+          height: 24px;
+          display: inline-flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 0.8em;
+          margin-left: 5px;
+      }
+      .keyword { color: var(--color-code-keyword); }
+      .collapsible {
+          background-color: var(--color-card-bg);
+          color: var(--color-text-dark);
+          cursor: pointer;
+          padding: 18px;
+          width: 100%;
+          border: none;
+          text-align: left;
+          outline: none;
+          font-size: 15px;
+          transition: 0.4s;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          flex: 1;
+      }
+      .active, .collapsible:hover {
+          background-color: var(--color-background);
+      }
+      .content {
+          max-height: 0;
+          overflow: hidden;
+          transition: max-height 0.2s ease-out;
+          background-color: var(--color-card-bg);
+      }
+      .up-arrow {
+          display: none;
+      }
+      .underline {
+          text-decoration: indianred wavy underline;
+      }
+      .hidden {
+          display: none;
+      }
+  </style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Test Reporter</h1>
+  </div>
+</header>
+
+<div class="main-content">
+    <div id="file1">
+    <button class="collapsible">
+      <span class="issue-count">3</span>
+      <span>/tests/acceptance/features/no-unnamed-scenarios/invalid.feature</span>
+      <span class="down-arrow">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+             stroke-linejoin="round" class="lucide lucide-arrow-down"><path d="M12 5v14" /><path
+          d="m19 12-7 7-7-7" /></svg>
+      </span>
+      <span class="up-arrow">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+             stroke-linejoin="round" class="lucide lucide-arrow-up"><path d="m5 12 7-7 7 7" /><path
+          d="M12 19V5" /></svg>
+      </span>
+    </button>
+    <div class="content">
+      <div class="code-snippet">
+        <pre><code><div class="line "><div class="gutter"><svg data-error="error-48b90a37-6951-4ea0-af36-747d72ca4aca" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">1</span></div><div class="code-content"><span class="keyword" style="padding-left:0px;">Feature</span>: No Unnamed Scenarios</div></div><div class="line "><div class="gutter"><svg data-error="error-130e8d48-e693-4e1a-a99e-2f98dc29b936" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">2</span></div><div class="code-content"><span class="keyword" style="padding-left:0px;"></span></div></div><div class="line underline"><div class="gutter"><svg data-error="error-d76ff3cb-dde7-45b8-9675-877d50ee5667" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x "><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">3</span></div><div class="code-content"><span class="keyword" style="padding-left:12px;">Scenario</span>:</div></div><div class="line "><div class="gutter"><svg data-error="error-ec8b5282-68ec-455d-a9d5-47fd7e3076c7" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">4</span></div><div class="code-content"><span class="keyword" style="padding-left:30px;">Given </span>I do something</div></div><div class="line "><div class="gutter"><svg data-error="error-464c18d2-b431-46a8-b230-e00ba9b9ae2e" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">5</span></div><div class="code-content"><span class="keyword" style="padding-left:30px;">When </span>I do something else</div></div><div class="line "><div class="gutter"><svg data-error="error-6ee29802-a7d4-4e4d-978c-843daf4a3988" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">6</span></div><div class="code-content"><span class="keyword" style="padding-left:30px;">Then </span>I should have done something</div></div><div class="line "><div class="gutter"><svg data-error="error-b664ab1a-6739-4714-9cdf-25047d7f9971" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">7</span></div><div class="code-content"><span class="keyword" style="padding-left:30px;">And </span>I should have done something else</div></div><div class="line "><div class="gutter"><svg data-error="error-2c8b1c72-0652-49b3-8f0b-f4f735355375" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">8</span></div><div class="code-content"><span class="keyword" style="padding-left:30px;">But </span>I shouldn&#x27;t have done nothing</div></div><div class="line "><div class="gutter"><svg data-error="error-d0f81c48-c67b-4c2a-a753-52d3cb953c92" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">9</span></div><div class="code-content"><span class="keyword" style="padding-left:0px;"></span></div></div></code></pre>
+      </div>
+    </div>
+  </div>
+    <div id="file1">
+    <button class="collapsible">
+      <span class="issue-count">3</span>
+      <span>/tests/acceptance/features/no-trailing-spaces/invalid.feature</span>
+      <span class="down-arrow">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+             stroke-linejoin="round" class="lucide lucide-arrow-down"><path d="M12 5v14" /><path
+          d="m19 12-7 7-7-7" /></svg>
+      </span>
+      <span class="up-arrow">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+             stroke-linejoin="round" class="lucide lucide-arrow-up"><path d="m5 12 7-7 7 7" /><path
+          d="M12 19V5" /></svg>
+      </span>
+    </button>
+    <div class="content">
+      <div class="code-snippet">
+        <pre><code><div class="line "><div class="gutter"><svg data-error="error-377d346f-7ad3-4aa3-815d-3133c651dfb7" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">1</span></div><div class="code-content"><span class="keyword" style="padding-left:0px;">Feature</span>: No Trailing Spaces</div></div><div class="line "><div class="gutter"><svg data-error="error-3a2a12ec-96b7-4959-bd4c-3081888ece17" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">2</span></div><div class="code-content"><span class="keyword" style="padding-left:0px;"></span></div></div><div class="line "><div class="gutter"><svg data-error="error-dd9f6a15-2427-47b7-8213-2c9d38979eed" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">3</span></div><div class="code-content"><span class="keyword" style="padding-left:12px;">Scenario</span>: Valid Indentation</div></div><div class="line underline"><div class="gutter"><svg data-error="error-73142760-e553-4e4e-9cee-8fd8a7b88811" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x "><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">4</span></div><div class="code-content"><span class="keyword" style="padding-left:36px;">Given </span>I do something</div></div><div class="line "><div class="gutter"><svg data-error="error-280919f9-e636-4354-9676-62834c1c8c07" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">5</span></div><div class="code-content"><span class="keyword" style="padding-left:30px;">When </span>I do something else</div></div><div class="line "><div class="gutter"><svg data-error="error-a494f900-1f27-4678-8e6d-194052d3d445" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">6</span></div><div class="code-content"><span class="keyword" style="padding-left:30px;">Then </span>I should have done something</div></div><div class="line underline"><div class="gutter"><svg data-error="error-c999deff-99cf-4fed-843b-4b93142a900d" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x "><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">7</span></div><div class="code-content"><span class="keyword" style="padding-left:42px;">And </span>I should have done something else</div></div><div class="line "><div class="gutter"><svg data-error="error-d33b27ac-716d-4f3f-b196-648f12e1f63a" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">8</span></div><div class="code-content"><span class="keyword" style="padding-left:30px;">But </span>I shouldn&#x27;t have done nothing</div></div><div class="line "><div class="gutter"><svg data-error="error-737cb57b-5e88-45f2-b91f-985e78073ede" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">9</span></div><div class="code-content"><span class="keyword" style="padding-left:0px;"></span></div></div><div class="line "><div class="gutter"><svg data-error="error-68b37580-671c-43c1-b7f8-c30a2307832b" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">10</span></div><div class="code-content"><span class="keyword" style="padding-left:18px;">Scenario</span>Outline: Valid Indentation</div></div><div class="line "><div class="gutter"><svg data-error="error-3ded91e2-8dbe-4903-816d-d6ff228340b6" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">11</span></div><div class="code-content"><span class="keyword" style="padding-left:30px;">When </span>I do each of these things</div></div><div class="line "><div class="gutter"><svg data-error="error-8ae167b7-caf6-4bb5-8907-6da3c0b5ae2b" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">12</span></div><div class="code-content"><span class="keyword" style="padding-left:36px;"></span>| &lt;THING&gt; |</div></div><div class="line underline"><div class="gutter"><svg data-error="error-e3144690-5594-4477-81fb-2f15cfaefec0" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x "><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">13</span></div><div class="code-content"><span class="keyword" style="padding-left:108px;">Then </span>I should have done something</div></div><div class="line "><div class="gutter"><svg data-error="error-b5b362a2-3f85-44ce-87c4-026369411817" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">14</span></div><div class="code-content"><span class="keyword" style="padding-left:0px;"></span></div></div><div class="line "><div class="gutter"><svg data-error="error-457ccf79-9746-4153-bca0-413fa66a55dd" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">15</span></div><div class="code-content"><span class="keyword" style="padding-left:24px;">Examples</span>:</div></div><div class="line "><div class="gutter"><svg data-error="error-2d963898-7e20-44d2-b134-c55910cef2e7" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">16</span></div><div class="code-content"><span class="keyword" style="padding-left:36px;"></span>| THING |</div></div><div class="line "><div class="gutter"><svg data-error="error-ec001d22-baab-4c04-bc24-f02c4e6f2787" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">17</span></div><div class="code-content"><span class="keyword" style="padding-left:36px;"></span>| sleep |</div></div><div class="line "><div class="gutter"><svg data-error="error-f0b0b290-f31d-42bd-846a-66aa0b5dc7f7" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">18</span></div><div class="code-content"><span class="keyword" style="padding-left:36px;"></span>| eat   |</div></div><div class="line "><div class="gutter"><svg data-error="error-9d62fba2-0c11-4967-adba-ad4fbb27a88e" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">19</span></div><div class="code-content"><span class="keyword" style="padding-left:0px;"></span></div></div></code></pre>
+      </div>
+    </div>
+  </div>
+    <div id="file1">
+    <button class="collapsible">
+      <span class="issue-count">3</span>
+      <span>/tests/acceptance/features/no-empty-file/invalid.feature</span>
+      <span class="down-arrow">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+             stroke-linejoin="round" class="lucide lucide-arrow-down"><path d="M12 5v14" /><path
+          d="m19 12-7 7-7-7" /></svg>
+      </span>
+      <span class="up-arrow">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+             stroke-linejoin="round" class="lucide lucide-arrow-up"><path d="m5 12 7-7 7 7" /><path
+          d="M12 19V5" /></svg>
+      </span>
+    </button>
+    <div class="content">
+      <div class="code-snippet">
+        <pre><code><div class="line "><div class="gutter"><svg data-error="error-4a717970-7ca3-411a-b61d-3b25d471f937" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">1</span></div><div class="code-content"><span class="keyword" style="padding-left:0px;"></span></div></div></code></pre>
+      </div>
+    </div>
+  </div>
+    <div id="file1">
+    <button class="collapsible">
+      <span class="issue-count">3</span>
+      <span>/tests/acceptance/features/no-background-only/invalid.feature</span>
+      <span class="down-arrow">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+             stroke-linejoin="round" class="lucide lucide-arrow-down"><path d="M12 5v14" /><path
+          d="m19 12-7 7-7-7" /></svg>
+      </span>
+      <span class="up-arrow">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+             stroke-linejoin="round" class="lucide lucide-arrow-up"><path d="m5 12 7-7 7 7" /><path
+          d="M12 19V5" /></svg>
+      </span>
+    </button>
+    <div class="content">
+      <div class="code-snippet">
+        <pre><code><div class="line underline"><div class="gutter"><svg data-error="error-780bd759-7e71-4135-a2f2-4531f333f21c" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x "><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">1</span></div><div class="code-content"><span class="keyword" style="padding-left:0px;">Feature</span>: No Background Only</div></div><div class="line "><div class="gutter"><svg data-error="error-e463fd2b-54f4-4398-9d70-9f4ca31b609d" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">2</span></div><div class="code-content"><span class="keyword" style="padding-left:12px;"></span>Background: Invalid</div></div><div class="line "><div class="gutter"><svg data-error="error-27a99c84-d631-49b8-a057-642e5a403fc1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">3</span></div><div class="code-content"><span class="keyword" style="padding-left:0px;"></span></div></div></code></pre>
+      </div>
+    </div>
+  </div>
+    <div id="file1">
+    <button class="collapsible">
+      <span class="issue-count">3</span>
+      <span>/tests/acceptance/features/new-line-at-eof/invalid.feature</span>
+      <span class="down-arrow">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+             stroke-linejoin="round" class="lucide lucide-arrow-down"><path d="M12 5v14" /><path
+          d="m19 12-7 7-7-7" /></svg>
+      </span>
+      <span class="up-arrow">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+             stroke-linejoin="round" class="lucide lucide-arrow-up"><path d="m5 12 7-7 7 7" /><path
+          d="M12 19V5" /></svg>
+      </span>
+    </button>
+    <div class="content">
+      <div class="code-snippet">
+        <pre><code><div class="line "><div class="gutter"><svg data-error="error-01df917c-ede1-4ce0-8be8-d4832e0babad" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">1</span></div><div class="code-content"><span class="keyword" style="padding-left:0px;">Feature</span>: New Line at EOF</div></div><div class="line "><div class="gutter"><svg data-error="error-c3716ff3-45cd-45be-8af5-50eed24cea25" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">2</span></div><div class="code-content"><span class="keyword" style="padding-left:0px;"></span></div></div><div class="line "><div class="gutter"><svg data-error="error-5a4667b8-4be5-48d1-bde1-5e018c9f8c16" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">3</span></div><div class="code-content"><span class="keyword" style="padding-left:12px;">Scenario</span>: Valid Indentation</div></div><div class="line "><div class="gutter"><svg data-error="error-7f67fa89-66ce-4ac4-9963-fdaea4200bee" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">4</span></div><div class="code-content"><span class="keyword" style="padding-left:30px;">Given </span>I do something</div></div><div class="line "><div class="gutter"><svg data-error="error-e385ed15-5e22-4aa9-b909-179a243dcee9" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">5</span></div><div class="code-content"><span class="keyword" style="padding-left:30px;">When </span>I do something else</div></div><div class="line "><div class="gutter"><svg data-error="error-997e72ff-be93-4963-abba-7d7d83a5b1b7" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">6</span></div><div class="code-content"><span class="keyword" style="padding-left:30px;">Then </span>I should have done something</div></div><div class="line "><div class="gutter"><svg data-error="error-24da107f-8496-4776-84e4-5787eab41442" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">7</span></div><div class="code-content"><span class="keyword" style="padding-left:30px;">And </span>I should have done something else</div></div><div class="line "><div class="gutter"><svg data-error="error-36285dce-b39b-467d-a0d5-fdae6bb4190c" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">8</span></div><div class="code-content"><span class="keyword" style="padding-left:30px;">But </span>I shouldn&#x27;t have done nothing</div></div><div class="line "><div class="gutter"><svg data-error="error-68c3f28b-7020-41b0-9e5e-052fe644bfb0" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">9</span></div><div class="code-content"><span class="keyword" style="padding-left:0px;"></span></div></div><div class="line "><div class="gutter"><svg data-error="error-fa6a1b9b-74ab-4fe5-9b66-85b424106292" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">10</span></div><div class="code-content"><span class="keyword" style="padding-left:18px;">Scenario</span>Outline: Valid Indentation</div></div><div class="line "><div class="gutter"><svg data-error="error-c8b2ffb8-9b73-457c-8f4b-5367da875caf" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">11</span></div><div class="code-content"><span class="keyword" style="padding-left:30px;">When </span>I do each of these things</div></div><div class="line "><div class="gutter"><svg data-error="error-5c00eedf-aefc-49a6-9f1d-57d00492ccfc" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">12</span></div><div class="code-content"><span class="keyword" style="padding-left:36px;"></span>| &lt;THING&gt; |</div></div><div class="line "><div class="gutter"><svg data-error="error-d2b63092-da0a-4cef-af0b-70015f3ff8cd" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">13</span></div><div class="code-content"><span class="keyword" style="padding-left:30px;">Then </span>I should have done something</div></div><div class="line "><div class="gutter"><svg data-error="error-00b96dc3-d69a-400a-96cd-8080bf982556" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">14</span></div><div class="code-content"><span class="keyword" style="padding-left:0px;"></span></div></div><div class="line "><div class="gutter"><svg data-error="error-345c2e05-6eb7-4db0-b72c-5e8d3b5735c1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">15</span></div><div class="code-content"><span class="keyword" style="padding-left:24px;">Examples</span>:</div></div><div class="line "><div class="gutter"><svg data-error="error-16942463-93c5-4616-8bcd-ec6957c9c12c" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">16</span></div><div class="code-content"><span class="keyword" style="padding-left:36px;"></span>| THING |</div></div><div class="line "><div class="gutter"><svg data-error="error-6e3cd722-82e4-416b-b741-5d64ba69bf7f" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">17</span></div><div class="code-content"><span class="keyword" style="padding-left:36px;"></span>| sleep |</div></div><div class="line underline"><div class="gutter"><svg data-error="error-95b887a7-5846-4900-b4ef-66cc7129e213" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x "><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">18</span></div><div class="code-content"><span class="keyword" style="padding-left:36px;"></span>| eat   |</div></div></code></pre>
+      </div>
+    </div>
+  </div>
+    <div id="file1">
+    <button class="collapsible">
+      <span class="issue-count">3</span>
+      <span>/tests/acceptance/features/indentation/invalid.feature</span>
+      <span class="down-arrow">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+             stroke-linejoin="round" class="lucide lucide-arrow-down"><path d="M12 5v14" /><path
+          d="m19 12-7 7-7-7" /></svg>
+      </span>
+      <span class="up-arrow">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+             stroke-linejoin="round" class="lucide lucide-arrow-up"><path d="m5 12 7-7 7 7" /><path
+          d="M12 19V5" /></svg>
+      </span>
+    </button>
+    <div class="content">
+      <div class="code-snippet">
+        <pre><code><div class="line underline"><div class="gutter"><svg data-error="error-20ec72f9-4222-4b1b-b96e-217e6ef5bf15" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x "><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">1</span></div><div class="code-content"><span class="keyword" style="padding-left:12px;"></span>Feature: Indentation</div></div><div class="line "><div class="gutter"><svg data-error="error-934e1575-4e93-46c9-8558-28bb50abd8b4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">2</span></div><div class="code-content"><span class="keyword" style="padding-left:0px;"></span></div></div><div class="line underline"><div class="gutter"><svg data-error="error-4ad946ea-38b5-4788-8578-6146e69971bd" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x "><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">3</span></div><div class="code-content"><span class="keyword" style="padding-left:6px;">Scenario</span>: Valid Indentation</div></div><div class="line underline"><div class="gutter"><svg data-error="error-34cd85af-d6a1-4f84-b367-2146df295198" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x "><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">4</span></div><div class="code-content"><span class="keyword" style="padding-left:42px;">Given </span>I do something</div></div><div class="line underline"><div class="gutter"><svg data-error="error-61ed0b91-5428-47ec-9c8b-131d9fd154f5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x "><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">5</span></div><div class="code-content"><span class="keyword" style="padding-left:48px;">When </span>I do something else</div></div><div class="line underline"><div class="gutter"><svg data-error="error-8936f3ea-3ab9-4c72-a9a5-a7a796b9a684" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x "><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">6</span></div><div class="code-content"><span class="keyword" style="padding-left:84px;">Then </span>I should have done something</div></div><div class="line underline"><div class="gutter"><svg data-error="error-f26f60b1-b684-40b7-9176-c6500f112c38" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x "><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">7</span></div><div class="code-content"><span class="keyword" style="padding-left:42px;">And </span>I should have done something else</div></div><div class="line underline"><div class="gutter"><svg data-error="error-3083459b-bb7c-4cac-b328-f563cfb229dd" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x "><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">8</span></div><div class="code-content"><span class="keyword" style="padding-left:60px;">But </span>I shouldn&#x27;t have done nothing</div></div><div class="line "><div class="gutter"><svg data-error="error-8c7ffa4e-6714-4abc-b615-f677ebe40144" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">9</span></div><div class="code-content"><span class="keyword" style="padding-left:0px;"></span></div></div><div class="line underline"><div class="gutter"><svg data-error="error-fa2834da-2ca2-4204-b538-5db8a75f60aa" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x "><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">10</span></div><div class="code-content"><span class="keyword" style="padding-left:24px;">Scenario</span>Outline: Valid Indentation</div></div><div class="line underline"><div class="gutter"><svg data-error="error-40a8fea5-a948-4c9d-9001-3e59230ad393" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x "><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">11</span></div><div class="code-content"><span class="keyword" style="padding-left:54px;">When </span>I do each of these things</div></div><div class="line "><div class="gutter"><svg data-error="error-04427bf3-122a-4e65-b97d-ad0f168159df" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">12</span></div><div class="code-content"><span class="keyword" style="padding-left:0px;"></span>| &lt;THING&gt; |</div></div><div class="line underline"><div class="gutter"><svg data-error="error-8ea47589-e698-4f26-b0af-235a3ef2f293" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x "><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">13</span></div><div class="code-content"><span class="keyword" style="padding-left:42px;">Then </span>I should have done something</div></div><div class="line "><div class="gutter"><svg data-error="error-f90f289a-7c75-44ba-b370-792dcccc30e6" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">14</span></div><div class="code-content"><span class="keyword" style="padding-left:0px;"></span></div></div><div class="line underline"><div class="gutter"><svg data-error="error-5d2608ca-0475-48fb-a27c-d08c9520f635" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x "><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">15</span></div><div class="code-content"><span class="keyword" style="padding-left:72px;">Examples</span>:</div></div><div class="line "><div class="gutter"><svg data-error="error-b6a3dac0-d89d-4693-84c8-0dc04a83d2bb" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">16</span></div><div class="code-content"><span class="keyword" style="padding-left:12px;"></span>| THING |</div></div><div class="line "><div class="gutter"><svg data-error="error-f7ce0df9-aa20-4907-90d8-aaacd4f4863a" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">17</span></div><div class="code-content"><span class="keyword" style="padding-left:60px;"></span>| sleep |</div></div><div class="line "><div class="gutter"><svg data-error="error-34fec10f-97d7-436b-8578-01a799237525" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">18</span></div><div class="code-content"><span class="keyword" style="padding-left:78px;"></span>| eat   |</div></div><div class="line "><div class="gutter"><svg data-error="error-9c8daaa5-93b0-49cd-81d7-4900468d0cc4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x hidden"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg><span class="line-number">19</span></div><div class="code-content"><span class="keyword" style="padding-left:0px;"></span></div></div></code></pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div id="error-48b90a37-6951-4ea0-af36-747d72ca4aca" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-130e8d48-e693-4e1a-a99e-2f98dc29b936" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-d76ff3cb-dde7-45b8-9675-877d50ee5667" class="error-details">
+      <div class="error-title">warn: no-unnamed-scenarios</div>
+      <div>Found scenario with no name</div>
+    </div>
+    <div id="error-ec8b5282-68ec-455d-a9d5-47fd7e3076c7" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-464c18d2-b431-46a8-b230-e00ba9b9ae2e" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-6ee29802-a7d4-4e4d-978c-843daf4a3988" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-b664ab1a-6739-4714-9cdf-25047d7f9971" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-2c8b1c72-0652-49b3-8f0b-f4f735355375" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-d0f81c48-c67b-4c2a-a753-52d3cb953c92" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-377d346f-7ad3-4aa3-815d-3133c651dfb7" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-3a2a12ec-96b7-4959-bd4c-3081888ece17" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-dd9f6a15-2427-47b7-8213-2c9d38979eed" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-73142760-e553-4e4e-9cee-8fd8a7b88811" class="error-details">
+      <div class="error-title">warn: no-trailing-spaces</div>
+      <div>Found trailing whitespace</div>
+    </div>
+    <div id="error-280919f9-e636-4354-9676-62834c1c8c07" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-a494f900-1f27-4678-8e6d-194052d3d445" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-c999deff-99cf-4fed-843b-4b93142a900d" class="error-details">
+      <div class="error-title">warn: no-trailing-spaces</div>
+      <div>Found trailing whitespace</div>
+    </div>
+    <div id="error-d33b27ac-716d-4f3f-b196-648f12e1f63a" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-737cb57b-5e88-45f2-b91f-985e78073ede" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-68b37580-671c-43c1-b7f8-c30a2307832b" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-3ded91e2-8dbe-4903-816d-d6ff228340b6" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-8ae167b7-caf6-4bb5-8907-6da3c0b5ae2b" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-e3144690-5594-4477-81fb-2f15cfaefec0" class="error-details">
+      <div class="error-title">warn: no-trailing-spaces</div>
+      <div>Found trailing whitespace</div>
+    </div>
+    <div id="error-b5b362a2-3f85-44ce-87c4-026369411817" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-457ccf79-9746-4153-bca0-413fa66a55dd" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-2d963898-7e20-44d2-b134-c55910cef2e7" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-ec001d22-baab-4c04-bc24-f02c4e6f2787" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-f0b0b290-f31d-42bd-846a-66aa0b5dc7f7" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-9d62fba2-0c11-4967-adba-ad4fbb27a88e" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-4a717970-7ca3-411a-b61d-3b25d471f937" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-780bd759-7e71-4135-a2f2-4531f333f21c" class="error-details">
+      <div class="error-title">warn: no-background-only</div>
+      <div>File contains only a background</div>
+    </div>
+    <div id="error-e463fd2b-54f4-4398-9d70-9f4ca31b609d" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-27a99c84-d631-49b8-a057-642e5a403fc1" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-01df917c-ede1-4ce0-8be8-d4832e0babad" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-c3716ff3-45cd-45be-8af5-50eed24cea25" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-5a4667b8-4be5-48d1-bde1-5e018c9f8c16" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-7f67fa89-66ce-4ac4-9963-fdaea4200bee" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-e385ed15-5e22-4aa9-b909-179a243dcee9" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-997e72ff-be93-4963-abba-7d7d83a5b1b7" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-24da107f-8496-4776-84e4-5787eab41442" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-36285dce-b39b-467d-a0d5-fdae6bb4190c" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-68c3f28b-7020-41b0-9e5e-052fe644bfb0" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-fa6a1b9b-74ab-4fe5-9b66-85b424106292" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-c8b2ffb8-9b73-457c-8f4b-5367da875caf" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-5c00eedf-aefc-49a6-9f1d-57d00492ccfc" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-d2b63092-da0a-4cef-af0b-70015f3ff8cd" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-00b96dc3-d69a-400a-96cd-8080bf982556" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-345c2e05-6eb7-4db0-b72c-5e8d3b5735c1" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-16942463-93c5-4616-8bcd-ec6957c9c12c" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-6e3cd722-82e4-416b-b741-5d64ba69bf7f" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-95b887a7-5846-4900-b4ef-66cc7129e213" class="error-details">
+      <div class="error-title">warn: new-line-at-eof</div>
+      <div>No new line at end of file</div>
+    </div>
+    <div id="error-20ec72f9-4222-4b1b-b96e-217e6ef5bf15" class="error-details">
+      <div class="error-title">warn: indentation</div>
+      <div>Invalid indentation for feature. Got 3, wanted 1</div>
+    </div>
+    <div id="error-934e1575-4e93-46c9-8558-28bb50abd8b4" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-4ad946ea-38b5-4788-8578-6146e69971bd" class="error-details">
+      <div class="error-title">warn: indentation</div>
+      <div>Invalid indentation for scenario. Got 2, wanted 3</div>
+    </div>
+    <div id="error-34cd85af-d6a1-4f84-b367-2146df295198" class="error-details">
+      <div class="error-title">warn: indentation</div>
+      <div>Invalid indentation for &quot;given&quot;. Got 7, wanted 5</div>
+    </div>
+    <div id="error-61ed0b91-5428-47ec-9c8b-131d9fd154f5" class="error-details">
+      <div class="error-title">warn: indentation</div>
+      <div>Invalid indentation for &quot;when&quot;. Got 8, wanted 5</div>
+    </div>
+    <div id="error-8936f3ea-3ab9-4c72-a9a5-a7a796b9a684" class="error-details">
+      <div class="error-title">warn: indentation</div>
+      <div>Invalid indentation for &quot;then&quot;. Got 14, wanted 5</div>
+    </div>
+    <div id="error-f26f60b1-b684-40b7-9176-c6500f112c38" class="error-details">
+      <div class="error-title">warn: indentation</div>
+      <div>Invalid indentation for &quot;and&quot;. Got 7, wanted 5</div>
+    </div>
+    <div id="error-3083459b-bb7c-4cac-b328-f563cfb229dd" class="error-details">
+      <div class="error-title">warn: indentation</div>
+      <div>Invalid indentation for &quot;but&quot;. Got 10, wanted 5</div>
+    </div>
+    <div id="error-8c7ffa4e-6714-4abc-b615-f677ebe40144" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-fa2834da-2ca2-4204-b538-5db8a75f60aa" class="error-details">
+      <div class="error-title">warn: indentation</div>
+      <div>Invalid indentation for scenario. Got 4, wanted 3</div>
+    </div>
+    <div id="error-40a8fea5-a948-4c9d-9001-3e59230ad393" class="error-details">
+      <div class="error-title">warn: indentation</div>
+      <div>Invalid indentation for &quot;when&quot;. Got 9, wanted 5</div>
+    </div>
+    <div id="error-04427bf3-122a-4e65-b97d-ad0f168159df" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-8ea47589-e698-4f26-b0af-235a3ef2f293" class="error-details">
+      <div class="error-title">warn: indentation</div>
+      <div>Invalid indentation for &quot;then&quot;. Got 7, wanted 5</div>
+    </div>
+    <div id="error-f90f289a-7c75-44ba-b370-792dcccc30e6" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-5d2608ca-0475-48fb-a27c-d08c9520f635" class="error-details">
+      <div class="error-title">warn: indentation</div>
+      <div>Invalid indentation for &quot;examples&quot;. Got 13, wanted 5</div>
+    </div>
+    <div id="error-b6a3dac0-d89d-4693-84c8-0dc04a83d2bb" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-f7ce0df9-aa20-4907-90d8-aaacd4f4863a" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-34fec10f-97d7-436b-8578-01a799237525" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+    <div id="error-9c8daaa5-93b0-49cd-81d7-4900468d0cc4" class="error-details">
+      <div class="error-title">: </div>
+      <div></div>
+    </div>
+
+<script>
+  document.querySelectorAll('.gutter > svg').forEach((icon) => {
+    icon.addEventListener('click', (e) => {
+      e.stopPropagation()
+      const errorId = icon.getAttribute('data-error')
+      const errorDetails = document.getElementById(errorId)
+
+      // Hide all other error details
+      document.querySelectorAll('.error-details').forEach((detail) => {
+        if (detail.id !== errorId) {
+          detail.style.display = 'none'
+        }
+      })
+
+      // Toggle the clicked error detail
+      if (errorDetails.style.display === 'block') {
+        errorDetails.style.display = 'none'
+      } else {
+        const rect = icon.getBoundingClientRect()
+        console.log(rect)
+        errorDetails.style.display = 'block'
+        errorDetails.style.left = `${rect.left + 30}px`
+        errorDetails.style.top = `${rect.top}px`
+      }
+    })
+  })
+
+  // Close error details when clicking outside
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.error-details').forEach((detail) => {
+      detail.style.display = 'none'
+    })
+  })
+
+  // Collapsible functionality
+  const collapsibles = document.getElementsByClassName('collapsible')
+
+  for (let col of collapsibles) {
+    col.addEventListener('click', () => {
+      col.classList.toggle('active')
+      const content = col.nextElementSibling
+      if (content.style.maxHeight) {
+        content.style.maxHeight = null
+      } else {
+        content.style.maxHeight = content.scrollHeight + 'px'
+      }
+
+      const downArrow = col.getElementsByClassName('down-arrow')[0]
+      const upArrow = col.getElementsByClassName('up-arrow')[0]
+      if (col.classList.contains('active')) {
+        upArrow.style.display = 'block'
+        downArrow.style.display = 'none'
+      } else {
+        upArrow.style.display = 'none'
+        downArrow.style.display = 'block'
+      }
+    })
+  }
+</script>
+</body>

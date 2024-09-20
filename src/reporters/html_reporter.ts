@@ -1,6 +1,7 @@
 import { readFileSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
 import Handlebars from 'handlebars'
+import { v4 } from 'uuid'
 
 import Reporter from './reporter'
 
@@ -14,6 +15,8 @@ export default class HTMLReporter extends Reporter {
       files: [],
     }
 
+    const keywords = ['Feature', 'Scenario', 'Given', 'When', 'Then', 'And', 'But', 'Examples']
+
     for (const [key] of this.errors.entries()) {
       const content = readFileSync(key, { encoding: 'utf-8' })
       const lines = content.split('\n')
@@ -25,15 +28,34 @@ export default class HTMLReporter extends Reporter {
 
       lines.forEach((line, index) => {
         const errors = this.errors.get(key)
-        const lineErrors = errors.filter((e) => e.location.line === index + 1)
+        const lineError = errors.filter((e) => e.location.line === index + 1)?.[0]
+        const keywordMatch = line.match(new RegExp(`^${keywords.join('|')}`))
+        let keyword
+        if (keywordMatch) {
+          keyword = keywordMatch[0]
+          line = line.replace(keyword, '')
+          if (keyword === 'Feature') {
+          }
+        }
+
+        let keywordFormatted
+        if (keyword) {
+          if (['Feature', 'Scenario', 'Examples'].includes(keyword)) {
+            keywordFormatted = `${keyword}`
+          } else {
+            keywordFormatted = `${keyword} `
+          }
+        }
 
         const lineValue = {
-          content: line,
-          lineNumber: index + 1,
+          id: v4(),
+          content: line.trim(),
+          number: index + 1,
+          keyword: keyword && keywordFormatted,
           column: line.length - line.trim().length,
-          padding: (line.length - line.trim().length) / 2,
-          hasError: lineErrors.length,
-          errors: lineErrors,
+          padding: (line.length - line.trim().length) * 6,
+          hasError: lineError !== undefined,
+          error: lineError,
         } as any
 
         value.lines.push(lineValue)
