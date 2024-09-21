@@ -26,6 +26,6 @@ export default {
     'no-background-only': 'warn',
     'no-empty-file': 'warn',
     'no-trailing-spaces': 'warn',
-    'no-unnamed-scenarios': 'warn',
+    'no-unnamed-scenarios': 'error',
   },
 }
