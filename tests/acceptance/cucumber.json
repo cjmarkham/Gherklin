@@ -1,6 +1,7 @@
 {
   "default": {
-    "format": ["html:cucumber-report.html"],
+    "format": ["progress", "html:cucumber-report.html"],
+    "paths": ["tests/acceptance/features/*.feature"],
     "import": ["tests/acceptance/steps.ts"]
   }
 }
