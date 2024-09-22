@@ -21,6 +21,7 @@ If a rule does not specify a severity, it will default to `warn`.
 * [no-trailing-spaces](#no-trailing-spaces)
 * [no-unnamed-scenarios](#no-unnamed-scenarios)
 * [keywords-in-logical-order](#keywords-in-logical-order)
+* [no-similar-scenarios](#no-similar-scenarios)
 
 ### Allowed Tags
 
@@ -332,6 +333,51 @@ Enable the rule and set severity
 export default {
   rules: {
     'keywords-in-logical-order': 'error',
+  }
+}
+```
+
+### No Similar Scenarios
+
+Compares each scenario with each other scenario to see if they are similar.
+Compares the Levenshtein distance between one scenarios keyword + text with the other scenarios keyword + text.
+The argument passed to this rule's configuration is the percentage threshold for similarity. 
+
+**Examples**
+
+Enable the rule
+
+```typescript
+export default {
+  rules: {
+    'no-similar-scenarios': 'on', 
+  }
+}
+```
+
+Enable the rule with arguments
+```typescript
+export default {
+  rules: {
+    'no-similar-scenarios': 85, 
+  }
+}
+```
+
+Enable the rule and set severity
+```typescript
+export default {
+  rules: {
+    'no-similar-scenarios': 'error',
+  }
+}
+```
+
+Set severity and arguments
+```typescript
+export default {
+  rules: {
+    'no-similar-scenarios': ['error', 99],
   }
 }
 ```
