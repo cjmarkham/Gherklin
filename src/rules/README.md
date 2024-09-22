@@ -22,6 +22,7 @@ If a rule does not specify a severity, it will default to `warn`.
 * [no-unnamed-scenarios](#no-unnamed-scenarios)
 * [keywords-in-logical-order](#keywords-in-logical-order)
 * [no-similar-scenarios](#no-similar-scenarios)
+* [no-single-example-outline](#no-single-example-outline)
 
 ### Allowed Tags
 
@@ -378,6 +379,32 @@ Set severity and arguments
 export default {
   rules: {
     'no-similar-scenarios': ['error', 99],
+  }
+}
+```
+
+### No Single Example Outline
+
+Checks Scenario Outlines that only have one example. These should be converted to simple Scenarios.
+
+**Examples**
+
+Enable the rule
+
+```typescript
+export default {
+  rules: {
+    'no-single-example-outline': 'on', 
+  }
+}
+```
+
+
+Enable the rule and set severity
+```typescript
+export default {
+  rules: {
+    'no-single-example-outline': 'error',
   }
 }
 ```
