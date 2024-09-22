@@ -59,7 +59,7 @@ export const run = (rule: Rule, document: GherkinDocument): Array<LintError> => 
 
       if (percentage > threshold) {
         errors.push({
-          message: `Scenario "${child.scenario.name}" is too similar (> ${percentage.toFixed(2)}%) to scenario "${other.name}"`,
+          message: `Scenario "${child.scenario.name}" is too similar (> ${threshold}%) to scenario "${other.name}".`,
           location: child.scenario.location,
         } as LintError)
       }

@@ -31,8 +31,8 @@ export default class Config {
       throw new Error(`Could not find a gherkin-lint.config.ts configuration file.`)
     }
 
-    if (!configuration.featureDirectory) {
-      throw new Error(`Could not find a featureDirectory configuration option.`)
+    if (!configuration.featureDirectory && !configuration.featureFile) {
+      throw new Error(`Could not find a featureDirectory or featureFile configuration option.`)
     }
 
     if (!configuration.rules) {

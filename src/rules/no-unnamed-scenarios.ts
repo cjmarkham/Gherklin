@@ -28,7 +28,7 @@ export const run = (rule: Rule, document: GherkinDocument): Array<LintError> => 
 
     if (child.scenario.name.length === 0) {
       errors.push({
-        message: 'Found scenario with no name',
+        message: 'Found scenario with no name.',
         location: child.scenario.location,
       } as LintError)
     }

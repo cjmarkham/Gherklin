@@ -4,6 +4,7 @@
   "description": "A linter for Gherkin syntax",
   "scripts": {
     "test": "NODE_ENV=testing mocha",
+    "acceptance": "NODE_OPTIONS=--import=tsx ./node_modules/.bin/cucumber-js --config tests/acceptance/cucumber.json",
     "eslint": "node_modules/.bin/eslint",
     "eslint:fix": "node_modules/.bin/eslint --fix",
     "prettier": "node_modules/.bin/prettier --check src/**/*.ts",
@@ -39,6 +40,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@cucumber/cucumber": "^11.0.1",
     "@eslint/eslintrc": "^3.1.0",
     "@eslint/js": "^9.9.0",
     "@types/chai": "^4.3.17",
@@ -58,6 +60,7 @@
     "prettier": "^3.3.3",
     "sinon": "^19.0.2",
     "tsx": "^4.19.1",
-    "typescript": "^5.5.4"
+    "typescript": "^5.5.4",
+    "uuid": "^10.0.0"
   }
 }

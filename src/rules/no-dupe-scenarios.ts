@@ -30,9 +30,13 @@ export const run = (rule: Rule, document: GherkinDocument, fileName: string): Ar
     if (!scenarios.has(scenarioName)) {
       scenarios.set(scenarioName, [path.basename(fileName)])
     } else {
-      scenarios.set(scenarioName, [path.basename(fileName), ...scenarios.get(scenarioName)])
+      const existing = scenarios.get(scenarioName)
+      // Prevent duplicates
+      if (existing.indexOf(path.basename(fileName)) === -1) {
+        scenarios.set(scenarioName, [path.basename(fileName), ...scenarios.get(scenarioName)])
+      }
       errors.push({
-        message: `Found duplicate scenario "${scenarioName}" in "${scenarios.get(scenarioName).join(', ')}"`,
+        message: `Found duplicate scenario "${scenarioName}" in "${scenarios.get(scenarioName).join(', ')}".`,
         location: child.scenario.location,
       } as LintError)
     }

@@ -34,7 +34,7 @@ export const run = async (rule: Rule, document: GherkinDocument, fileName: strin
     }
     if (line.charCodeAt(line.length - 1) === 32) {
       errors.push({
-        message: 'Found trailing whitespace',
+        message: 'Found trailing whitespace.',
         location: {
           line: lineNumber,
           column: line.length,

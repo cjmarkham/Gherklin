@@ -54,6 +54,7 @@ export interface GherklinConfiguration {
   featureDirectory?: string
   rules?: RuleConfiguration
   reporter?: ReporterConfig
+  featureFile?: string
 }
 
 export interface RuleDefinition {
