@@ -1,3 +1,10 @@
+export interface ReporterConfig {
+  type?: string
+  title?: string
+  configDirectory: string
+  outFile?: string
+}
+
 export interface GherkinKeywordNumericals {
   feature?: number
   background?: number
@@ -46,9 +53,36 @@ export interface GherklinConfiguration {
   customRulesDirectory?: string
   featureDirectory?: string
   rules?: RuleConfiguration
+  reporter?: ReporterConfig
 }
 
 export interface RuleDefinition {
   schema: any
   run: Function
+}
+
+export interface Report {
+  title: string
+  files: Array<ReportFile>
+  totalErrors: number
+  totalWarns: number
+  totalLines: number
+  rules: {
+    [name: string]: number
+  }
+}
+
+export interface ReportFile {
+  path: string
+  hasErrors: boolean
+  lines: Array<ReportLine>
+  issueCount: number
+}
+
+export interface ReportLine {
+  number: number
+  hasError: boolean
+  errorSeverity: Severity
+  content: string
+  ruleName: string
 }
