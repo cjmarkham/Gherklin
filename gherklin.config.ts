@@ -1,4 +1,7 @@
 export default {
+  reporter: {
+    type: 'stdout',
+  },
   featureDirectory: './tests/acceptance/features',
   rules: {
     indentation: [

@@ -41,3 +41,9 @@ export const offOrNumberOrSeverityAndNumber = z.union([
   z.number(),
   z.tuple([z.nativeEnum(Severity), z.number()]),
 ])
+export const offOrNumberOrSeverityOrSeverityAndNumber = z.union([
+  z.literal(Switch.off),
+  z.number(),
+  z.nativeEnum(Severity),
+  z.tuple([z.nativeEnum(Severity), z.number()]),
+])
