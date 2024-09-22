@@ -24,7 +24,7 @@ export const run = async (rule: Rule, document: GherkinDocument, fileName: strin
     errors.push({
       message: 'No new line at end of file',
       location: {
-        line: lines.length - 1,
+        line: lines.length,
         column: 0,
       },
     } as LintError)

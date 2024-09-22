@@ -79,7 +79,7 @@ export const run = (rule: Rule, document: GherkinDocument): Array<LintError> => 
             if (step.location.column !== args[stepNormalized]) {
               errors.push({
                 message: `Invalid indentation for "${stepNormalized}". Got ${step.location.column}, wanted ${args[stepNormalized]}`,
-                location: child.scenario.location,
+                location: step.location,
               } as LintError)
             }
           }
