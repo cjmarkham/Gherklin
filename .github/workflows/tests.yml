@@ -1,4 +1,4 @@
-name: Unit Tests
+name: Unit and Acceptance Tests
 
 on:
   push:
