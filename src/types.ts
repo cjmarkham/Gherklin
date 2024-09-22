@@ -2,6 +2,7 @@ export interface ReporterConfig {
   type?: string
   title?: string
   configDirectory: string
+  outFile?: string
 }
 
 export interface GherkinKeywordNumericals {

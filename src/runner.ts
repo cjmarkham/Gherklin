@@ -12,6 +12,10 @@ import Config from './config'
 import { GherklinConfiguration, ReporterConfig, Severity } from './types'
 import Reporter from './reporters/reporter'
 import HTMLReporter from './reporters/html_reporter'
+import STDOUTReporter from './reporters/stdout_reporter'
+import JSONReporter from './reporters/json_reporter'
+import logger from './logger'
+import chalk from 'chalk'
 
 export default class Runner {
   public gherkinFiles: Array<string> = []
@@ -33,11 +37,7 @@ export default class Runner {
       this.config = await new Config().fromFile()
     }
 
-    const reporterConfig = Object.assign({}, this.config?.reporter, {
-      configDirectory: this.config.configDirectory,
-    }) as ReporterConfig
-
-    this.reporter = new HTMLReporter(reporterConfig)
+    this.reporter = this.getReporter()
 
     this.gherkinFiles = await getFiles(
       path.resolve(this.config.configDirectory, this.config.featureDirectory),
@@ -140,10 +140,28 @@ export default class Runner {
       }
     }
 
+    logger.info(chalk.green('✓ Gherklin found no errors!'))
+
     return {
       success: true,
       errors: new Map(),
       schemaErrors: new Map(),
+    }
+  }
+
+  public getReporter(): Reporter {
+    const reporterConfig = Object.assign({}, this.config?.reporter, {
+      configDirectory: this.config.configDirectory,
+    }) as ReporterConfig
+
+    switch (reporterConfig.type) {
+      case 'html':
+        return new HTMLReporter(reporterConfig)
+      case 'json':
+        return new JSONReporter(reporterConfig)
+      case 'stdout':
+      default:
+        return new STDOUTReporter(reporterConfig)
     }
   }
 }

@@ -43,8 +43,9 @@ export default class HTMLReporter extends Reporter {
           number: index + 1,
           hasError: lineIssue !== undefined,
           errorSeverity: lineIssue && lineIssue.severity.toString().toLowerCase(),
-          content: line,
+          content: this.syntaxHighlight(line),
           ruleName: lineIssue && lineIssue.rule,
+          ruleDescription: lineIssue && lineIssue.message,
         } as ReportLine
 
         if (lineIssue) {
@@ -62,6 +63,23 @@ export default class HTMLReporter extends Reporter {
     }
 
     const html = template(values)
-    writeFileSync(path.resolve(this.config.configDirectory, 'gherklin-report.html'), html)
+    writeFileSync(path.resolve(this.config.configDirectory, this.config.outFile || 'gherklin-report.html'), html)
+  }
+
+  private syntaxHighlight(line: string): string {
+    const keywords = ['Scenario Outline', 'Scenario', 'Feature', 'Given', 'When', 'Then', 'And', 'But', 'Rule']
+    let keyword
+
+    const keywordMatch = line.match(new RegExp(`${keywords.join('|')}`))
+    if (keywordMatch) {
+      keyword = keywordMatch[0]
+      line = line.replace(keyword, `<span class="keyword">${keyword}</span>`)
+    }
+
+    if (line.trim().indexOf('#') === 0) {
+      line = `<span class="text-muted">${line}</span>`
+    }
+
+    return line
   }
 }

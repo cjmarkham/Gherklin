@@ -134,7 +134,7 @@
           width: calc(var(--width-container) - var(--width-gutter));
       }
 
-      .line p {
+      .line pre {
           margin: 0;
       }
 
@@ -285,7 +285,7 @@
             {{this.number}}
           </td>
           <td class="line {{#if this.hasError}}has-error{{/if}}">
-            <p>{{this.content}}</p>
+            <pre>{{{this.content}}}</pre>
             {{#if this.hasError}}
               <div class="{{this.errorSeverity}}">
                 <header>
@@ -296,7 +296,7 @@
                   {{../this.path}}:{{this.number}}
                 </p>
                 <p>
-                  {{this.ruleName}}
+                  [{{this.ruleName}}]: {{this.ruleDescription}}
                 </p>
               </div>
             {{/if}}
