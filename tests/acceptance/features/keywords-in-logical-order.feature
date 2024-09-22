@@ -14,7 +14,6 @@ Feature: Keywords in Logical Order
       | keywords-in-logical-order |
       | on                        |
     Then there is 1 files with errors
-    And there is 2 errors in the file
     And the errors are
       | location                 | severity | rule                      | message                                               |
       | {"line": 4, "column": 5} | warn     | keywords-in-logical-order | Expected "When" to be followed by "Then", got "Given" |

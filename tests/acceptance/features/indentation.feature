@@ -15,7 +15,6 @@ Feature: Indentation
       | indentation                                                                         |
       | {"feature": 1, "scenario": 3, "given": 3, "when": 3, "then": 3, "and": 3, "but": 3} |
     Then there is 1 file with errors
-    And there are 6 errors in the file
     And the errors are
       | location                  | severity | rule        | message                                           |
       | {"line": 2, "column": 1}  | warn     | indentation | Invalid indentation for scenario. Got 1, wanted 3 |

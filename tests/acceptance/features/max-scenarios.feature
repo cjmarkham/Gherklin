@@ -11,7 +11,6 @@ Feature: Max Scenarios
       | max-scenarios |
       | [error, 1]    |
     Then there is 1 files with errors
-    And there is 1 error in the file
     And the errors are
       | location                 | severity | rule          | message                                     |
       | {"line": 1, "column": 1} | error    | max-scenarios | Expected max 1 scenarios per file. Found 2. |
