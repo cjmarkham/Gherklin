@@ -45,9 +45,7 @@ Gherklin also has an API that can be invoked. A simple example of which is:
 ```typescript
 import { Runner } from 'gherklin'
 
-  ;
-
-(async () => {
+;(async () => {
   const runner = new Runner()
   const init = await runner.init()
   if (!init.success) {
