@@ -114,14 +114,29 @@ export default class Runner {
         }
 
         const ruleErrors: Array<LintError> = await rule.run(walk, fileName)
-        if (ruleErrors && ruleErrors.length) {
-          ruleErrors.forEach((_, index) => {
-            ruleErrors[index].severity = rule.schema.severity
-            ruleErrors[index].rule = rule.name
-          })
-
-          this.reporter.addErrors(fileName, ruleErrors)
+        if (!ruleErrors || (ruleErrors && !ruleErrors.length)) {
+          continue
         }
+
+        let shouldFix = false
+        if (this.config.fix === true) {
+          shouldFix = true
+        }
+        if (Array.isArray(this.config.fix) && this.config.fix.includes(rule.name)) {
+          shouldFix = true
+        }
+
+        if (shouldFix) {
+          await rule.fix(document, fileName)
+          continue
+        }
+
+        ruleErrors.forEach((_, index) => {
+          ruleErrors[index].severity = rule.schema.severity
+          ruleErrors[index].rule = rule.name
+        })
+
+        this.reporter.addErrors(fileName, ruleErrors)
       }
     }
 

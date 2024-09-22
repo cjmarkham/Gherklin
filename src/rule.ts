@@ -5,6 +5,7 @@ import { GherkinDocument } from '@cucumber/messages'
 import { LintError } from './error'
 import Schema from './schema'
 import { RawSchema, RuleDefinition } from './types'
+import logger from './logger'
 
 export default class Rule {
   public schema: Schema
@@ -70,5 +71,14 @@ export default class Rule {
 
   public async run(document: GherkinDocument, filename: string): Promise<Array<LintError>> {
     return await this.ruleDefinition.run(this, document, filename)
+  }
+
+  public async fix(document: GherkinDocument, filename: string): Promise<void> {
+    if (!('fix' in this.ruleDefinition)) {
+      logger.error(`tried to fix ${this.name} but no fix method found.`)
+      return
+    }
+
+    await this.ruleDefinition.fix(this, document, filename)
   }
 }

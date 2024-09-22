@@ -55,11 +55,13 @@ export interface GherklinConfiguration {
   rules?: RuleConfiguration
   reporter?: ReporterConfig
   featureFile?: string
+  fix?: boolean | Array<string>
 }
 
 export interface RuleDefinition {
   schema: any
   run: Function
+  fix?: Function
 }
 
 export interface Report {

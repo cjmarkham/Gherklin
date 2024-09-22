@@ -4,6 +4,7 @@ import { offOrKeywordIntsOrSeverityAndKeywordInts } from '../schemas'
 import Rule from '../rule'
 import { GherkinKeywordNumericals } from '../types'
 import { lineDisabled } from '../utils'
+import { readFileSync, writeFileSync } from 'node:fs'
 
 /**
  * Allowed:
@@ -126,4 +127,25 @@ export const run = (rule: Rule, document: GherkinDocument): Array<LintError> => 
   })
 
   return errors
+}
+
+export const fix = async (rule: Rule, document: GherkinDocument, fileName: string): Promise<void> => {
+  const fileContent = readFileSync(fileName, { encoding: 'utf-8' })
+  const lines = fileContent.split('\n')
+  const indentation = rule.schema.args
+  const keywords = ['Feature', 'Scenario', 'Given', 'When', 'Then', 'And', 'But']
+  const newContent = []
+
+  lines.forEach((line) => {
+    const keywordMatch = line.match(new RegExp(`${keywords.join('|')}`))
+    if (!keywordMatch) {
+      return
+    }
+
+    const keyword = keywordMatch[0]
+    const padding = Array(Number(indentation[keyword?.toLowerCase()] - 1)).fill(' ')
+    newContent.push(padding.join('') + line.trimStart())
+  })
+
+  writeFileSync(fileName, newContent.join('\n'))
 }

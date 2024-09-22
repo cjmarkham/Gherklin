@@ -5,6 +5,7 @@ import { GherkinDocument } from '@cucumber/messages'
 import { LintError } from '../error'
 import Rule from '../rule'
 import { switchOrSeveritySchema } from '../schemas'
+import { readFileSync, writeFileSync } from 'node:fs'
 
 /**
  * Allowed:
@@ -31,4 +32,11 @@ export const run = async (rule: Rule, document: GherkinDocument, fileName: strin
   }
 
   return errors
+}
+
+export const fix = async (rule: Rule, document: GherkinDocument, fileName: string): Promise<void> => {
+  const fileContent = readFileSync(fileName, { encoding: 'utf-8' })
+  const newContent = fileContent + '\n'
+
+  writeFileSync(fileName, newContent)
 }

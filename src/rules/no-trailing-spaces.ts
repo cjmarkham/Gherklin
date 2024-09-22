@@ -1,4 +1,5 @@
-import * as fs from 'node:fs'
+import { createReadStream, readFileSync, writeFileSync } from 'node:fs'
+import path from 'node:path'
 import readline from 'readline'
 
 import { GherkinDocument } from '@cucumber/messages'
@@ -17,7 +18,7 @@ export const run = async (rule: Rule, document: GherkinDocument, fileName: strin
   const errors: Array<LintError> = []
 
   // Cucumber automatically trims the spaces when parsing the Gherkin, so we need to read the actual file
-  const stream = fs.createReadStream(fileName)
+  const stream = createReadStream(fileName)
   const rl = readline.createInterface({
     input: stream,
   })
@@ -46,4 +47,17 @@ export const run = async (rule: Rule, document: GherkinDocument, fileName: strin
   }
 
   return errors
+}
+
+export const fix = async (rule: Rule, document: GherkinDocument, fileName: string): Promise<void> => {
+  const fileContent = readFileSync(fileName, { encoding: 'utf-8' })
+  const lines = fileContent.split('\n')
+
+  const newContent = []
+
+  lines.forEach((line) => {
+    newContent.push(line.trimEnd())
+  })
+
+  writeFileSync(fileName, newContent.join('\n'))
 }

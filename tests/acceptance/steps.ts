@@ -1,4 +1,4 @@
-import { existsSync, rmSync, writeFileSync } from 'node:fs'
+import { existsSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { Given, DataTable, When, Then, After, Before } from '@cucumber/cucumber'
 import { expect } from 'chai'
 import { v4 } from 'uuid'
@@ -36,17 +36,8 @@ Given('the following feature file named {string}', function (name: string, featu
   writeFileSync(featureFile, featureContent)
 })
 
-When('Gherklin is ran with the following rule(s)', async function (table: DataTable): Promise<void> {
-  const rules: RuleConfiguration = {}
-  table.hashes().forEach((hash) => {
-    Object.keys(hash).forEach((key) => {
-      const value = parse(hash[key])
-      rules[key] = value as unknown
-    })
-  })
-
+When('Gherklin is ran with the following configuration', async function (table: DataTable): Promise<void> {
   const config: GherklinConfiguration = {
-    rules,
     featureDirectory: path.resolve(import.meta.dirname, './tmp'),
     configDirectory: import.meta.dirname,
     reporter: {
@@ -54,6 +45,16 @@ When('Gherklin is ran with the following rule(s)', async function (table: DataTa
       type: 'null',
     },
   }
+
+  table.hashes().forEach((hash) => {
+    Object.keys(hash).forEach((key) => {
+      const value = parse(hash[key])
+      if (key === 'rules') {
+        this.rules = value
+      }
+      config[key] = value as unknown
+    })
+  })
 
   const runner = new Runner(config)
   await runner.init()
@@ -87,7 +88,54 @@ Then('the error(s) are/is', function (table: DataTable): void {
   expect(errors).to.deep.equal(expectedErrors)
 })
 
+When('the file is loaded', function () {
+  this.fileContent = readFileSync(this.featureFiles[0], { encoding: 'utf-8' })
+})
+
+Then('the content has trailing whitespace on line {int}', function (lineNumber: number) {
+  const lines = this.fileContent.split('\n')
+  const line = lines[lineNumber]
+  expect(line.length).to.not.eq(line.trimEnd().length)
+})
+
+Then('the content has no trailing whitespace on line {int}', function (lineNumber: number) {
+  const lines = this.fileContent.split('\n')
+  const line = lines[lineNumber]
+  expect(line.length).to.eq(line.trimEnd().length)
+})
+
+Then('there is no new line at the end', function () {
+  const lines = this.fileContent.split('\n')
+  expect(lines[lines.length - 1].length).to.not.eq(0)
+})
+
+Then('there is a new line at the end', function () {
+  const lines = this.fileContent.split('\n')
+  expect(lines[lines.length - 1].length).to.eq(0)
+})
+
+Then('the indentation follows the rule', function () {
+  const lines = this.fileContent.split('\n')
+  const rule = this.rules.indentation
+  const keywords = ['Feature', 'Scenario', 'Given', 'When', 'Then', 'And', 'But']
+
+  lines.forEach((line) => {
+    const keywordMatch = line.match(new RegExp(`${keywords.join('|')}`))
+    if (!keywordMatch) {
+      return
+    }
+
+    const keyword = keywordMatch[0]
+    const spacing = line.length - line.trimStart().length + 1
+    expect(spacing).to.eq(rule[keyword?.toLowerCase()])
+  })
+})
+
 const parse = (value: string) => {
+  if (value === 'true' || value === 'false') {
+    return Boolean(value)
+  }
+
   if (!isNaN(Number(value))) {
     return Number(value)
   }
