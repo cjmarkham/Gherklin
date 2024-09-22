@@ -16,6 +16,7 @@ import STDOUTReporter from './reporters/stdout_reporter'
 import JSONReporter from './reporters/json_reporter'
 import logger from './logger'
 import chalk from 'chalk'
+import NullReporter from './reporters/null_reporter'
 
 export default class Runner {
   public gherkinFiles: Array<string> = []
@@ -39,10 +40,14 @@ export default class Runner {
 
     this.reporter = this.getReporter()
 
-    this.gherkinFiles = await getFiles(
-      path.resolve(this.config.configDirectory, this.config.featureDirectory),
-      'feature',
-    )
+    if (this.config.featureFile) {
+      this.gherkinFiles = [path.resolve(this.config.configDirectory, this.config.featureFile)]
+    } else {
+      this.gherkinFiles = await getFiles(
+        path.resolve(this.config.configDirectory, this.config.featureDirectory),
+        'feature',
+      )
+    }
 
     // Import and validate all default rules
     for (const ruleName in this.config.rules) {
@@ -159,6 +164,8 @@ export default class Runner {
         return new HTMLReporter(reporterConfig)
       case 'json':
         return new JSONReporter(reporterConfig)
+      case 'null':
+        return new NullReporter(reporterConfig)
       case 'stdout':
       default:
         return new STDOUTReporter(reporterConfig)

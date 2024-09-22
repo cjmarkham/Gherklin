@@ -1,0 +1,6 @@
+{
+  "default": {
+    "format": ["html:cucumber-report.html"],
+    "import": ["tests/acceptance/steps.ts"]
+  }
+}
