@@ -1,5 +1,5 @@
 import { existsSync, rmSync, writeFileSync } from 'node:fs'
-import { Given, DataTable, When, Then, After } from '@cucumber/cucumber'
+import { Given, DataTable, When, Then, After, Before } from '@cucumber/cucumber'
 import { expect } from 'chai'
 import { v4 } from 'uuid'
 
@@ -9,16 +9,31 @@ import { mkdirSync } from 'fs'
 import path from 'node:path'
 
 After(function () {
-  rmSync(this.featureFile)
+  this.featureFiles.forEach((featureFile) => {
+    rmSync(featureFile)
+  })
+})
+
+Before(function () {
+  this.tmpLocation = path.resolve(import.meta.dirname, './tmp')
+  if (!existsSync(this.tmpLocation)) {
+    mkdirSync(this.tmpLocation)
+  }
+  if (!Array.isArray(this.featureFiles)) {
+    this.featureFiles = []
+  }
 })
 
 Given('the following feature file', function (featureContent: string): void {
-  const tmpLocation = path.resolve(import.meta.dirname, './tmp')
-  if (!existsSync(tmpLocation)) {
-    mkdirSync(tmpLocation)
-  }
-  this.featureFile = `${tmpLocation}/${v4()}.feature`
-  writeFileSync(this.featureFile, featureContent)
+  const featureFile = `${this.tmpLocation}/${v4()}.feature`
+  this.featureFiles.push(featureFile)
+  writeFileSync(featureFile, featureContent)
+})
+
+Given('the following feature file named {string}', function (name: string, featureContent: string): void {
+  const featureFile = `${this.tmpLocation}/${name}.feature`
+  this.featureFiles.push(featureFile)
+  writeFileSync(featureFile, featureContent)
 })
 
 When('Gherklin is ran with the following rule(s)', async function (table: DataTable): Promise<void> {
@@ -32,7 +47,7 @@ When('Gherklin is ran with the following rule(s)', async function (table: DataTa
 
   const config: GherklinConfiguration = {
     rules,
-    featureFile: this.featureFile,
+    featureDirectory: path.resolve(import.meta.dirname, './tmp'),
     configDirectory: import.meta.dirname,
     reporter: {
       configDirectory: import.meta.dirname,
@@ -45,12 +60,18 @@ When('Gherklin is ran with the following rule(s)', async function (table: DataTa
   this.runResult = await runner.run()
 })
 
-Then('there is/are {int} error(s)', function (amount: number): void {
+Then('there is/are {int} file(s) with errors', function (amount: number): void {
   expect(this.runResult.errors.size).to.eq(amount)
 })
 
 Then('the error(s) are/is', function (table: DataTable): void {
-  const errors = this.runResult.errors.get(this.featureFile)
+  const errors = []
+  expect(this.runResult.errors.size).to.be.greaterThan(0)
+  this.featureFiles.forEach((featureFile) => {
+    if (this.runResult.errors.has(featureFile)) {
+      errors.push(...this.runResult.errors.get(featureFile))
+    }
+  })
   const expectedErrors = []
 
   table.hashes().forEach((hash) => {
@@ -63,14 +84,23 @@ Then('the error(s) are/is', function (table: DataTable): void {
     expectedErrors.push(error)
   })
 
-  expect(expectedErrors).to.deep.equal(errors)
+  expect(errors).to.deep.equal(expectedErrors)
 })
 
 const parse = (value: string) => {
+  if (!isNaN(Number(value))) {
+    return Number(value)
+  }
+
   if (value.indexOf('[') === 0) {
-    return [value.replace('[', '').replace(']', '')]
+    const parts = value.replace('[', '').replace(']', '').split(',')
+    return parts.map((p) => {
+      return parse(p.trim())
+    })
   }
   if (value.indexOf('{') === 0) {
     return JSON.parse(value)
   }
+
+  return value
 }

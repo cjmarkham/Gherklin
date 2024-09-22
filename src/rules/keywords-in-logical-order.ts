@@ -29,7 +29,7 @@ export const run = (rule: Rule, document: GherkinDocument): Array<LintError> => 
       if (!nextStep) {
         return
       }
-      const nextTrimmed = nextStep.keyword
+      const nextTrimmed = nextStep.keyword.trim()
 
       const dialect = dialects[document.feature.language]
       const given = dialect.given.filter((w) => w !== '* ')
@@ -40,23 +40,23 @@ export const run = (rule: Rule, document: GherkinDocument): Array<LintError> => 
       const trimmedThen = then.map((w) => w.trim())
       const trimmedAnd = and.map((w) => w.trim())
 
-      if (given.includes(step.keyword) && !when.includes(nextTrimmed)) {
+      if (given.includes(step.keyword) && !when.includes(nextStep.keyword)) {
         errors.push({
-          message: `Expected "${step.keyword}" to be followed by "${trimmedWhen.join(', ')}", got "${nextTrimmed}"`,
+          message: `Expected "${step.keyword.trim()}" to be followed by "${trimmedWhen.join(', ')}", got "${nextTrimmed}"`,
           location: step.location,
         } as LintError)
       }
 
-      if (when.includes(step.keyword) && !then.includes(nextTrimmed)) {
+      if (when.includes(step.keyword) && !then.includes(nextStep.keyword)) {
         errors.push({
-          message: `Expected "${step.keyword}" to be followed by "${trimmedThen.join(', ')}", got "${nextTrimmed}"`,
+          message: `Expected "${step.keyword.trim()}" to be followed by "${trimmedThen.join(', ')}", got "${nextTrimmed}"`,
           location: step.location,
         } as LintError)
       }
 
-      if (then.includes(step.keyword) && ![...and, ...when].includes(nextTrimmed)) {
+      if (then.includes(step.keyword) && ![...and, ...when].includes(nextStep.keyword)) {
         errors.push({
-          message: `Expected "${step.keyword}" to be followed by "${[...trimmedAnd, ...trimmedWhen].join(', ')}", got "${nextTrimmed}"`,
+          message: `Expected "${step.keyword.trim()}" to be followed by "${[...trimmedAnd, ...trimmedWhen].join(', ')}", got "${nextTrimmed}"`,
           location: step.location,
         } as LintError)
       }

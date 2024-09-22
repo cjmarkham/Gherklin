@@ -23,7 +23,7 @@ export const run = (rule: Rule, document: GherkinDocument): Array<LintError> => 
 
     if (document.feature.children.length < 2) {
       errors.push({
-        message: `File contains only a background`,
+        message: `File contains only a background.`,
         location: document.feature.location,
       } as LintError)
     }

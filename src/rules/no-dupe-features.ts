@@ -27,7 +27,7 @@ export const run = (rule: Rule, document: GherkinDocument, fileName: string): Ar
   } else {
     features.set(featureName, [path.basename(fileName), ...features.get(featureName)])
     errors.push({
-      message: `Found duplicate feature "${featureName}" in "${features.get(featureName).join(', ')}"`,
+      message: `Found duplicate feature "${featureName}" in "${features.get(featureName).join(', ')}".`,
       location: document.feature.location,
     } as LintError)
   }

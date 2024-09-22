@@ -145,7 +145,9 @@ export default class Runner {
       }
     }
 
-    logger.info(chalk.green('✓ Gherklin found no errors!'))
+    if (!(this.reporter instanceof NullReporter)) {
+      logger.info(chalk.green('✓ Gherklin found no errors!'))
+    }
 
     return {
       success: true,

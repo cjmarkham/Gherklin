@@ -15,7 +15,7 @@ export const run = (rule: Rule, document: GherkinDocument): Array<LintError> => 
 
   if (!document) {
     errors.push({
-      message: 'Feature file is empty',
+      message: 'Feature file is empty.',
       location: {
         line: 0,
         column: 0,

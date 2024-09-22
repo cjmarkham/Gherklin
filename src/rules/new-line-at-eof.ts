@@ -22,7 +22,7 @@ export const run = async (rule: Rule, document: GherkinDocument, fileName: strin
   const lastLine = lines[lines.length - 1]
   if (lastLine !== '') {
     errors.push({
-      message: 'No new line at end of file',
+      message: 'No new line at end of file.',
       location: {
         line: lines.length,
         column: 0,
