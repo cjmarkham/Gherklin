@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<head>
+  <title>Gherklin Report</title>
+  <style>
+      :root {
+          --color-bg: white;
+          --color-grey: #ddd;
+          --color-bg-muted: rgb(246, 248, 250);
+          --color-file-info-bg: #f1f8ff;
+          --color-font-muted: #888;
+          --color-error: indianred;
+          --color-warn: #ccb021;
+          --width-container: 1200px;
+          --width-gutter: 20px;
+      }
+
+      body > header {
+          background: cornflowerblue;
+          color: white;
+          padding: 1rem;
+          margin-bottom: 1rem;
+          display: flex;
+          justify-content: space-between;
+      }
+
+      body {
+          font-family: Verdana, Arial, sans-serif;
+          line-height: 1.6;
+          margin: 0;
+          padding: 0;
+          background-color: var(--color-bg);
+      }
+
+      .sidebar {
+          margin-right: 1rem;
+          max-width: 18rem;
+      }
+
+      .sidebar header {
+          background: var(--color-file-info-bg);
+          padding: 0.5rem;
+          border-bottom: 1px solid var(--color-grey);
+      }
+
+      .sidebar header > p {
+          margin: 0;
+      }
+
+      .sidebar-content {
+          padding: 0.5rem;
+      }
+
+      .stat {
+          display: flex;
+          justify-content: space-between;
+          font-size: 14px;
+      }
+
+      .stat p {
+          margin: 0;
+      }
+
+      .sidebar > div {
+          margin-bottom: 1rem;
+      }
+
+      .sidebar input#search {
+          border: 1px solid var(--color-grey);
+          padding: 0.5rem;
+          width: 12rem;
+      }
+
+      .sidebar-content > div {
+          margin-bottom: 1rem;
+      }
+
+      .container {
+          margin: 0 auto;
+          width: var(--width-container);
+          display: flex;
+      }
+
+      .file-info {
+          padding: 0.5rem;
+          background: var(--color-file-info-bg);
+          display: flex;
+          justify-content: space-between;
+          cursor: pointer;
+          user-select: none;
+      }
+
+      .file-info svg {
+          color: var(--color-font-muted);
+      }
+
+      .file-info p {
+          margin: 0;
+      }
+
+      .file-info, .error, table, .warn, .sidebar > div {
+          border: 1px solid var(--color-grey);
+      }
+
+      .file-info.error, .error {
+          border-left: 5px solid var(--color-error);
+      }
+      .file-info.warn, .warn {
+          border-left: 5px solid var(--color-warn);
+      }
+
+      .file {
+          margin-bottom: 1rem;
+      }
+
+      table {
+          border-collapse: collapse;
+          border-top: 0;
+      }
+
+      .gutter {
+          width: var(--width-gutter);
+          line-height: 1.4;
+          font-family: monospace;
+          border-right: 1px solid var(--color-grey);
+          text-align: right;
+          padding: 0 0.5rem;
+          background: var(--color-bg-muted);
+          vertical-align: top;
+      }
+
+      .line {
+          font-family: monospace;
+          padding: 0 0.5rem;
+          width: calc(var(--width-container) - var(--width-gutter));
+      }
+
+      .line pre {
+          margin: 0;
+      }
+
+      td.has-error > p {
+          text-decoration: var(--color-error) wavy underline;
+      }
+
+      .keyword {
+          color: cornflowerblue;
+      }
+
+      td .error, td .warn {
+          vertical-align: middle;
+          padding: 0.5rem;
+          margin: 0.5rem 0;
+      }
+
+      td .error svg {
+          color: var(--color-error);
+          width: 2rem;
+      }
+      td .warn svg {
+          color: var(--color-warn);
+          width: 2rem;
+      }
+
+      td .error > header p, td .warn > header p {
+          display: inline-block;
+          vertical-align: top;
+          margin: 0.1rem 0 0;
+      }
+
+      .rule-name, .text-muted {
+          color: var(--color-font-muted);
+      }
+
+      td .error .line-info {
+          color: var(--color-error);
+          font-weight: 600;
+      }
+      td .warn .line-info {
+          color: var(--color-warn);
+          font-weight: 600;
+      }
+
+      .error-count, .warn-count {
+          border-radius: 100%;
+          color: white;
+          padding: 0 0.5rem;
+      }
+      .error-count {
+          background: var(--color-error);
+      }
+      .warn-count {
+          background: var(--color-warn);
+      }
+
+      .file .file-content {
+          display: none;
+      }
+
+      .file.active .file-content {
+          display: block;
+      }
+
+      .up-arrow {
+          display: none;
+      }
+      .file.active .up-arrow {
+          display: block;
+      }
+      .file.active .down-arrow {
+          display: none;
+      }
+      .highlight {
+          background: yellow;
+      }
+  </style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <h1>Gherklin Report</h1>
+  </div>
+</header>
+<div class="container">
+  <div class="sidebar">
+    <div>
+      <header>
+        Statistics
+      </header>
+      <div class="sidebar-content">
+        <div class="stat">
+          <p>Lines checked</p>
+          <p><strong>{{totalLines}}</strong></p>
+        </div>
+        <div class="stat">
+          <p>Errors</p>
+          <p><strong>{{totalErrors}}</strong></p>
+        </div>
+        <div class="stat">
+          <p>Warns</p>
+          <p><strong>{{totalWarns}}</strong></p>
+        </div>
+        {{#each this.rules}}
+          <div class="stat">
+            <p>{{@key}}</p>
+            <p><strong>{{this}}</strong></p>
+          </div>
+        {{/each}}
+      </div>
+    </div>
+    <div>
+      <header>
+        <p>Options</p>
+      </header>
+      <div class="sidebar-content">
+        <div>
+          <input type="text" id="search" placeholder="Search files...">
+        </div>
+        <div>
+          <input id="show-errors" type="checkbox" checked>
+          <label for="show-errors">Show errors</label>
+        </div>
+        <div>
+          <input id="show-warns" type="checkbox" checked>
+          <label for="show-warns">Show warnings</label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="files">
+    {{#each files}}
+      <div class="file active">
+      <div class="file-info {{#if this.hasErrors}}error{{else}}warn{{/if}}">
+        <span class="{{#if this.hasErrors}}error{{else}}warn{{/if}}-count">{{this.issueCount}}</span>
+        <p>
+          {{this.path}}
+        </p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="down-arrow"><path d="m6 9 6 6 6-6"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="up-arrow"><path d="m18 15-6-6-6 6"/></svg>
+      </div>
+      <table class="file-content">
+        <tbody>
+        {{#each this.lines}}
+          <tr>
+          <td class="gutter">
+            {{this.number}}
+          </td>
+          <td class="line {{#if this.hasError}}has-error{{/if}}">
+            <pre>{{{this.content}}}</pre>
+            {{#if this.hasError}}
+              <div class="{{this.errorSeverity}}">
+                <header>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>
+                  <p class="text-muted">Failure on line {{this.number}}</p>
+                </header>
+                <p class="line-info">
+                  {{../this.path}}:{{this.number}}
+                </p>
+                <p>
+                  [{{this.ruleName}}]: {{this.ruleDescription}}
+                </p>
+              </div>
+            {{/if}}
+          </td>
+        </tr>
+        {{/each}}
+        </tbody>
+      </table>
+    </div>
+    {{/each}}
+  </div>
+</div>
+
+<script>
+  const collapsibles = document.getElementsByClassName('file-info')
+
+  for (let col of collapsibles) {
+    const parent = col.parentElement
+    parent.addEventListener('click', () => {
+      parent.classList.toggle('active')
+    })
+  }
+
+  const showErrors = document.getElementById('show-errors')
+  showErrors.addEventListener('click', (e) => {
+    const checked = e.currentTarget.checked
+    const errorFiles = document.getElementsByClassName('file-info error')
+
+    if (!checked) {
+      [...errorFiles].forEach((ef) => ef.parentNode.style.display = 'none')
+    } else {
+      [...errorFiles].forEach((ef) => ef.parentNode.style.display = 'block')
+    }
+  })
+  const showWarns = document.getElementById('show-warns')
+  showWarns.addEventListener('click', (e) => {
+    const checked = e.currentTarget.checked
+    const warnFiles = document.getElementsByClassName('file-info warn')
+
+    if (!checked) {
+      [...warnFiles].forEach((ef) => ef.parentNode.style.display = 'none')
+    } else {
+      [...warnFiles].forEach((ef) => ef.parentNode.style.display = 'block')
+    }
+  })
+
+  const search = document.getElementById('search')
+  search.addEventListener('keyup', (e) => {
+    const term = encodeURI(e.currentTarget.value)
+
+    const fileNames = document.querySelectorAll('.file-info > p');
+    [...fileNames].forEach((fn) => {
+      const wrapper = fn.parentNode.parentNode
+      const index = fn.innerText.indexOf(term)
+      if (index > -1) {
+        wrapper.style.display = 'block'
+        const original = fn.innerText
+        const before = original.slice(0, index)
+        const after = original.slice(index + term.length, original.length)
+        fn.innerHTML = before + `<span class="highlight">${term}</span>` + after
+      } else {
+        wrapper.style.display = 'none'
+      }
+    })
+  })
+</script>
+</body>
