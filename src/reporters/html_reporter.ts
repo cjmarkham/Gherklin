@@ -3,7 +3,7 @@ import path from 'node:path'
 import Handlebars from 'handlebars'
 
 import Reporter from './reporter'
-import { Severity } from '../types'
+import { Report, ReportFile, ReportLine, Severity } from '../types'
 
 export default class HTMLReporter extends Reporter {
   public override write = (): void => {
@@ -17,20 +17,7 @@ export default class HTMLReporter extends Reporter {
       totalWarns: 0,
       totalLines: 0,
       rules: {},
-    }
-
-    const keywords = [
-      'Feature',
-      'Scenario',
-      'Given',
-      'When',
-      'Then',
-      'And',
-      'But',
-      'Examples',
-      'Background',
-      'Scenario Outline',
-    ]
+    } as Report
 
     for (const [key] of this.errors.entries()) {
       const content = readFileSync(key, { encoding: 'utf-8' })
@@ -43,7 +30,7 @@ export default class HTMLReporter extends Reporter {
         hasErrors,
         lines: [],
         issueCount: errors.length,
-      }
+      } as ReportFile
 
       values.totalErrors += errors.map((e) => e.severity === Severity.error).length
       values.totalWarns += errors.map((e) => e.severity === Severity.warn).length
@@ -51,33 +38,14 @@ export default class HTMLReporter extends Reporter {
 
       lines.forEach((line: string, index: number) => {
         const lineIssue = errors.find((e) => e.location.line === index + 1)
-        let keyword = undefined
-        let lineContent = line
-        let padding = lineContent.length
-
-        keywords.forEach((kw: string) => {
-          const keywordMatches = line.trim().match(new RegExp(`^${kw}`))
-          if (keywordMatches) {
-            keyword = keywordMatches[0].trim()
-            lineContent = lineContent.replace(keyword, '')
-            padding = (lineContent.length - lineContent.trim().length) / 2
-            lineContent = lineContent.trim()
-            if (!['Feature', 'Scenario', 'Scenario Outline', 'Background'].includes(kw)) {
-              lineContent = ' ' + lineContent
-            }
-          }
-        })
 
         const lineInfo = {
           number: index + 1,
-          hasError: lineIssue,
+          hasError: lineIssue !== undefined,
           errorSeverity: lineIssue && lineIssue.severity.toString().toLowerCase(),
-          keyword,
-          content: lineContent,
-          padding,
+          content: line,
           ruleName: lineIssue && lineIssue.rule,
-          ruleDescrition: 'Something here',
-        }
+        } as ReportLine
 
         if (lineIssue) {
           if (lineIssue.rule in values.rules) {

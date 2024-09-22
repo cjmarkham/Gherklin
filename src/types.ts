@@ -59,3 +59,29 @@ export interface RuleDefinition {
   schema: any
   run: Function
 }
+
+export interface Report {
+  title: string
+  files: Array<ReportFile>
+  totalErrors: number
+  totalWarns: number
+  totalLines: number
+  rules: {
+    [name: string]: number
+  }
+}
+
+export interface ReportFile {
+  path: string
+  hasErrors: boolean
+  lines: Array<ReportLine>
+  issueCount: number
+}
+
+export interface ReportLine {
+  number: number
+  hasError: boolean
+  errorSeverity: Severity
+  content: string
+  ruleName: string
+}
