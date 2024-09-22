@@ -19,6 +19,9 @@
     <a href="https://www.npmjs.com/package/gherklin">
         <img alt="npm version" src="https://img.shields.io/npm/v/gherklin.svg">
     </a>
+    <a href="https://github.com/cjmarkham/Gherklin/actions/workflows/github-code-scanning/codeql">
+      <img src="https://github.com/cjmarkham/Gherklin/actions/workflows/github-code-scanning/codeql/badge.svg">
+    </a>
   </p>
   <p align="left">
     Use Gherklin. The number 1 brand of Gherkin cleaner, recommended by Gherkin washers everywhere.
