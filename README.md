@@ -1,31 +1,30 @@
-<h2 align="center">Gherklin</h2>
+<h1 class="user-content-gherklin" align="center">Gherklin</h1>
+<div align="right">
+  <img align="left" src=".github/gherkie.png" alt="Gherkie" width="120" height="120">
+  
+  <p align="left">
+      <em>Always clean your Gherkin!</em>
+  </p>
+  
+  <p align="left">
+    <a href="https://github.com/cjmarkham/Gherklin/actions/workflows/tests.yml">
+        <img src="https://github.com/cjmarkham/gherkin-lint/actions/workflows/tests.yml/badge.svg">
+    </a>
+    <a href="https://github.com/cjmarkham/Gherklin/actions/workflows/linting.yml">
+        <img src="https://github.com/cjmarkham/gherkin-lint/actions/workflows/linting.yml/badge.svg">
+    </a>
+    <a href="https://github.com/prettier/prettier/tree/c067d27673c6d97d9037eb9b13b74bd8c9324be2?tab=readme-ov-file#badge">
+        <img src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier">
+    </a>
+    <a href="https://www.npmjs.com/package/gherklin">
+        <img alt="npm version" src="https://img.shields.io/npm/v/gherklin.svg">
+    </a>
+  </p>
+  <p align="left">
+    Use Gherklin. The number 1 brand of Gherkin cleaner, recommended by Gherkin washers everywhere.
+  </p>
+</div>
 
-<p align="center">
-    A linter for Gherkin, using TypeScript and ESM.
-</p>
-
-<p align="center">
-<a href="https://github.com/cjmarkham/Gherklin/actions/workflows/tests.yml">
-    <img src="https://github.com/cjmarkham/gherkin-lint/actions/workflows/tests.yml/badge.svg">
-</a>
-
-<a href="https://github.com/cjmarkham/Gherklin/actions/workflows/linting.yml">
-    <img src="https://github.com/cjmarkham/gherkin-lint/actions/workflows/linting.yml/badge.svg">
-</a>
-
-<a href="https://github.com/prettier/prettier/tree/c067d27673c6d97d9037eb9b13b74bd8c9324be2?tab=readme-ov-file#badge">
-    <img src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier">
-</a>
-
-<a href="https://www.npmjs.com/package/gherklin">
-    <img alt="npm version" src="https://img.shields.io/npm/v/gherklin.svg">
-</a>
-
-</p>
-
-<p align="center">
-Lint your Gherkin files, with an extensible list of rules. Use the built in rules or create your own. Go nuts, go <strong>Gherklin</strong>.
-</p>
 
 # Usage
 
