@@ -345,7 +345,7 @@
 
   const search = document.getElementById('search')
   search.addEventListener('keyup', (e) => {
-    const term = e.currentTarget.value
+    const term = encodeURI(e.currentTarget.value)
 
     const fileNames = document.querySelectorAll('.file-info > p');
     [...fileNames].forEach((fn) => {
