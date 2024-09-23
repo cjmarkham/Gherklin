@@ -1,11 +1,4 @@
-import fs from 'node:fs/promises'
 import path from 'node:path'
-import Gherkin from '@cucumber/gherkin'
-import { GherkinDocumentWalker } from '@cucumber/gherkin-utils'
-import { IdGenerator } from '@cucumber/messages'
-
-import { LintError } from './error'
-import Rule from './rule'
 import { outputSchemaErrors, Results } from './output'
 import { getFiles } from './utils'
 import Config from './config'
@@ -17,20 +10,24 @@ import JSONReporter from './reporters/json_reporter'
 import logger from './logger'
 import chalk from 'chalk'
 import NullReporter from './reporters/null_reporter'
+import RuleLoader from './rule_loader'
+import Document from './document'
 
 export default class Runner {
   public gherkinFiles: Array<string> = []
-
-  private rules: Array<Rule> = []
 
   private config: GherklinConfiguration
 
   private reporter: Reporter
 
+  private ruleLoader: RuleLoader
+
   constructor(gherklinConfig?: GherklinConfiguration) {
     if (gherklinConfig) {
       this.config = new Config().fromInline(gherklinConfig)
     }
+
+    this.ruleLoader = new RuleLoader()
   }
 
   public init = async (): Promise<Results> => {
@@ -51,23 +48,22 @@ export default class Runner {
 
     // Import and validate all default rules
     for (const ruleName in this.config.rules) {
-      const rule = new Rule(ruleName, this.config.rules[ruleName])
-      const loadError = await rule.load(this.config.configDirectory, this.config.customRulesDirectory)
-      if (loadError) {
-        throw loadError
-      }
-      const validationErrors = rule.validate()
+      await this.ruleLoader.load(
+        this.config.configDirectory,
+        ruleName,
+        this.config.rules[ruleName],
+        this.config.customRulesDirectory,
+      )
 
-      if (validationErrors.size) {
-        outputSchemaErrors(validationErrors)
+      const schemaErrors = this.ruleLoader.validateRules()
+      if (schemaErrors.size) {
+        outputSchemaErrors(schemaErrors)
         return {
           success: false,
-          schemaErrors: validationErrors,
+          schemaErrors: schemaErrors,
           errors: new Map(),
         }
       }
-
-      this.rules.push(rule)
     }
 
     return {
@@ -78,50 +74,13 @@ export default class Runner {
   }
 
   public run = async (): Promise<Results> => {
-    const walker = new GherkinDocumentWalker()
-    const builder = new Gherkin.AstBuilder(IdGenerator.uuid())
-    const matcher = new Gherkin.GherkinClassicTokenMatcher()
-    const parser = new Gherkin.Parser(builder, matcher)
+    for (const filename of this.gherkinFiles) {
+      const document = new Document(filename)
+      await document.load()
 
-    for (const fileName of this.gherkinFiles) {
-      const content = await fs.readFile(fileName).catch((): never => {
-        throw new Error(`Could not open the feature file at ${fileName}. Does it exist?`)
-      })
-
-      const document = parser.parse(content.toString())
-      const walk = walker.walkGherkinDocument(document)
-
-      const inlineDisabled = []
-      document.comments.forEach((comment) => {
-        const rulesToDisable = comment.text.replace(/#\s?gherklin-disable\s?/, '')
-        if (rulesToDisable.length) {
-          inlineDisabled.push(...rulesToDisable.split(', '))
-        }
-      })
-
-      // Check for gherklin-disable and no arguments, which means we disable
-      // Gherklin for the whole file
-      const disableCheck = document.comments[0]?.text?.indexOf('gherklin-disable')
-      if (disableCheck !== undefined && disableCheck > -1) {
-        if (inlineDisabled.length === 0) {
-          continue
-        }
-      }
-
-      for (const rule of this.rules) {
-        if (!rule.schema.enabled || inlineDisabled.includes(rule.name)) {
-          continue
-        }
-
-        const ruleErrors: Array<LintError> = await rule.run(walk, fileName)
-        if (ruleErrors && ruleErrors.length) {
-          ruleErrors.forEach((_, index) => {
-            ruleErrors[index].severity = rule.schema.severity
-            ruleErrors[index].rule = rule.name
-          })
-
-          this.reporter.addErrors(fileName, ruleErrors)
-        }
+      const ruleErrors = await this.ruleLoader.runRules(document)
+      if (ruleErrors && ruleErrors.length) {
+        this.reporter.addErrors(filename, ruleErrors)
       }
     }
 

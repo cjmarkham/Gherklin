@@ -1,48 +1,46 @@
-import { GherkinDocument } from '@cucumber/messages'
-
-import { LintError } from '../error'
 import { switchOrSeveritySchema } from '../schemas'
+import Schema from '../schema'
 import Rule from '../rule'
+import { RawSchema, AcceptedSchema } from '../types'
+import Document from '../document'
 
-/**
- * Allowed:
- * off | on
- */
-export const schema = switchOrSeveritySchema
+export default class NoSingleExampleOutline implements Rule {
+  public readonly name: string = 'no-single-example-outline'
 
-export const run = (rule: Rule, document: GherkinDocument): Array<LintError> => {
-  if (!document || (document && !document.feature)) {
-    return []
+  public readonly acceptedSchema: AcceptedSchema = switchOrSeveritySchema
+
+  public readonly schema: Schema
+
+  public constructor(rawSchema: RawSchema) {
+    this.schema = new Schema(rawSchema)
   }
 
-  const errors: Array<LintError> = []
+  public async run(document: Document): Promise<void> {
+    document.feature.children.forEach((child) => {
+      if (!child.scenario) {
+        return
+      }
 
-  document.feature.children.forEach((child) => {
-    if (!child.scenario) {
-      return
-    }
+      if (child.scenario.keyword !== 'Scenario Outline') {
+        return
+      }
 
-    if (child.scenario.keyword !== 'Scenario Outline') {
-      return
-    }
+      if (!child.scenario.examples.length) {
+        return
+      }
 
-    if (!child.scenario.examples.length) {
-      return
-    }
+      let totalExamples = 0
 
-    let totalExamples = 0
+      child.scenario.examples.forEach((example) => {
+        totalExamples += example.tableBody.length
+      })
 
-    child.scenario.examples.forEach((example) => {
-      totalExamples += example.tableBody.length
+      if (totalExamples === 1) {
+        document.addError(
+          'Scenario Outline has only one example. Consider converting to a simple Scenario.',
+          child.scenario.location,
+        )
+      }
     })
-
-    if (totalExamples === 1) {
-      errors.push({
-        message: 'Scenario Outline has only one example. Consider converting to a simple Scenario.',
-        location: child.scenario.location,
-      } as LintError)
-    }
-  })
-
-  return errors
+  }
 }

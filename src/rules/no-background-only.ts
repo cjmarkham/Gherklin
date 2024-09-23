@@ -1,33 +1,29 @@
-import { GherkinDocument } from '@cucumber/messages'
-import { LintError } from '../error'
-import Rule from '../rule'
 import { switchOrSeveritySchema } from '../schemas'
+import Schema from '../schema'
+import Rule from '../rule'
+import { RawSchema, AcceptedSchema } from '../types'
+import Document from '../document'
 
-/**
- * Allowed:
- * off | on | error | warn
- */
-export const schema = switchOrSeveritySchema
+export default class NoBackgroundOnly implements Rule {
+  public readonly name: string = 'no-background-only'
 
-export const run = (rule: Rule, document: GherkinDocument): Array<LintError> => {
-  if (!document || (document && !document.feature)) {
-    return []
+  public readonly acceptedSchema: AcceptedSchema = switchOrSeveritySchema
+
+  public readonly schema: Schema
+
+  public constructor(rawSchema: RawSchema) {
+    this.schema = new Schema(rawSchema)
   }
 
-  const errors: Array<LintError> = []
+  public async run(document: Document): Promise<void> {
+    document.feature.children.forEach((child) => {
+      if (!child.background) {
+        return
+      }
 
-  document.feature.children.forEach((child) => {
-    if (!child.background) {
-      return
-    }
-
-    if (document.feature.children.length < 2) {
-      errors.push({
-        message: `File contains only a background.`,
-        location: document.feature.location,
-      } as LintError)
-    }
-  })
-
-  return errors
+      if (document.feature.children.length < 2) {
+        document.addError(`File contains only a background.`, document.feature.location)
+      }
+    })
+  }
 }

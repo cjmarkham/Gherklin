@@ -1,27 +1,26 @@
-import { GherkinDocument } from '@cucumber/messages'
-
-import { LintError } from '../error'
 import { switchOrSeveritySchema } from '../schemas'
+import Schema from '../schema'
 import Rule from '../rule'
+import { RawSchema, AcceptedSchema } from '../types'
+import Document from '../document'
 
-/**
- * Allowed:
- * off | on | error | warn
- */
-export const schema = switchOrSeveritySchema
+export default class NoEmptyFile implements Rule {
+  public readonly name: string = 'no-empty-file'
 
-export const run = (rule: Rule, document: GherkinDocument): Array<LintError> => {
-  const errors: Array<LintError> = []
+  public readonly acceptedSchema: AcceptedSchema = switchOrSeveritySchema
 
-  if (!document) {
-    errors.push({
-      message: 'Feature file is empty.',
-      location: {
-        line: 0,
-        column: 0,
-      },
-    } as LintError)
+  public readonly schema: Schema
+
+  public constructor(rawSchema: RawSchema) {
+    this.schema = new Schema(rawSchema)
   }
 
-  return errors
+  public async run(document: Document): Promise<void> {
+    if (document.feature.keyword === '') {
+      document.addError('Feature file is empty.', {
+        line: 0,
+        column: 0,
+      })
+    }
+  }
 }

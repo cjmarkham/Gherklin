@@ -1,36 +1,34 @@
 import path from 'node:path'
-import { GherkinDocument } from '@cucumber/messages'
 
-import { LintError } from '../error'
-import Rule from '../rule'
 import { switchOrSeveritySchema } from '../schemas'
+import Schema from '../schema'
+import Rule from '../rule'
+import { RawSchema, AcceptedSchema } from '../types'
+import Document from '../document'
 
-/**
- * Allowed:
- * off | on | error | warn
- */
-export const schema = switchOrSeveritySchema
+export default class NoDupeFeatures implements Rule {
+  public readonly name: string = 'no-dupe-features'
 
-// A map of feature names => a list of files they appear in
-const features: Map<string, Array<string>> = new Map()
+  public readonly acceptedSchema: AcceptedSchema = switchOrSeveritySchema
 
-export const run = (rule: Rule, document: GherkinDocument, fileName: string): Array<LintError> => {
-  if (!document || (document && !document.feature)) {
-    return []
+  public readonly schema: Schema
+
+  private features: Map<string, Array<string>> = new Map()
+
+  public constructor(rawSchema: RawSchema) {
+    this.schema = new Schema(rawSchema)
   }
 
-  const errors: Array<LintError> = []
-
-  const featureName = document.feature.name
-  if (!features.has(featureName)) {
-    features.set(featureName, [path.basename(fileName)])
-  } else {
-    features.set(featureName, [path.basename(fileName), ...features.get(featureName)])
-    errors.push({
-      message: `Found duplicate feature "${featureName}" in "${features.get(featureName).join(', ')}".`,
-      location: document.feature.location,
-    } as LintError)
+  public async run(document: Document): Promise<void> {
+    const featureName = document.feature.name
+    if (!this.features.has(featureName)) {
+      this.features.set(featureName, [path.basename(document.filename)])
+    } else {
+      this.features.set(featureName, [path.basename(document.filename), ...this.features.get(featureName)])
+      document.addError(
+        `Found duplicate feature "${featureName}" in "${this.features.get(featureName).join(', ')}".`,
+        document.feature.location,
+      )
+    }
   }
-
-  return errors
 }

@@ -141,24 +141,12 @@ Custom rules can be loaded by setting the `customRulesDirectory` parameter in yo
 There are a few things needed to consider for rules:
 
 - Each file in the directory contains one rule.
-- Each file has at minimum two exports
-    - A named constant called schema
-    - A named function called `run`
+- Each file exports a default class that implements [Rule](./src/rule.ts)
 
 Schema for rules uses [Zod](https://github.com/colinhacks/zod). There are a few different schemas
 specified in [the schemas file](./src/schemas.ts), but if you
 want to create something different, you can use Zod directly.
 When the rule is loaded, this schema is used to verify the configuration value for the rule.
-
-The `run` function accepts two arguments
-
-- rule: An instance of the [rule class](./src/rule.ts)
-- document:
-  The [Gherkin Document](https://github.com/cucumber/messages/blob/main/javascript/src/messages.ts#L94)
-  being validated
-
-The `run` function must return an array of [LintError](./src/error.ts) (or an empty array for no
-errors).
 
 # Reporting
 

@@ -1,7 +1,7 @@
 import chalk from 'chalk'
 
 import logger from './logger'
-import { LintError } from './error'
+import { LintError } from './types'
 
 export interface Results {
   success: boolean

@@ -1,60 +1,48 @@
-import { GherkinDocument } from '@cucumber/messages'
-
-import { LintError } from '../error'
 import { offOrStringArrayOrSeverityAndStringArray } from '../schemas'
+import Schema from '../schema'
 import Rule from '../rule'
-import { lineDisabled } from '../utils'
+import { RawSchema, AcceptedSchema } from '../types'
+import Document from '../document'
 
-/**
- * Allowed:
- * off
- * [@tag1]
- * ['error', [@tag1]]
- */
-export const schema = offOrStringArrayOrSeverityAndStringArray
+export default class AllowedTags implements Rule {
+  public readonly name: string = 'allowed-tags'
 
-export const run = (rule: Rule, document: GherkinDocument): Array<LintError> => {
-  if (!document || (document && !document.feature)) {
-    return []
+  public readonly acceptedSchema: AcceptedSchema = offOrStringArrayOrSeverityAndStringArray
+
+  public readonly schema: Schema
+
+  public constructor(rawSchema: RawSchema) {
+    this.schema = new Schema(rawSchema)
   }
 
-  const errors: Array<LintError> = []
-  let allowedTags = rule.schema.args as Array<string>
-  if (!allowedTags.length) {
-    return []
-  }
-
-  document.feature.tags.forEach((tag) => {
-    if (lineDisabled(document.comments, tag.location.line)) {
+  public async run(document: Document): Promise<void> {
+    let allowedTags = this.schema.args as Array<string>
+    if (!allowedTags.length) {
       return
     }
 
-    if (!allowedTags.includes(tag.name)) {
-      errors.push({
-        message: `Found a feature tag that is not allowed. Got ${tag.name}, wanted ${Array.isArray(allowedTags) ? allowedTags.join(', ') : allowedTags}`,
-        location: tag.location,
-      } as LintError)
-    }
-  })
+    document.feature.tags.forEach((tag) => {
+      if (!allowedTags.includes(tag.name)) {
+        document.addError(
+          `Found a feature tag that is not allowed. Got ${tag.name}, wanted ${Array.isArray(allowedTags) ? allowedTags.join(', ') : allowedTags}`,
+          tag.location,
+        )
+      }
+    })
 
-  document.feature.children.forEach((child) => {
-    if (!child.scenario) {
-      return
-    }
-
-    child.scenario.tags.forEach((tag) => {
-      if (lineDisabled(document.comments, tag.location.line)) {
+    document.feature.children.forEach((child) => {
+      if (!child.scenario) {
         return
       }
 
-      if (!allowedTags.includes(tag.name)) {
-        errors.push({
-          message: `Found a scenario tag that is not allowed. Got ${tag.name}, wanted ${Array.isArray(allowedTags) ? allowedTags.join(', ') : allowedTags}`,
-          location: tag.location,
-        } as LintError)
-      }
+      child.scenario.tags.forEach((tag) => {
+        if (!allowedTags.includes(tag.name)) {
+          document.addError(
+            `Found a scenario tag that is not allowed. Got ${tag.name}, wanted ${Array.isArray(allowedTags) ? allowedTags.join(', ') : allowedTags}`,
+            tag.location,
+          )
+        }
+      })
     })
-  })
-
-  return errors
+  }
 }

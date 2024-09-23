@@ -1,38 +1,34 @@
-import { GherkinDocument } from '@cucumber/messages'
-
-import { LintError } from '../error'
 import { offOrNumberOrSeverityAndNumber } from '../schemas'
+import Schema from '../schema'
 import Rule from '../rule'
+import { RawSchema, AcceptedSchema } from '../types'
+import Document from '../document'
 
-/**
- * Allowed:
- * off
- * number
- * ['error', number]
- */
-export const schema = offOrNumberOrSeverityAndNumber
+export default class MaxScenarios implements Rule {
+  public readonly name: string = 'max-scenarios'
 
-export const run = (rule: Rule, document: GherkinDocument): Array<LintError> => {
-  if (!document || (document && !document.feature)) {
-    return []
+  public readonly acceptedSchema: AcceptedSchema = offOrNumberOrSeverityAndNumber
+
+  public readonly schema: Schema
+
+  public constructor(rawSchema: RawSchema) {
+    this.schema = new Schema(rawSchema)
   }
 
-  const errors: Array<LintError> = []
+  public async run(document: Document): Promise<void> {
+    let scenarioCount = 0
+    document.feature.children.forEach((child) => {
+      if (child.scenario) {
+        scenarioCount += 1
+      }
+    })
 
-  let scenarioCount = 0
-  document.feature.children.forEach((child) => {
-    if (child.scenario) {
-      scenarioCount += 1
+    const expected = this.schema.args as number
+    if (scenarioCount > expected) {
+      document.addError(
+        `Expected max ${expected} scenarios per file. Found ${scenarioCount}.`,
+        document.feature.location,
+      )
     }
-  })
-
-  const expected = rule.schema.args as number
-  if (scenarioCount > expected) {
-    errors.push({
-      message: `Expected max ${expected} scenarios per file. Found ${scenarioCount}.`,
-      location: document.feature.location,
-    } as LintError)
   }
-
-  return errors
 }
