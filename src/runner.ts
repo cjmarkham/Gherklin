@@ -48,15 +48,12 @@ export default class Runner {
 
     // Import and validate all default rules
     for (const ruleName in this.config.rules) {
-      const loadError = await this.ruleLoader.load(
+      await this.ruleLoader.load(
         this.config.configDirectory,
         ruleName,
         this.config.rules[ruleName],
         this.config.customRulesDirectory,
       )
-      if (loadError) {
-        throw loadError
-      }
 
       const schemaErrors = this.ruleLoader.validateRules()
       if (schemaErrors.size) {
