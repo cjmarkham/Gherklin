@@ -1,5 +1,7 @@
+export { default as Document } from './document'
 export { default as Runner } from './runner'
 export { default as Rule } from './rule'
-export { Severity, Switch } from './types'
+export { default as Schema } from './schema'
+export { AcceptedSchema, RawSchema, Severity, Switch } from './types'
 export type { LintError } from './types'
 export * as Schemas from './schemas'
