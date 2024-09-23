@@ -21,7 +21,7 @@ export const keywordInts = z
   .strict()
 
 // warn | error
-export const severitySchema = z.union([z.literal(Severity.warn), z.literal(Severity.error)])
+export const severitySchema = z.nativeEnum(Severity)
 // on | off | warn | error
 export const switchOrSeveritySchema = z.union([z.nativeEnum(Switch), z.nativeEnum(Severity)])
 // off | [string] | [error | warn, [string]]

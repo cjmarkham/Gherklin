@@ -1,3 +1,5 @@
+import { z } from 'zod'
+
 export interface ReporterConfig {
   type?: string
   title?: string
@@ -39,6 +41,14 @@ export type RawSchema =
   | Array<string>
   | [string, GherkinKeywordNumericals | Array<string> | number]
   | number
+
+// Simple alias
+export type AcceptedSchema = z.ZodSchema
+
+export interface Location {
+  line: number
+  column?: number
+}
 
 // RuleArguments are the arguments when the RuleSchema is parsed in
 // to its severity | switch and arguments

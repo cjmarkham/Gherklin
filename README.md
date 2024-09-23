@@ -152,7 +152,7 @@ When the rule is loaded, this schema is used to verify the configuration value f
 
 The `run` function accepts two arguments
 
-- rule: An instance of the [rule class](./src/rule.ts)
+- rule: An instance of the [rule class](./src/rule_loader.ts)
 - document:
   The [Gherkin Document](https://github.com/cucumber/messages/blob/main/javascript/src/messages.ts#L94)
   being validated

@@ -45,12 +45,6 @@ export default class Schema {
   }
 
   public validate(zodSchema: z.ZodSchema): Array<string> {
-    const testSchema = z.instanceof(z.ZodSchema)
-    const parseErr = testSchema.safeParse(zodSchema)
-    if (!parseErr.success) {
-      return parseErr.error.errors.map((e) => e.message)
-    }
-
     const result = zodSchema.safeParse(this.rawSchema)
     if (!result.success) {
       return result.error.format()?._errors

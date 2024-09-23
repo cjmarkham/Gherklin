@@ -1,34 +1,33 @@
-import * as fs from 'node:fs/promises'
+import { readFile } from 'node:fs/promises'
 
-import { GherkinDocument } from '@cucumber/messages'
-
-import { LintError } from '../error'
-import Rule from '../rule'
 import { switchOrSeveritySchema } from '../schemas'
+import Schema from '../schema'
+import { Rule } from '../rule'
+import { RawSchema, AcceptedSchema } from '../types'
+import Document from '../document'
 
-/**
- * Allowed:
- * off | on | error | warn
- */
-export const schema = switchOrSeveritySchema
+export default class NewLineAtEof implements Rule {
+  public readonly name: string = 'new-line-at-eof'
 
-export const run = async (rule: Rule, document: GherkinDocument, fileName: string): Promise<Array<LintError>> => {
-  const errors: Array<LintError> = []
+  public readonly acceptedSchema: AcceptedSchema = switchOrSeveritySchema
 
-  // readline automatically strips lines that are only whitespace, so we have to split the lines manually
-  const content = await fs.readFile(fileName)
-  const lines = String(content).split(/\r\n|\r|\n/)
+  public readonly schema: Schema
 
-  const lastLine = lines[lines.length - 1]
-  if (lastLine !== '') {
-    errors.push({
-      message: 'No new line at end of file.',
-      location: {
-        line: lines.length,
-        column: 0,
-      },
-    } as LintError)
+  public constructor(rawSchema: RawSchema) {
+    this.schema = new Schema(rawSchema)
   }
 
-  return errors
+  public async run(document: Document): Promise<void> {
+    // readline automatically strips lines that are only whitespace, so we have to split the lines manually
+    const content = await readFile(document.filename)
+    const lines = String(content).split(/\r\n|\r|\n/)
+
+    const lastLine = lines[lines.length - 1]
+    if (lastLine !== '') {
+      document.addError('No new line at end of file.', {
+        line: lines.length,
+        column: 0,
+      })
+    }
+  }
 }

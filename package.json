@@ -4,7 +4,7 @@
   "description": "A linter for Gherkin syntax",
   "scripts": {
     "test": "NODE_ENV=testing mocha",
-    "acceptance": "NODE_OPTIONS=--import=tsx ./node_modules/.bin/cucumber-js --config tests/acceptance/cucumber.json",
+    "acceptance": "NODE_OPTIONS=--import=tsx ./node_modules/.bin/cucumber-js --config tests/acceptance/cucumber.mjs",
     "eslint": "node_modules/.bin/eslint",
     "eslint:fix": "node_modules/.bin/eslint --fix",
     "prettier": "node_modules/.bin/prettier --check src/**/*.ts",
