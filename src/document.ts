@@ -2,8 +2,7 @@ import fs from 'node:fs/promises'
 import { Feature, IdGenerator } from '@cucumber/messages'
 import Gherkin from '@cucumber/gherkin'
 
-import { LintError } from './error'
-import { Location } from './types'
+import { LintError, Location } from './types'
 
 export default class Document {
   public filename: string
@@ -18,7 +17,7 @@ export default class Document {
 
   public load = async (): Promise<void> => {
     const content = await fs.readFile(this.filename).catch((): never => {
-      throw new Error(`Could not open the feature file at ${this.filename}. Does it exist?`)
+      throw new Error(`Could not open the feature file at "${this.filename}". Does it exist?`)
     })
 
     const builder = new Gherkin.AstBuilder(IdGenerator.uuid())

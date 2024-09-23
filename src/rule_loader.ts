@@ -2,10 +2,9 @@ import fs from 'node:fs'
 import path from 'node:path'
 
 import Schema from './schema'
-import { Rule } from './rule'
-import { LintError } from './error'
+import Rule from './rule'
 import Document from './document'
-import { RawSchema } from './types'
+import { LintError, RawSchema } from './types'
 
 export default class RuleLoader {
   public schema: Schema
@@ -17,21 +16,21 @@ export default class RuleLoader {
     ruleName: string,
     rawSchema: RawSchema,
     customDir?: string,
-  ): Promise<Error> => {
-    // If this rule doesn't appear in the defaults, we'll need to look for it in the custom rules dir
+  ): Promise<void> => {
     let location = path.resolve(import.meta.dirname, `./rules/${ruleName}.ts`)
 
+    // If this rule doesn't appear in the defaults, we'll need to look for it in the custom rules dir
     if (!fs.existsSync(location)) {
       if (customDir) {
         // Import files relative to the location of the config file
-        const resolved = path.join(configLocation, customDir, `${ruleName}.ts`)
+        const customLocation = path.join(configLocation, customDir, `${ruleName}.ts`)
 
-        if (!fs.existsSync(resolved)) {
-          return new Error(`could not find rule "${ruleName}" in "${location}" or "${resolved}"`)
+        if (!fs.existsSync(customLocation)) {
+          throw new Error(`could not find rule "${ruleName}" in default rules or "${customDir}".`)
         }
-        location = resolved
+        location = customLocation
       } else {
-        return new Error(
+        throw new Error(
           `could not find rule "${ruleName}" in default rules.\nIf this is a custom rule, please specify a customRuleDir in the config.`,
         )
       }

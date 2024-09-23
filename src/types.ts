@@ -67,11 +67,6 @@ export interface GherklinConfiguration {
   featureFile?: string
 }
 
-export interface RuleDefinition {
-  schema: any
-  run: Function
-}
-
 export interface Report {
   title: string
   files: Array<ReportFile>
@@ -96,4 +91,11 @@ export interface ReportLine {
   errorSeverity: Severity
   content: string
   ruleName: string
+}
+
+export interface LintError {
+  rule: string
+  severity: Severity
+  message: string
+  location: Location
 }
