@@ -1,6 +1,6 @@
 import { offOrNumberOrSeverityOrSeverityAndNumber } from '../schemas'
 import Schema from '../schema'
-import { Rule } from '../rule'
+import Rule from '../rule'
 import { RawSchema, AcceptedSchema } from '../types'
 import Document from '../document'
 import { levenshtein } from '../utils'

@@ -1,6 +1,6 @@
 import { offOrKeywordIntsOrSeverityAndKeywordInts } from '../schemas'
 import Schema from '../schema'
-import { Rule } from '../rule'
+import Rule from '../rule'
 import { RawSchema, AcceptedSchema, GherkinKeywordNumericals } from '../types'
 import Document from '../document'
 
