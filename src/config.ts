@@ -1,7 +1,8 @@
 import path from 'node:path'
 import * as fs from 'node:fs'
-import { GherklinConfiguration } from './types'
 import { pathToFileURL } from 'node:url'
+
+import { GherklinConfiguration } from './types'
 
 export default class Config {
   public fromInline = (config: GherklinConfiguration): GherklinConfiguration => {

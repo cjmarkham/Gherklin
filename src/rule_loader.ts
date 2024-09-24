@@ -1,11 +1,11 @@
 import fs from 'node:fs'
 import path from 'node:path'
+import { pathToFileURL } from 'node:url'
 
 import Schema from './schema'
 import Rule from './rule'
 import Document from './document'
 import { LintError, RawSchema } from './types'
-import { pathToFileURL } from 'node:url'
 
 export default class RuleLoader {
   public schema: Schema
