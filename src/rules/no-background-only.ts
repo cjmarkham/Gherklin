@@ -22,7 +22,7 @@ export default class NoBackgroundOnly implements Rule {
       }
 
       if (document.feature.children.length < 2) {
-        document.addError(`File contains only a background.`, document.feature.location)
+        document.addError(this.name, `File contains only a background.`, document.feature.location)
       }
     })
   }

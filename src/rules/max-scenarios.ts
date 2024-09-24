@@ -26,6 +26,7 @@ export default class MaxScenarios implements Rule {
     const expected = this.schema.args as number
     if (scenarioCount > expected) {
       document.addError(
+        this.name,
         `Expected max ${expected} scenarios per file. Found ${scenarioCount}.`,
         document.feature.location,
       )

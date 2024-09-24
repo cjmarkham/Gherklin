@@ -57,7 +57,7 @@ export default class RuleLoader {
     const errors: Array<LintError> = []
 
     for (const rule of this.rules) {
-      if (!rule.schema.enabled) {
+      if (!rule.schema.enabled || document.disabled) {
         continue
       }
 

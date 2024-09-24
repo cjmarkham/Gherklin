@@ -56,6 +56,7 @@ export default class NoSimilarScenarios implements Rule {
 
         if (percentage > threshold) {
           document.addError(
+            this.name,
             `Scenario "${child.scenario.name}" is too similar (> ${threshold}%) to scenario "${other.name}".`,
             child.scenario.location,
           )

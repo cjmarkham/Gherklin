@@ -41,6 +41,7 @@ export default class KeywordsInLogicalOrder implements Rule {
 
         if (given.includes(step.keyword) && !when.includes(nextStep.keyword)) {
           document.addError(
+            this.name,
             `Expected "${step.keyword.trim()}" to be followed by "${trimmedWhen.join(', ')}", got "${nextTrimmed}"`,
             step.location,
           )
@@ -48,6 +49,7 @@ export default class KeywordsInLogicalOrder implements Rule {
 
         if (when.includes(step.keyword) && !then.includes(nextStep.keyword)) {
           document.addError(
+            this.name,
             `Expected "${step.keyword.trim()}" to be followed by "${trimmedThen.join(', ')}", got "${nextTrimmed}"`,
             step.location,
           )
@@ -55,6 +57,7 @@ export default class KeywordsInLogicalOrder implements Rule {
 
         if (then.includes(step.keyword) && ![...and, ...when].includes(nextStep.keyword)) {
           document.addError(
+            this.name,
             `Expected "${step.keyword.trim()}" to be followed by "${[...trimmedAnd, ...trimmedWhen].join(', ')}", got "${nextTrimmed}"`,
             step.location,
           )
