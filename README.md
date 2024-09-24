@@ -28,6 +28,28 @@
   </p>
 </div>
 
+# Contents
+* [Installation](#installation)
+* [Usage](#usage)
+* [Configuration](#configuration)
+* [Disabling Rules](#disabling-rules)
+* [Automatic Fixing](#automatic-fixing)
+* [Custom Rules](#custom-rules)
+  * [Generating Custom Rules](#generating-custom-rules)
+* [Reporting](#reporting)
+  * [Reporter Configuratio](#reporter-configuration)
+* [Contributing](#contributing)
+* [Testing](#testing)
+
+# Installation
+Gherklin can be installed either via NPM or Yarn
+```shell
+npm install gherklin
+```
+```shell
+yarn add gherklin
+```
+
 # Usage
 
 #### Bin script
@@ -118,6 +140,16 @@ While `gherklin-disable` works for every rule, `gherklin-disable-next-line` only
 where it makes sense.
 For example, using `gherklin-disable-next-line` does not make sense for the `no-empty-file` rule.
 
+You can also disable specific rules for the file, using the # gherklin-disable rule-name.
+
+### Example
+```gherkin
+# gherklin-disable allowed-tags, no-unnamed-scenario
+Feature: The below tag is invalid
+  @invalid-tag
+  Scenario:
+```
+
 # Automatic Fixing
 
 **Gherklin** doesn't support automatic fixes that you may be used to with things like ESLint and
@@ -147,6 +179,12 @@ Schema for rules uses [Zod](https://github.com/colinhacks/zod). There are a few 
 specified in [the schemas file](./src/schemas.ts), but if you
 want to create something different, you can use Zod directly.
 When the rule is loaded, this schema is used to verify the configuration value for the rule.
+
+## Generating Custom Rules
+Gherklin comes with a generator script that you can use. Running the following will generate the skeleton for a new Rule class:
+```shell
+npx tsx ./node_modules/.bin/gherklin-rule
+```
 
 # Reporting
 

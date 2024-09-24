@@ -28,7 +28,7 @@ export default class NoTrailingSpaces implements Rule {
 
     for await (const line of rl) {
       if (line.charCodeAt(line.length - 1) === 32) {
-        document.addError('Found trailing whitespace.', {
+        document.addError(this.name, 'Found trailing whitespace.', {
           line: lineNumber,
           column: line.length,
         })

@@ -5,7 +5,7 @@ import { Runner } from '../src/index'
 const runner = new Runner()
 const init = await runner.init()
 if (!init.success) {
-  throw init.schemaErrors
+  process.exit(1)
 }
 const result = await runner.run()
 if (!result.success) {
