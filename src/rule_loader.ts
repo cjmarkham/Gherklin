@@ -32,7 +32,7 @@ export default class RuleLoader {
         location = customLocation
       } else {
         throw new Error(
-          `could not find rule "${ruleName}" in default rules.\nIf this is a custom rule, please specify a customRuleDir in the config.`,
+          `could not find rule "${ruleName}" in default rules.\nIf this is a custom rule, please specify "customRulesDirectory" in the config.`,
         )
       }
     }
