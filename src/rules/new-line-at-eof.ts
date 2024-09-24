@@ -1,10 +1,9 @@
-import { readFile } from 'node:fs/promises'
-
 import { switchOrSeveritySchema } from '../schemas'
 import Schema from '../schema'
 import Rule from '../rule'
 import { RawSchema, AcceptedSchema } from '../types'
 import Document from '../document'
+import Line from '../line'
 
 export default class NewLineAtEof implements Rule {
   public readonly name: string = 'new-line-at-eof'
@@ -18,16 +17,19 @@ export default class NewLineAtEof implements Rule {
   }
 
   public async run(document: Document): Promise<void> {
-    // readline automatically strips lines that are only whitespace, so we have to split the lines manually
-    const content = await readFile(document.filename)
-    const lines = String(content).split(/\r\n|\r|\n/)
+    const lines = document.lines
 
     const lastLine = lines[lines.length - 1]
-    if (lastLine !== '') {
+    if (lastLine.text !== '') {
       document.addError(this.name, 'No new line at end of file.', {
         line: lines.length,
         column: 0,
       })
     }
+  }
+
+  public async fix(document: Document): Promise<void> {
+    document.lines.push(new Line(''))
+    await document.regenerate()
   }
 }

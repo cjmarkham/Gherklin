@@ -4,9 +4,9 @@ Feature: No Empty File
     Given the following feature file
       """
       """
-    When Gherklin is ran with the following rules
-      | no-empty-file |
-      | on            |
+    When Gherklin is ran with the following configuration
+      | rules                   |
+      | {"no-empty-file": "on"} |
     Then there is 1 files with errors
     And the errors are
       | location                 | severity | rule          | message                |

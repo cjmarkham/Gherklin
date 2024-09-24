@@ -7,9 +7,9 @@ Feature: Max Scenarios
         Scenario: One
         Scenario: Two
       """
-    When Gherklin is ran with the following rules
-      | max-scenarios |
-      | [error, 1]    |
+    When Gherklin is ran with the following configuration
+      | rules                           |
+      | {"max-scenarios": ["error", 1]} |
     Then there is 1 files with errors
     And the errors are
       | location                 | severity | rule          | message                                     |
@@ -22,7 +22,7 @@ Feature: Max Scenarios
         Scenario: One
         Scenario: Two
       """
-    When Gherklin is ran with the following rules
-      | max-scenarios |
-      | [error, 3]    |
+    When Gherklin is ran with the following configuration
+      | rules                           |
+      | {"max-scenarios": ["error", 3]} |
     Then there is 0 files with errors

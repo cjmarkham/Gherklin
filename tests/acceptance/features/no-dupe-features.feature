@@ -9,9 +9,9 @@ Feature: No Dupe Features
       """
       Feature: Invalid
       """
-    When Gherklin is ran with the following rules
-      | no-dupe-features |
-      | on               |
+    When Gherklin is ran with the following configuration
+      | rules                      |
+      | {"no-dupe-features": "on"} |
     Then there is 1 files with errors
     And the errors are
       | location                 | severity | rule             | message                                                                      |

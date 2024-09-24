@@ -27,7 +27,7 @@ export default class Runner {
       this.config = new Config().fromInline(gherklinConfig)
     }
 
-    this.ruleLoader = new RuleLoader()
+    this.ruleLoader = new RuleLoader(gherklinConfig)
   }
 
   public init = async (): Promise<Results> => {

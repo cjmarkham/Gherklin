@@ -10,4 +10,6 @@ export default abstract class Rule {
   public readonly schema: Schema
 
   public abstract run(document: Document): Promise<void>
+
+  public abstract fix?(document: Document): Promise<void>
 }
