@@ -14,7 +14,7 @@ describe('RuleLoader', () => {
         const load = loader.load('.', 'a-rule', Switch.on)
         await expect(load).to.be.rejectedWith(
           Error,
-          'could not find rule "a-rule" in default rules.\nIf this is a custom rule, please specify a customRuleDir in the config.',
+          'could not find rule "a-rule" in default rules.\nIf this is a custom rule, please specify a customRulesDirectory in the config.',
         )
       })
     })
