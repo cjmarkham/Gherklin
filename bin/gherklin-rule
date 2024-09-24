@@ -1,0 +1,45 @@
+#!/usr/bin/env node
+
+import { writeFileSync } from 'node:fs'
+import path from 'node:path'
+
+const template = `
+import { AcceptedSchema, Document, RawSchema, Rule, Schema, Schemas } from 'gherklin'
+
+export default class {{className}} implements Rule {
+  public readonly name: string = '{{ruleName}}'
+
+  public readonly acceptedSchema: AcceptedSchema = Schemas.switchOrSeveritySchema
+
+  public readonly schema: Schema
+
+  public constructor(rawSchema: RawSchema) {
+    this.schema = new Schema(rawSchema)
+  }
+
+  public async run(document: Document): Promise<void> {
+    
+  }
+}
+`
+
+if (process.argv.length > 3) {
+  console.error('This script only supports 1 argument.')
+  process.exit(1)
+}
+
+const ruleName = process.argv[2]
+if (!ruleName) {
+  console.error('Please specify a name for your new rule.')
+  process.exit(1)
+}
+if (ruleName.match(/[^a-zA-Z0-9-]/)) {
+  console.error('Rules must be follow kebab-case.')
+  process.exit(1)
+}
+
+const titlized = ruleName.split('-').map((w) => w.charAt(0).toUpperCase() + w.slice(1, w.length)).join('')
+const rule = template.replace('{{className}}', titlized).replace('{{ruleName}}', ruleName)
+
+writeFileSync(`${ruleName}.ts`, rule)
+process.exit(0)

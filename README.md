@@ -148,6 +148,12 @@ specified in [the schemas file](./src/schemas.ts), but if you
 want to create something different, you can use Zod directly.
 When the rule is loaded, this schema is used to verify the configuration value for the rule.
 
+## Generating Custom Rules
+Gherklin comes with a generator script that you can use. Running the following will generate the skeleton for a new Rule class:
+```shell
+npx tsx ./node_modules/.bin/gherklin-rule
+```
+
 # Reporting
 
 By default, Gherklin outputs to STDOUT. You can change this by specifying the reporter in your
