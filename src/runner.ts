@@ -26,8 +26,6 @@ export default class Runner {
     if (gherklinConfig) {
       this.config = new Config().fromInline(gherklinConfig)
     }
-
-    this.ruleLoader = new RuleLoader(gherklinConfig)
   }
 
   public init = async (): Promise<Results> => {
@@ -35,6 +33,7 @@ export default class Runner {
       this.config = await new Config().fromFile()
     }
 
+    this.ruleLoader = new RuleLoader(this.config)
     this.reporter = this.getReporter()
 
     if (this.config.featureFile) {
