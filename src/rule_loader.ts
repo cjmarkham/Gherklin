@@ -1,5 +1,6 @@
 import fs from 'node:fs'
 import path from 'node:path'
+import { pathToFileURL } from 'node:url'
 
 import Schema from './schema'
 import Rule from './rule'
@@ -37,12 +38,12 @@ export default class RuleLoader {
         location = customLocation
       } else {
         throw new Error(
-          `could not find rule "${ruleName}" in default rules.\nIf this is a custom rule, please specify a customRuleDir in the config.`,
+          `could not find rule "${ruleName}" in default rules.\nIf this is a custom rule, please specify "customRulesDirectory" in the config.`,
         )
       }
     }
 
-    const klass = await import(location.replace('.ts', ''))
+    const klass = await import(pathToFileURL(location.replace('.ts', '')).href)
     this.rules.push(new klass.default(rawSchema))
   }
 

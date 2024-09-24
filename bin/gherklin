@@ -1,12 +1,21 @@
 #!/usr/bin/env node
-
+import { version } from '../package.json'
 import { Runner } from '../src/index'
 
-const runner = new Runner()
-const init = await runner.init()
-if (!init.success) {
-  process.exit(1)
+const onError = (err) => {
+  console.error(`Ah ah ah, you didn't say the magic word!
+
+Gherklin: v${version}  
+
+${err}
+`)
 }
+
+process.on('uncaughtException', onError)
+process.on('onFatalError', onError)
+
+const runner = new Runner()
+await runner.init()
 const result = await runner.run()
 if (!result.success) {
   process.exit(1)
