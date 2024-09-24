@@ -28,6 +28,28 @@
   </p>
 </div>
 
+# Contents
+* [Installation](#installation)
+* [Usage](#usage)
+* [Configuration](#configuration)
+* [Disabling Rules](#disabling-rules)
+* [Automatic Fixing](#automatic-fixing)
+* [Custom Rules](#custom-rules)
+  * [Generating Custom Rules](#generating-custom-rules)
+* [Reporting](#reporting)
+  * [Reporter Configuratio](#reporter-configuration)
+* [Contributing](#contributing)
+* [Testing](#testing)
+
+# Installation
+Gherklin can be installed either via NPM or Yarn
+```shell
+npm install gherklin
+```
+```shell
+yarn add gherklin
+```
+
 # Usage
 
 #### Bin script
@@ -117,6 +139,16 @@ Feature: The below tag is invalid
 While `gherklin-disable` works for every rule, `gherklin-disable-next-line` only works for rules
 where it makes sense.
 For example, using `gherklin-disable-next-line` does not make sense for the `no-empty-file` rule.
+
+You can also disable specific rules for the file, using the # gherklin-disable rule-name.
+
+### Example
+```gherkin
+# gherklin-disable allowed-tags, no-unnamed-scenario
+Feature: The below tag is invalid
+  @invalid-tag
+  Scenario:
+```
 
 # Automatic Fixing
 
