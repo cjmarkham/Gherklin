@@ -21,6 +21,7 @@ export default class Indentation implements Rule {
     if (args.feature !== undefined) {
       if (document.feature.location.column !== args.feature) {
         document.addError(
+          this.name,
           `Invalid indentation for feature. Got ${document.feature.location.column}, wanted ${args.feature}`,
           document.feature.location,
         )
@@ -31,6 +32,7 @@ export default class Indentation implements Rule {
       if (child.background && args.background !== undefined) {
         if (child.background.location.column !== args.background) {
           document.addError(
+            this.name,
             `Invalid indentation for background. Got ${child.background.location.column}, wanted ${args.background}`,
             child.background.location,
           )
@@ -40,6 +42,7 @@ export default class Indentation implements Rule {
       if (child.scenario && args.scenario !== undefined) {
         if (child.scenario.location.column !== args.scenario) {
           document.addError(
+            this.name,
             `Invalid indentation for scenario. Got ${child.scenario.location.column}, wanted ${args.scenario}`,
             child.scenario.location,
           )
@@ -51,6 +54,7 @@ export default class Indentation implements Rule {
           if (step.keyword.toLowerCase() in args) {
             if (step.location.column !== args[step.keyword.toLowerCase()]) {
               document.addError(
+                this.name,
                 `Invalid indentation for "${step.keyword.toLowerCase()}". Got ${step.location.column}, wanted ${args[step.keyword.toLowerCase()]}`,
                 child.background.location,
               )
@@ -65,6 +69,7 @@ export default class Indentation implements Rule {
           if (stepNormalized in args) {
             if (step.location.column !== args[stepNormalized]) {
               document.addError(
+                this.name,
                 `Invalid indentation for "${stepNormalized}". Got ${step.location.column}, wanted ${args[stepNormalized]}`,
                 step.location,
               )
@@ -76,6 +81,7 @@ export default class Indentation implements Rule {
           child.scenario.examples.forEach((example) => {
             if (example.location.column !== args.examples) {
               document.addError(
+                this.name,
                 `Invalid indentation for "examples". Got ${example.location.column}, wanted ${args.examples}`,
                 example.location,
               )
@@ -84,6 +90,7 @@ export default class Indentation implements Rule {
             if (example.tableHeader && args.exampleTableHeader !== undefined) {
               if (example.tableHeader.location.column !== args.exampleTableHeader) {
                 document.addError(
+                  this.name,
                   `Invalid indentation for "example table header". Got ${example.tableHeader.location.column}, wanted ${args.exampleTableHeader}`,
                   example.location,
                 )
@@ -94,6 +101,7 @@ export default class Indentation implements Rule {
               example.tableBody.forEach((row) => {
                 if (row.location.column !== args.exampleTableBody) {
                   document.addError(
+                    this.name,
                     `Invalid indentation for "example table row". Got ${row.location.column}, wanted ${args.exampleTableBody}`,
                     example.location,
                   )

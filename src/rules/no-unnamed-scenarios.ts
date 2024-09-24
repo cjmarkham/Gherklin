@@ -22,7 +22,7 @@ export default class NoUnnamedScenarios implements Rule {
       }
 
       if (child.scenario.name.length === 0) {
-        document.addError('Found scenario with no name.', child.scenario.location)
+        document.addError(this.name, 'Found scenario with no name.', child.scenario.location)
       }
     })
   }
