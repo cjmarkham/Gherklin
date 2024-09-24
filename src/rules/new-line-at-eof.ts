@@ -24,7 +24,7 @@ export default class NewLineAtEof implements Rule {
 
     const lastLine = lines[lines.length - 1]
     if (lastLine !== '') {
-      document.addError('No new line at end of file.', {
+      document.addError(this.name, 'No new line at end of file.', {
         line: lines.length,
         column: 0,
       })

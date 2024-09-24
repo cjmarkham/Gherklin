@@ -37,6 +37,7 @@ export default class NoSingleExampleOutline implements Rule {
 
       if (totalExamples === 1) {
         document.addError(
+          this.name,
           'Scenario Outline has only one example. Consider converting to a simple Scenario.',
           child.scenario.location,
         )
