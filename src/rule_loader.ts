@@ -5,6 +5,7 @@ import Schema from './schema'
 import Rule from './rule'
 import Document from './document'
 import { LintError, RawSchema } from './types'
+import { pathToFileURL } from 'node:url'
 
 export default class RuleLoader {
   public schema: Schema
@@ -36,7 +37,7 @@ export default class RuleLoader {
       }
     }
 
-    const klass = await import(location.replace('.ts', ''))
+    const klass = await import(pathToFileURL(location.replace('.ts', '')).href)
     this.rules.push(new klass.default(rawSchema))
   }
 

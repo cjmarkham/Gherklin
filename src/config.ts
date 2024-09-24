@@ -1,6 +1,7 @@
 import path from 'node:path'
 import * as fs from 'node:fs'
 import { GherklinConfiguration } from './types'
+import { pathToFileURL } from 'node:url'
 
 export default class Config {
   public fromInline = (config: GherklinConfiguration): GherklinConfiguration => {
@@ -13,7 +14,7 @@ export default class Config {
     if (!fs.existsSync(importPath)) {
       throw new Error(`could not find gherklin.config.ts`)
     }
-    const module = await import(importPath)
+    const module = await import(pathToFileURL(importPath).href)
     if (!('default' in module)) {
       throw new Error(`config file did not export a default function`)
     }
