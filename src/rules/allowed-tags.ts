@@ -24,6 +24,7 @@ export default class AllowedTags implements Rule {
     document.feature.tags.forEach((tag) => {
       if (!allowedTags.includes(tag.name)) {
         document.addError(
+          this.name,
           `Found a feature tag that is not allowed. Got ${tag.name}, wanted ${Array.isArray(allowedTags) ? allowedTags.join(', ') : allowedTags}`,
           tag.location,
         )
@@ -38,6 +39,7 @@ export default class AllowedTags implements Rule {
       child.scenario.tags.forEach((tag) => {
         if (!allowedTags.includes(tag.name)) {
           document.addError(
+            this.name,
             `Found a scenario tag that is not allowed. Got ${tag.name}, wanted ${Array.isArray(allowedTags) ? allowedTags.join(', ') : allowedTags}`,
             tag.location,
           )

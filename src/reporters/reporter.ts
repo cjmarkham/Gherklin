@@ -1,5 +1,4 @@
-import { LintError } from '../error'
-import { ReporterConfig } from '../types'
+import { LintError, ReporterConfig } from '../types'
 
 export default class Reporter {
   protected readonly config: ReporterConfig
