@@ -3,8 +3,6 @@ import Schema from '../schema'
 import Rule from '../rule'
 import { RawSchema, AcceptedSchema } from '../types'
 import Document from '../document'
-import { createReadStream } from 'node:fs'
-import * as readline from 'node:readline'
 import Line from '../line'
 
 export default class NoTrailingSpaces implements Rule {
@@ -19,8 +17,6 @@ export default class NoTrailingSpaces implements Rule {
   }
 
   public async run(document: Document): Promise<void> {
-    // Cucumber automatically trims the spaces when parsing the Gherkin, so we need to read the actual file
-
     let lineNumber = 1
 
     document.lines.forEach((line) => {
