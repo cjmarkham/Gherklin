@@ -1,4 +1,4 @@
-name: Gherklin Linting
+name: Gherklin
 
 on:
   push:
@@ -8,13 +8,11 @@ on:
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: [22.x]
-
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v4
     - name: Use Node.js ${{ matrix.node-version }}

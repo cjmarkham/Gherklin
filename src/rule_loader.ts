@@ -1,5 +1,6 @@
 import fs from 'node:fs'
 import path from 'node:path'
+import { pathToFileURL } from 'node:url'
 
 import Schema from './schema'
 import Rule from './rule'
@@ -36,7 +37,7 @@ export default class RuleLoader {
       }
     }
 
-    const klass = await import(location.replace('.ts', ''))
+    const klass = await import(pathToFileURL(location.replace('.ts', '')).href)
     this.rules.push(new klass.default(rawSchema))
   }
 
