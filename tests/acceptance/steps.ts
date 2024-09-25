@@ -36,6 +36,14 @@ Given('the following feature file named {string}', function (name: string, featu
   writeFileSync(featureFile, featureContent)
 })
 
+Given('the following feature files', function (table: DataTable): void {
+  table.hashes().forEach((hash) => {
+    const featureFile = `${this.tmpLocation}/${hash.name}.feature`
+    this.featureFiles.push(featureFile)
+    writeFileSync(featureFile, '')
+  })
+})
+
 When('Gherklin is ran with the following configuration', async function (table: DataTable): Promise<void> {
   const config: GherklinConfiguration = {
     featureDirectory: path.resolve(import.meta.dirname, './tmp'),

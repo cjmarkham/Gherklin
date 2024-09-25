@@ -29,6 +29,7 @@ If a rule does not specify a severity, it will default to `warn`.
 * [background-setup-only](#background-setup-only)
 * [given-after-background](#given-after-background)
 * [no-inconsistent-quotes](#no-inconsistent-quotes)
+* [filename-snake-case](#file-name-snake-case)
 
 ### Allowed Tags
 
@@ -589,6 +590,32 @@ Enable the rule and set argument.
 export default {
   rules: {
     'no-inconsistent-quotes': ['error', "\""],
+  }
+}
+```
+
+### File Name Snake Case
+
+File names should be in snake_case.
+
+**Examples**
+
+Enable the rule
+
+```typescript
+export default {
+  rules: {
+    'filename-snake-case': 'on', 
+  }
+}
+```
+
+
+Enable the rule and set severity
+```typescript
+export default {
+  rules: {
+    'filename-snake-case': 'error',
   }
 }
 ```
