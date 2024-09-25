@@ -10,7 +10,7 @@ Feature: No Full Stop
     When Gherklin is ran with the following configuration
       | rules                     |
       | {"no-full-stop": "error"} |
-    Then there is 1 files with errors
+    Then there is 1 file with errors
     And the errors are
       | location                  | severity | rule         | message                     |
       | {"line": 3, "column": 28} | error    | no-full-stop | Line ends with a full stop. |
@@ -28,7 +28,7 @@ Feature: No Full Stop
     When Gherklin is ran with the following configuration
       | rules                     |
       | {"no-full-stop": "error"} |
-    Then there is 1 files with errors
+    Then there is 1 file with errors
     And the errors are
       | location                  | severity | rule         | message                     |
       | {"line": 3, "column": 28} | error    | no-full-stop | Line ends with a full stop. |

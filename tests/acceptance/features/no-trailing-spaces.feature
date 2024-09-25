@@ -15,7 +15,7 @@ Feature: No Trailing Spaces
     When Gherklin is ran with the following configuration
       | rules                           |
       | {"no-trailing-spaces": "error"} |
-    Then there is 1 files with errors
+    Then there is 1 file with errors
     And the errors are
       | location                  | severity | rule               | message                    |
       | {"line": 2, "column": 25} | error    | no-trailing-spaces | Found trailing whitespace. |

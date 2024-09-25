@@ -9,7 +9,7 @@ Feature: Allowed Tags
     When Gherklin is ran with the following configuration
       | rules                              |
       | {"allowed-tags": ["@development"]} |
-    Then there is 1 files with errors
+    Then there is 1 file with errors
     And the errors are
       | location                 | severity | rule         | message                                                                        |
       | {"line": 1, "column": 1} | warn     | allowed-tags | Found a feature tag that is not allowed. Got @invalid-tag, wanted @development |

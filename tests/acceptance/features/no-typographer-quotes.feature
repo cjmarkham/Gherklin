@@ -11,7 +11,7 @@ Feature: No Typographer Quotes
     When Gherklin is ran with the following configuration
       | rules                              |
       | {"no-typographer-quotes": "error"} |
-    Then there is 1 files with errors
+    Then there is 1 file with errors
     And the errors are
       | location                  | severity | rule                  | message                 |
       | {"line": 3, "column": 15} | error    | no-typographer-quotes | Found typographer quote |
