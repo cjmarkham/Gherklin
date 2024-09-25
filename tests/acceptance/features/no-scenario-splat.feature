@@ -13,7 +13,7 @@ Feature: No Scenario Splat
     When Gherklin is ran with the following configuration
       | rules                       |
       | {"no-scenario-splat": "on"} |
-    Then there is 1 files with errors
+    Then there is 1 file with errors
     And the errors are
       | location                 | severity | rule              | message                              |
       | {"line": 4, "column": 5} | warn     | no-scenario-splat | Found a splat (*) inside a scenario. |

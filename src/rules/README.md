@@ -26,6 +26,7 @@ If a rule does not specify a severity, it will default to `warn`.
 * [no-full-stop](#no-full-stop)
 * [no-scenario-splat](#no-scenario-splat)
 * [no-typographer-quotes](#no-typographer-quotes)
+* [background-setup-only](#background-setup-only)
 
 ### Allowed Tags
 
@@ -497,6 +498,32 @@ Enable the rule and set argument.
 export default {
   rules: {
     'no-typographer-quotes': ['error', "\""],
+  }
+}
+```
+
+### Background Setup Only
+
+Background should be used for set up only, so should only include "Given" or splats (*).
+
+**Examples**
+
+Enable the rule
+
+```typescript
+export default {
+  rules: {
+    'background-setup-only': 'on', 
+  }
+}
+```
+
+
+Enable the rule and set severity
+```typescript
+export default {
+  rules: {
+    'background-setup-only': 'error',
   }
 }
 ```

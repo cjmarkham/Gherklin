@@ -11,7 +11,7 @@ Feature: No Unnamed Scenarios
     When Gherklin is ran with the following configuration
       | rules                          |
       | {"no-unnamed-scenarios": "on"} |
-    Then there is 1 files with errors
+    Then there is 1 file with errors
     And the errors are
       | location                 | severity | rule                 | message                      |
       | {"line": 2, "column": 3} | warn     | no-unnamed-scenarios | Found scenario with no name. |
