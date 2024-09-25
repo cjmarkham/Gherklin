@@ -27,6 +27,7 @@ If a rule does not specify a severity, it will default to `warn`.
 * [no-scenario-splat](#no-scenario-splat)
 * [no-typographer-quotes](#no-typographer-quotes)
 * [background-setup-only](#background-setup-only)
+* [given-after-background](#given-after-background)
 
 ### Allowed Tags
 
@@ -524,6 +525,32 @@ Enable the rule and set severity
 export default {
   rules: {
     'background-setup-only': 'error',
+  }
+}
+```
+
+### Given After Background
+
+If you have a background, it should be used to set up scenarios, so there's no need for scenarios to also use "Given"
+
+**Examples**
+
+Enable the rule
+
+```typescript
+export default {
+  rules: {
+    'given-after-background': 'on', 
+  }
+}
+```
+
+
+Enable the rule and set severity
+```typescript
+export default {
+  rules: {
+    'given-after-background': 'error',
   }
 }
 ```
