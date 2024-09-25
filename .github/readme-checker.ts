@@ -11,12 +11,6 @@ const content = readFileSync(fileLocation, { encoding: 'utf-8' })
 const errors: Array<string> = []
 
 rules.forEach((rule) => {
-  // Look for the rule in the index
-  const indexIndex = content.indexOf(`[${rule}](#${rule})`)
-  if (indexIndex === -1) {
-    errors.push(`\u001b[91mCould not find rule ${rule} in README index\u001b[0m`)
-  }
-
   const smallWords = ['at', 'in']
   const largeWords = ['eof']
 
@@ -32,6 +26,12 @@ rules.forEach((rule) => {
       return `${p.charAt(0).toUpperCase()}${p.slice(1, p.length)}`
     })
     .join(' ')
+
+  // Look for the rule in the table
+  const tableIndex = content.indexOf(`[${ruleTitlized}](#${rule})`)
+  if (tableIndex === -1) {
+    errors.push(`\u001b[91mCould not find rule ${rule} in README index\u001b[0m`)
+  }
 
   const index = content.indexOf(`### ${ruleTitlized}`)
   if (index === -1) {
