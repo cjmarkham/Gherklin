@@ -1,13 +1,11 @@
-import { dialects } from '@cucumber/gherkin'
-
 import { switchOrSeveritySchema } from '../schemas'
 import Schema from '../schema'
 import Rule from '../rule'
 import { RawSchema, AcceptedSchema } from '../types'
 import Document from '../document'
 
-export default class BackgroundOnlySetup implements Rule {
-  public readonly name: string = 'background-only-setup'
+export default class BackgroundSetupOnly implements Rule {
+  public readonly name: string = 'background-setup-only'
 
   public readonly acceptedSchema: AcceptedSchema = switchOrSeveritySchema
 

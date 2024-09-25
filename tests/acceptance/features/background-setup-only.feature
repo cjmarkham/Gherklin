@@ -11,12 +11,12 @@ Feature: Background Setup Only
       """
     When Gherklin is ran with the following configuration
       | rules                              |
-      | {"background-only-setup": "error"} |
+      | {"background-setup-only": "error"} |
     Then there is 1 file with errors
     And the errors are
       | location                 | severity | rule                  | message                                                  |
-      | {"line": 4, "column": 5} | error    | background-only-setup | Background should only be used for set up. Found "Then". |
-      | {"line": 5, "column": 5} | error    | background-only-setup | Background should only be used for set up. Found "And".  |
+      | {"line": 4, "column": 5} | error    | background-setup-only | Background should only be used for set up. Found "Then". |
+      | {"line": 5, "column": 5} | error    | background-setup-only | Background should only be used for set up. Found "And".  |
 
   Scenario: Valid
     Given the following feature file
@@ -30,5 +30,5 @@ Feature: Background Setup Only
       """
     When Gherklin is ran with the following configuration
       | rules                              |
-      | {"background-only-setup": "error"} |
+      | {"background-setup-only": "error"} |
     Then there are 0 files with errors
