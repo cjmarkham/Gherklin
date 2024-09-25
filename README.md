@@ -14,13 +14,16 @@
         <img src="https://github.com/cjmarkham/gherkin-lint/actions/workflows/linting.yml/badge.svg">
     </a>
     <a href="https://github.com/prettier/prettier/tree/c067d27673c6d97d9037eb9b13b74bd8c9324be2?tab=readme-ov-file#badge">
-        <img src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier">
+        <img src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg">
     </a>
     <a href="https://www.npmjs.com/package/gherklin">
         <img alt="npm version" src="https://img.shields.io/npm/v/gherklin.svg">
     </a>
     <a href="https://github.com/cjmarkham/Gherklin/actions/workflows/github-code-scanning/codeql">
       <img src="https://github.com/cjmarkham/Gherklin/actions/workflows/github-code-scanning/codeql/badge.svg">
+    </a>
+    <a href="https://github.com/cjmarkham/Gherklin">
+      <img src="https://img.shields.io/badge/code_style-gherklin-5B21B6.svg">
     </a>
   </p>
   <p align="left">
