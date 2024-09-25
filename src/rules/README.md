@@ -23,6 +23,7 @@ If a rule does not specify a severity, it will default to `warn`.
 * [keywords-in-logical-order](#keywords-in-logical-order)
 * [no-similar-scenarios](#no-similar-scenarios)
 * [no-single-example-outline](#no-single-example-outline)
+* [no-full-stop](#no-full-stop)
 
 ### Allowed Tags
 
@@ -405,6 +406,32 @@ Enable the rule and set severity
 export default {
   rules: {
     'no-single-example-outline': 'error',
+  }
+}
+```
+
+### No Full Stop
+
+Full stops (period) end sentences and don't convey a flow of steps.
+
+**Examples**
+
+Enable the rule
+
+```typescript
+export default {
+  rules: {
+    'no-full-stops': 'on', 
+  }
+}
+```
+
+
+Enable the rule and set severity
+```typescript
+export default {
+  rules: {
+    'no-full-stops': 'error',
   }
 }
 ```
