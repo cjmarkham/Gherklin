@@ -3,7 +3,6 @@ import Schema from '../schema'
 import Rule from '../rule'
 import { RawSchema, AcceptedSchema } from '../types'
 import Document from '../document'
-import Line from '../line'
 
 export default class NoScenarioSplat implements Rule {
   public readonly name: string = 'no-scenario-splat'
