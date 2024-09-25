@@ -12,9 +12,9 @@ Feature: No Similar Scenarios
           When something happens
           Then something will have happened
       """
-    When Gherklin is ran with the following rules
-      | no-similar-scenarios |
-      | [error, 90]          |
+    When Gherklin is ran with the following configuration
+      | rules                                   |
+      | {"no-similar-scenarios": ["error", 90]} |
     Then there is 1 files with errors
     And the errors are
       | location                 | severity | rule                 | message                                                                |

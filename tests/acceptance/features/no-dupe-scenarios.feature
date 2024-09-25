@@ -7,9 +7,9 @@ Feature: No Dupe Scenarios
         Scenario: One
         Scenario: One
       """
-    When Gherklin is ran with the following rules
-      | no-dupe-scenarios |
-      | on                |
+    When Gherklin is ran with the following configuration
+      | rules                       |
+      | {"no-dupe-scenarios": "on"} |
     Then there is 1 files with errors
     And the errors are
       | location                 | severity | rule              | message                                              |

@@ -6,9 +6,9 @@ Feature: Allowed Tags
       @invalid-tag
       Feature: Invalid Tag
       """
-    When Gherklin is ran with the following rules
-      | allowed-tags   |
-      | [@development] |
+    When Gherklin is ran with the following configuration
+      | rules                              |
+      | {"allowed-tags": ["@development"]} |
     Then there is 1 files with errors
     And the errors are
       | location                 | severity | rule         | message                                                                        |
@@ -20,7 +20,7 @@ Feature: Allowed Tags
       @development
       Feature: Valid Tag
       """
-    When Gherklin is ran with the following rules
-      | allowed-tags   |
-      | [@development] |
+    When Gherklin is ran with the following configuration
+      | rules                              |
+      | {"allowed-tags": ["@development"]} |
     Then there are 0 files with errors

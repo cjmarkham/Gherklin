@@ -11,9 +11,9 @@ Feature: No Single Example Outline
           | PERSON | OTHER |
           | Kryten | Human |
       """
-    When Gherklin is ran with the following rules
-      | no-single-example-outline |
-      | on                        |
+    When Gherklin is ran with the following configuration
+      | rules                               |
+      | {"no-single-example-outline": "on"} |
     Then there is 1 files with errors
     And the errors are
       | location                 | severity | rule                      | message                                                                          |

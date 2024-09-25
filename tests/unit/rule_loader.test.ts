@@ -6,7 +6,7 @@ import { Switch } from '../../src'
 use(chaiAsPromised)
 
 describe('RuleLoader', () => {
-  const loader = new RuleLoader()
+  const loader = new RuleLoader({})
 
   describe('load', () => {
     context('no custom directory specified', () => {

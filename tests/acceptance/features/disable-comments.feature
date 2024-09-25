@@ -10,9 +10,9 @@ Feature: Disabling Comments
         @invalid-tag
         Feature: Invalid Tag
         """
-    When Gherklin is ran with the following rules
-      | allowed-tags   |
-      | [@development] |
+    When Gherklin is ran with the following configuration
+      | rules                              |
+      | {"allowed-tags": ["@development"]} |
     Then there are 0 files with errors
 
   Scenario: Disable whole file regardless of indentation
@@ -22,9 +22,9 @@ Feature: Disabling Comments
         @invalid-tag
         Feature: Invalid Tag
         """
-    When Gherklin is ran with the following rules
-      | allowed-tags   |
-      | [@development] |
+    When Gherklin is ran with the following configuration
+      | rules                              |
+      | {"allowed-tags": ["@development"]} |
     Then there are 0 files with errors
 
   Scenario: Disable comment is not on the first line
@@ -37,9 +37,9 @@ Feature: Disabling Comments
         # gherklin-disable
         Feature: Invalid Tag
         """
-    When Gherklin is ran with the following rules
-      | allowed-tags   |
-      | [@development] |
+    When Gherklin is ran with the following configuration
+      | rules                              |
+      | {"allowed-tags": ["@development"]} |
     Then there are 1 files with errors
 
   Scenario: Disable whole file but comment is not correctly formatted
@@ -49,9 +49,9 @@ Feature: Disabling Comments
         @invalid-tag
         Feature: Invalid Tag
         """
-    When Gherklin is ran with the following rules
-      | allowed-tags   |
-      | [@development] |
+    When Gherklin is ran with the following configuration
+      | rules                              |
+      | {"allowed-tags": ["@development"]} |
     Then there are 1 file with errors
 
   Scenario: Disable next line
@@ -61,9 +61,9 @@ Feature: Disabling Comments
           # gherklin-disable-next-line
           Scenario:
         """
-    When Gherklin is ran with the following rules
-      | no-unnamed-scenarios |
-      | on                   |
+    When Gherklin is ran with the following configuration
+      | rules                          |
+      | {"no-unnamed-scenarios": "on"} |
     Then there are 0 files with errors
 
   Scenario: Disable next line regardless of indentation
@@ -73,9 +73,9 @@ Feature: Disabling Comments
                   # gherklin-disable-next-line
           Scenario:
         """
-    When Gherklin is ran with the following rules
-      | no-unnamed-scenarios |
-      | on                   |
+    When Gherklin is ran with the following configuration
+      | rules                          |
+      | {"no-unnamed-scenarios": "on"} |
     Then there are 0 files with errors
 
   Scenario: Disable next line but comment is not correctly formatted
@@ -85,9 +85,9 @@ Feature: Disabling Comments
           #gherklin-disable-next-line
           Scenario:
         """
-    When Gherklin is ran with the following rules
-      | no-unnamed-scenarios |
-      | on                   |
+    When Gherklin is ran with the following configuration
+      | rules                          |
+      | {"no-unnamed-scenarios": "on"} |
     Then there are 1 file with errors
 
   Scenario: Disable specific rule
@@ -97,9 +97,9 @@ Feature: Disabling Comments
         Feature: Empty Scenario
           Scenario:
         """
-    When Gherklin is ran with the following rules
-      | no-unnamed-scenarios |
-      | on                   |
+    When Gherklin is ran with the following configuration
+      | rules                          |
+      | {"no-unnamed-scenarios": "on"} |
     Then there are 0 files with errors
 
   Scenario: Disable specific rule regradless of indentation
@@ -109,9 +109,9 @@ Feature: Disabling Comments
         Feature: Empty Scenario
           Scenario:
         """
-    When Gherklin is ran with the following rules
-      | no-unnamed-scenarios |
-      | on                   |
+    When Gherklin is ran with the following configuration
+      | rules                          |
+      | {"no-unnamed-scenarios": "on"} |
     Then there are 0 files with errors
 
   Scenario: Disable specific rule but comment is not correctly formatted
@@ -121,9 +121,9 @@ Feature: Disabling Comments
         Feature: Empty Scenario
           Scenario:
         """
-    When Gherklin is ran with the following rules
-      | no-unnamed-scenarios |
-      | on                   |
+    When Gherklin is ran with the following configuration
+      | rules                          |
+      | {"no-unnamed-scenarios": "on"} |
     Then there are 1 file with errors
 
   Scenario: Disable specific rule with no space between rules
@@ -133,7 +133,7 @@ Feature: Disabling Comments
         Feature: Empty Scenario
           Scenario:
         """
-    When Gherklin is ran with the following rules
-      | no-unnamed-scenarios |
-      | on                   |
+    When Gherklin is ran with the following configuration
+      | rules                          |
+      | {"no-unnamed-scenarios": "on"} |
     Then there are 0 files with errors

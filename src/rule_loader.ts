@@ -5,12 +5,18 @@ import { pathToFileURL } from 'node:url'
 import Schema from './schema'
 import Rule from './rule'
 import Document from './document'
-import { LintError, RawSchema } from './types'
+import { GherklinConfiguration, LintError, RawSchema } from './types'
 
 export default class RuleLoader {
+  private config: GherklinConfiguration
+
   public schema: Schema
 
   private rules: Array<Rule> = []
+
+  public constructor(config: GherklinConfiguration) {
+    this.config = config
+  }
 
   public load = async (
     configLocation: string,
@@ -60,6 +66,11 @@ export default class RuleLoader {
     for (const rule of this.rules) {
       if (!rule.schema.enabled || document.disabled) {
         continue
+      }
+
+      // Attempt to fix the original document
+      if (this.config.fix === true && rule.fix !== undefined) {
+        await rule.fix(document)
       }
 
       await rule.run(document)

@@ -65,6 +65,7 @@ export interface GherklinConfiguration {
   rules?: RuleConfiguration
   reporter?: ReporterConfig
   featureFile?: string
+  fix?: boolean
 }
 
 export interface Report {

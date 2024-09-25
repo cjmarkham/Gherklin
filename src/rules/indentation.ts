@@ -3,6 +3,7 @@ import Schema from '../schema'
 import Rule from '../rule'
 import { RawSchema, AcceptedSchema, GherkinKeywordNumericals } from '../types'
 import Document from '../document'
+import Line from '../line'
 
 export default class Indentation implements Rule {
   public readonly name: string = 'indentation'
@@ -112,5 +113,18 @@ export default class Indentation implements Rule {
         }
       }
     })
+  }
+
+  public async fix(document: Document): Promise<void> {
+    const expectedIndentation = this.schema.args as GherkinKeywordNumericals
+
+    document.lines.forEach((line: Line, index: number) => {
+      const expected = expectedIndentation[line.keyword.trim().toLowerCase()]
+      if (expected) {
+        document.lines[index].indentation = expected - 1
+      }
+    })
+
+    await document.regenerate()
   }
 }

@@ -36,17 +36,8 @@ Given('the following feature file named {string}', function (name: string, featu
   writeFileSync(featureFile, featureContent)
 })
 
-When('Gherklin is ran with the following rule(s)', async function (table: DataTable): Promise<void> {
-  const rules: RuleConfiguration = {}
-  table.hashes().forEach((hash) => {
-    Object.keys(hash).forEach((key) => {
-      const value = parse(hash[key])
-      rules[key] = value as unknown
-    })
-  })
-
+When('Gherklin is ran with the following configuration', async function (table: DataTable): Promise<void> {
   const config: GherklinConfiguration = {
-    rules,
     featureDirectory: path.resolve(import.meta.dirname, './tmp'),
     configDirectory: import.meta.dirname,
     reporter: {
@@ -54,6 +45,13 @@ When('Gherklin is ran with the following rule(s)', async function (table: DataTa
       type: 'null',
     },
   }
+
+  table.hashes().forEach((hash) => {
+    Object.keys(hash).forEach((key) => {
+      const value = parse(hash[key])
+      config[key] = value as unknown
+    })
+  })
 
   const runner = new Runner(config)
   await runner.init()
@@ -88,6 +86,10 @@ Then('the error(s) are/is', function (table: DataTable): void {
 })
 
 const parse = (value: string) => {
+  if (value === 'true' || value === 'false') {
+    return Boolean(value)
+  }
+
   if (!isNaN(Number(value))) {
     return Number(value)
   }

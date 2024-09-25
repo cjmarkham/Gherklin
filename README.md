@@ -155,19 +155,29 @@ Feature: The below tag is invalid
 
 # Automatic Fixing
 
-**Gherklin** doesn't support automatic fixes that you may be used to with things like ESLint and
-Prettier.
+Gherklin supports automatic fixing for a small set of rules, usually those to do with whitespace.
 
-Why? It's not so simple to fix Gherkin.
-Let's say we have a rule for allowed tags and you have a feature file with a tag that's not allowed.
-Gherklin
-**could** remove this tag, but then that could break the semantic coupling between Gherkin and your
-step definitions.
+To allow Gherklin to automatically fix rules that can be fixed, pass the `fix` option to your `gherklin.config.ts` file:
 
-Let's take another example, max scenarios. If **Gherklin** finds that a file has too many scenarios,
-should it delete the whole scenario?
+### Example
+```typescript
+export default {
+  ...
+  fix: true,
+}
+```
 
-These are a few of the reasons why **Gherklin** doesn't support automatic fix ups.
+Gherklin fixes files **before** the rules are ran against the file. This is so you can be sure that the fix actually worked.
+
+### Custom Rule Fixing
+
+In order to support custom rule fixes, your rule class needs to have a `fix` method.
+
+This method takes the [Document](./src/document.ts) as a parameter.
+
+This method **must** call `document.regenerate()` to save the document.
+
+An example can be found with the [no-trailing-spaces](./src/rules/no-trailing-spaces.ts) rule.
 
 # Custom Rules
 
