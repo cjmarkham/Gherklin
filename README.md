@@ -40,7 +40,7 @@
 * [Custom Rules](#custom-rules)
   * [Generating Custom Rules](#generating-custom-rules)
 * [Reporting](#reporting)
-  * [Reporter Configuratio](#reporter-configuration)
+  * [Reporter Configuration](#reporter-configuration)
 * [Contributing](#contributing)
 * [Testing](#testing)
 
