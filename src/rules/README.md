@@ -24,6 +24,7 @@ If a rule does not specify a severity, it will default to `warn`.
 * [no-similar-scenarios](#no-similar-scenarios)
 * [no-single-example-outline](#no-single-example-outline)
 * [no-full-stop](#no-full-stop)
+* [no-scenario-splat](#no-scenario-splat)
 
 ### Allowed Tags
 
@@ -432,6 +433,32 @@ Enable the rule and set severity
 export default {
   rules: {
     'no-full-stops': 'error',
+  }
+}
+```
+
+### No Scenario Splat
+
+Splat steps (*) are useful for setup, which should occur in the background
+
+**Examples**
+
+Enable the rule
+
+```typescript
+export default {
+  rules: {
+    'no-scenario-splat': 'on', 
+  }
+}
+```
+
+
+Enable the rule and set severity
+```typescript
+export default {
+  rules: {
+    'no-scenario-splat': 'error',
   }
 }
 ```
