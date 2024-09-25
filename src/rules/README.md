@@ -29,7 +29,7 @@ If a rule does not specify a severity, it will default to `warn`.
 * [background-setup-only](#background-setup-only)
 * [given-after-background](#given-after-background)
 * [no-inconsistent-quotes](#no-inconsistent-quotes)
-* [filename-snake-case](#file-name-snake-case)
+* [filename-snake-case](#filename-snake-case)
 
 ### Allowed Tags
 
@@ -594,7 +594,7 @@ export default {
 }
 ```
 
-### File Name Snake Case
+### Filename Snake Case
 
 File names should be in snake_case.
 
