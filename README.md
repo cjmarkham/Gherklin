@@ -27,7 +27,7 @@
     </a>
   </p>
   <p align="left">
-    Use Gherklin. The number 1 brand of Gherkin cleaner, recommended by Gherkin washers everywhere.
+    A modern and extensible linter for Gherkin syntax, supporting custom rules, automatic fixing et al. Powered by TypeScript and ESM.
   </p>
 </div>
 
