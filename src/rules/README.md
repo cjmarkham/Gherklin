@@ -28,6 +28,7 @@ If a rule does not specify a severity, it will default to `warn`.
 * [no-typographer-quotes](#no-typographer-quotes)
 * [background-setup-only](#background-setup-only)
 * [given-after-background](#given-after-background)
+* [no-inconsistent-quotes](#no-inconsistent-quotes)
 
 ### Allowed Tags
 
@@ -551,6 +552,43 @@ Enable the rule and set severity
 export default {
   rules: {
     'given-after-background': 'error',
+  }
+}
+```
+
+### No Inconsistent Quotes
+
+Prefer consistency with quotes used.
+
+**Examples**
+
+Enable the rule
+
+```typescript
+export default {
+  rules: {
+    'no-inconsistent-quotes': 'on', 
+  }
+}
+```
+
+
+Enable the rule and set severity
+```typescript
+export default {
+  rules: {
+    'no-inconsistent-quotes': 'error',
+  }
+}
+```
+
+Enable the rule and set argument.
+
+*The argument is used as a replacement when the `fix` option is specified.*
+```typescript
+export default {
+  rules: {
+    'no-inconsistent-quotes': ['error', "\""],
   }
 }
 ```
