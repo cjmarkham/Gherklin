@@ -1,4 +1,4 @@
-import { existsSync, rmSync, writeFileSync } from 'node:fs'
+import { existsSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { Given, DataTable, When, Then, After, Before } from '@cucumber/cucumber'
 import { expect } from 'chai'
 import { v4 } from 'uuid'
@@ -83,6 +83,17 @@ Then('the error(s) are/is', function (table: DataTable): void {
   })
 
   expect(errors).to.deep.equal(expectedErrors)
+})
+
+Then('the file has the content', function (table: DataTable) {
+  this.featureFiles.forEach((featureFile) => {
+    const content = readFileSync(featureFile, { encoding: 'utf-8' })
+    const lines = content.split(/\r\n|\r|\n/)
+    table.hashes().forEach((hash) => {
+      const line = lines[Number(hash.line) - 1]
+      expect(line.trim()).to.eq(hash.content)
+    })
+  })
 })
 
 const parse = (value: string) => {

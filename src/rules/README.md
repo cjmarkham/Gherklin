@@ -25,6 +25,7 @@ If a rule does not specify a severity, it will default to `warn`.
 * [no-single-example-outline](#no-single-example-outline)
 * [no-full-stop](#no-full-stop)
 * [no-scenario-splat](#no-scenario-splat)
+* [no-typographer-quotes](#no-typographer-quotes)
 
 ### Allowed Tags
 
@@ -459,6 +460,43 @@ Enable the rule and set severity
 export default {
   rules: {
     'no-scenario-splat': 'error',
+  }
+}
+```
+
+### No Typographer Quotes
+
+"Smart quotes" can be a result of copy/pasting from other programs and may not be intended.
+
+**Examples**
+
+Enable the rule
+
+```typescript
+export default {
+  rules: {
+    'no-typographer-quotes': 'on', 
+  }
+}
+```
+
+
+Enable the rule and set severity
+```typescript
+export default {
+  rules: {
+    'no-typographer-quotes': 'error',
+  }
+}
+```
+
+Enable the rule and set argument.
+
+*The argument is used as a replacement when the `fix` option is specified.*
+```typescript
+export default {
+  rules: {
+    'no-typographer-quotes': ['error', "\""],
   }
 }
 ```

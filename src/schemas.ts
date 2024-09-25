@@ -24,7 +24,14 @@ export const keywordInts = z
 export const severitySchema = z.nativeEnum(Severity)
 // on | off | warn | error
 export const switchOrSeveritySchema = z.union([z.nativeEnum(Switch), z.nativeEnum(Severity)])
-// off | [string] | [error | warn, [string]]
+
+export const switchOrSeverityorSeverityAndStringSchema = z.union([
+  z.nativeEnum(Switch),
+  z.nativeEnum(Severity),
+  z.tuple([z.nativeEnum(Severity), z.string()]),
+])
+
+// off | on | error | warn | [error | warn, string]
 export const offOrStringArrayOrSeverityAndStringArray = z.union([
   z.literal(Switch.off),
   z.string().array(),
