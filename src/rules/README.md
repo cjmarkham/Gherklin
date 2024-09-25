@@ -3,32 +3,39 @@
 Rules can either be specified in your `gherklin.config.ts` file, or inline when you call
 the [Runner](../../README.md#api)
 
-Rule configuration takes the form of a `string` key and a value. Every rule supports `off` as a value,
+Rule configuration takes the form of a `string` key and a value. Every rule supports `off` as a
+value,
 turning the rule off (which is the same as excluding it from the configuration).
 
 However, depending on the rule, there may be more configuration values.
 
 If a rule does not specify a severity, it will default to `warn`.
 
-* [allowed-tags](#allowed-tags)
-* [indentation](#indentation)
-* [max-scenarios](#max-scenarios)
-* [new-line-at-eof](#new-line-at-eof)
-* [no-background-only](#no-background-only)
-* [no-dupe-features](#no-dupe-features)
-* [no-dupe-scenarios](#no-dupe-scenarios)
-* [no-empty-file](#no-empty-file)
-* [no-trailing-spaces](#no-trailing-spaces)
-* [no-unnamed-scenarios](#no-unnamed-scenarios)
-* [keywords-in-logical-order](#keywords-in-logical-order)
-* [no-similar-scenarios](#no-similar-scenarios)
-* [no-single-example-outline](#no-single-example-outline)
-* [no-full-stop](#no-full-stop)
-* [no-scenario-splat](#no-scenario-splat)
-* [no-typographer-quotes](#no-typographer-quotes)
-* [background-setup-only](#background-setup-only)
-* [given-after-background](#given-after-background)
-* [no-inconsistent-quotes](#no-inconsistent-quotes)
+The following is a list of rules and whether or not they are fixable with the `fix` configuration
+option.
+
+| Name                                                    | Rule                        | Fixable |
+|---------------------------------------------------------|-----------------------------|:-------:|
+| [Allowed Tags](#allowed-tags)                           | `allowed-tags`              |    ❌    | 
+| [Indentation](#indentation)                             | `indentation`               |    ✅    |
+| [Max Scenarios](#max-scenarios)                         | `max-scenarios`             |    ❌    |
+| [New Line at EOF](#new-line-at-eof)                     | `new-line-at-eof`           |    ✅    |
+| [No Background Only](#no-background-only)               | `no-background-only`        |    ❌    |
+| [No Dupe Features](#no-dupe-features)                   | `no-dupe-features`          |    ❌    |
+| [No Dupe Scenarios](#no-dupe-scenarios)                 | `no-dupe-scenerios`         |    ❌    |
+| [No Similar Scenarios](#no-similar-scenarios)           | `no-similar-scenerios`      |    ❌    |
+| [No Empty File](#no-empty-file)                         | `no-empty-file`             |    ❌    |
+| [No Trailing Spaces](#no-trailing-spaces)               | `no-trailing-spaces`        |    ✅    |
+| [No Unnamed Scenarios](#no-unnamed-scenarios)           | `no-unnamed-scenarios`      |    ❌    |
+| [Keywords in Logical Order](#keywords-in-logical-order) | `keywords-in-logical-order` |    ❌    |
+| [No Single Example Outline](#no-single-example-outline) | `no-single-example-outline` |    ❌    |
+| [No Full Stop](#no-full-stop)                           | `no-full-stop`              |    ✅    |
+| [No Scenario Splat](#no-scenario-splat)                 | `no-scenario-splat`         |    ❌    |
+| [No Typographer Quotes](#no-typographer-quotes)         | `no-typographer-quotes`     |    ✅    |
+| [Background Setup Only](#background-setup-only)         | `background-setup-only`     |    ❌    |
+| [Given After Background](#given-after-background)       | `given-after-backgroundy`   |    ❌    |
+| [No Inconsistent Quotes](#no-inconsistent-quotes)       | `no-inconsistent-quotes`    |    ✅    |
+| [Filename Snake Case](#filename-snake-case)             | `filename-snake-case`       |    ❌    |
 
 ### Allowed Tags
 
@@ -38,6 +45,7 @@ checks for valid tags at the feature level and scenario level.
 **Examples**
 
 Enable the rule with arguments
+
 ```typescript
 export default {
   rules: {
@@ -45,7 +53,9 @@ export default {
   },
 }
 ```
+
 Enable the rule and set severity
+
 ```typescript
 export default {
   rules: {
@@ -84,7 +94,9 @@ export default {
   }
 }
 ```
+
 Enable the rule and set severity
+
 ```typescript
 export default {
   rules: {
@@ -122,11 +134,13 @@ Enable the rule with arguments
 ```typescript
 export default {
   rules: {
-    'max-scenarios': 2, 
+    'max-scenarios': 2,
   }
 }
 ```
+
 Enable the rule and set severity
+
 ```typescript
 export default {
   rules: {
@@ -151,11 +165,13 @@ Enable the rule
 ```typescript
 export default {
   rules: {
-    'new-line-at-eof': 'on', 
+    'new-line-at-eof': 'on',
   }
 }
 ```
+
 Enable the rule and set severity
+
 ```typescript
 export default {
   rules: {
@@ -177,11 +193,13 @@ Enable the rule
 ```typescript
 export default {
   rules: {
-    'no-background-only': 'on', 
+    'no-background-only': 'on',
   }
 }
 ```
+
 Enable the rule and set severity
+
 ```typescript
 export default {
   rules: {
@@ -203,11 +221,13 @@ Enable the rule
 ```typescript
 export default {
   rules: {
-    'no-dupe-features': 'on', 
+    'no-dupe-features': 'on',
   }
 }
 ```
+
 Enable the rule and set severity
+
 ```typescript
 export default {
   rules: {
@@ -229,11 +249,13 @@ Enable the rule
 ```typescript
 export default {
   rules: {
-    'no-dupe-scenarios': 'on', 
+    'no-dupe-scenarios': 'on',
   }
 }
 ```
+
 Enable the rule and set severity
+
 ```typescript
 export default {
   rules: {
@@ -255,11 +277,13 @@ Enable the rule
 ```typescript
 export default {
   rules: {
-    'no-empty-file': 'on', 
+    'no-empty-file': 'on',
   }
 }
 ```
+
 Enable the rule and set severity
+
 ```typescript
 export default {
   rules: {
@@ -281,11 +305,13 @@ Enable the rule
 ```typescript
 export default {
   rules: {
-    'no-trailing-spaces': 'on', 
+    'no-trailing-spaces': 'on',
   }
 }
 ```
+
 Enable the rule and set severity
+
 ```typescript
 export default {
   rules: {
@@ -307,11 +333,13 @@ Enable the rule
 ```typescript
 export default {
   rules: {
-    'no-unnamed-scenarios': 'on', 
+    'no-unnamed-scenarios': 'on',
   }
 }
 ```
+
 Enable the rule and set severity
+
 ```typescript
 export default {
   rules: {
@@ -331,11 +359,13 @@ Enable the rule
 ```typescript
 export default {
   rules: {
-    'keywords-in-logical-order': 'on', 
+    'keywords-in-logical-order': 'on',
   }
 }
 ```
+
 Enable the rule and set severity
+
 ```typescript
 export default {
   rules: {
@@ -347,8 +377,9 @@ export default {
 ### No Similar Scenarios
 
 Compares each scenario with each other scenario to see if they are similar.
-Compares the Levenshtein distance between one scenarios keyword + text with the other scenarios keyword + text.
-The argument passed to this rule's configuration is the percentage threshold for similarity. 
+Compares the Levenshtein distance between one scenarios keyword + text with the other scenarios
+keyword + text.
+The argument passed to this rule's configuration is the percentage threshold for similarity.
 
 **Examples**
 
@@ -357,21 +388,23 @@ Enable the rule
 ```typescript
 export default {
   rules: {
-    'no-similar-scenarios': 'on', 
+    'no-similar-scenarios': 'on',
   }
 }
 ```
 
 Enable the rule with arguments
+
 ```typescript
 export default {
   rules: {
-    'no-similar-scenarios': 85, 
+    'no-similar-scenarios': 85,
   }
 }
 ```
 
 Enable the rule and set severity
+
 ```typescript
 export default {
   rules: {
@@ -381,6 +414,7 @@ export default {
 ```
 
 Set severity and arguments
+
 ```typescript
 export default {
   rules: {
@@ -400,13 +434,13 @@ Enable the rule
 ```typescript
 export default {
   rules: {
-    'no-single-example-outline': 'on', 
+    'no-single-example-outline': 'on',
   }
 }
 ```
 
-
 Enable the rule and set severity
+
 ```typescript
 export default {
   rules: {
@@ -426,13 +460,13 @@ Enable the rule
 ```typescript
 export default {
   rules: {
-    'no-full-stops': 'on', 
+    'no-full-stops': 'on',
   }
 }
 ```
 
-
 Enable the rule and set severity
+
 ```typescript
 export default {
   rules: {
@@ -452,13 +486,13 @@ Enable the rule
 ```typescript
 export default {
   rules: {
-    'no-scenario-splat': 'on', 
+    'no-scenario-splat': 'on',
   }
 }
 ```
 
-
 Enable the rule and set severity
+
 ```typescript
 export default {
   rules: {
@@ -478,13 +512,13 @@ Enable the rule
 ```typescript
 export default {
   rules: {
-    'no-typographer-quotes': 'on', 
+    'no-typographer-quotes': 'on',
   }
 }
 ```
 
-
 Enable the rule and set severity
+
 ```typescript
 export default {
   rules: {
@@ -496,6 +530,7 @@ export default {
 Enable the rule and set argument.
 
 *The argument is used as a replacement when the `fix` option is specified.*
+
 ```typescript
 export default {
   rules: {
@@ -515,13 +550,13 @@ Enable the rule
 ```typescript
 export default {
   rules: {
-    'background-setup-only': 'on', 
+    'background-setup-only': 'on',
   }
 }
 ```
 
-
 Enable the rule and set severity
+
 ```typescript
 export default {
   rules: {
@@ -532,7 +567,8 @@ export default {
 
 ### Given After Background
 
-If you have a background, it should be used to set up scenarios, so there's no need for scenarios to also use "Given"
+If you have a background, it should be used to set up scenarios, so there's no need for scenarios to
+also use "Given"
 
 **Examples**
 
@@ -541,13 +577,13 @@ Enable the rule
 ```typescript
 export default {
   rules: {
-    'given-after-background': 'on', 
+    'given-after-background': 'on',
   }
 }
 ```
 
-
 Enable the rule and set severity
+
 ```typescript
 export default {
   rules: {
@@ -567,13 +603,13 @@ Enable the rule
 ```typescript
 export default {
   rules: {
-    'no-inconsistent-quotes': 'on', 
+    'no-inconsistent-quotes': 'on',
   }
 }
 ```
 
-
 Enable the rule and set severity
+
 ```typescript
 export default {
   rules: {
@@ -585,10 +621,37 @@ export default {
 Enable the rule and set argument.
 
 *The argument is used as a replacement when the `fix` option is specified.*
+
 ```typescript
 export default {
   rules: {
     'no-inconsistent-quotes': ['error', "\""],
+  }
+}
+```
+
+### Filename Snake Case
+
+File names should be in snake_case.
+
+**Examples**
+
+Enable the rule
+
+```typescript
+export default {
+  rules: {
+    'filename-snake-case': 'on',
+  }
+}
+```
+
+Enable the rule and set severity
+
+```typescript
+export default {
+  rules: {
+    'filename-snake-case': 'error',
   }
 }
 ```
