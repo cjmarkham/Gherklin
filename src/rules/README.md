@@ -462,3 +462,40 @@ export default {
   }
 }
 ```
+
+### No Typographer Quotes
+
+"Smart quotes" can be a result of copy/pasting from other programs and may not be intended.
+
+**Examples**
+
+Enable the rule
+
+```typescript
+export default {
+  rules: {
+    'no-typographer-quotes': 'on', 
+  }
+}
+```
+
+
+Enable the rule and set severity
+```typescript
+export default {
+  rules: {
+    'no-typographer-quotes': 'error',
+  }
+}
+```
+
+Enable the rule and set argument.
+
+*The argument is used as a replacement when the `fix` option is specified.*
+```typescript
+export default {
+  rules: {
+    'no-typographer-quotes': ['error', "\""],
+  }
+}
+```
