@@ -25,6 +25,7 @@ If a rule does not specify a severity, it will default to `warn`.
 * [no-single-example-outline](#no-single-example-outline)
 * [no-full-stop](#no-full-stop)
 * [no-scenario-splat](#no-scenario-splat)
+* [no-typographer-quotes](#no-typographer-quotes)
 
 ### Allowed Tags
 
