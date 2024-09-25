@@ -15,7 +15,7 @@ export default class Line {
       .filter((kw) => kw[0] !== 'name' && kw[0] !== 'native')
       .map((kw) => kw[1])
       .flat()
-    const regex = new RegExp(`^(${keywords.map((k) => k.replace('*', '\\*')).join('|')})`)
+    const regex = new RegExp(`^(${keywords.map((k: string) => k.replaceAll('*', '\\*')).join('|')})`)
 
     const keywordMatch = line.trim().match(regex)
     if (keywordMatch) {
