@@ -4,7 +4,7 @@ import { expect } from 'chai'
 import { v4 } from 'uuid'
 
 import { Runner } from '../../src/index'
-import { GherklinConfiguration, RuleConfiguration } from '../../src/types'
+import { GherklinConfiguration } from '../../src/types'
 import { mkdirSync } from 'fs'
 import path from 'node:path'
 

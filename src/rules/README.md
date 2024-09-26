@@ -36,6 +36,7 @@ option.
 | [Given After Background](#given-after-background)       | `given-after-backgroundy`   |    ❌    |
 | [No Inconsistent Quotes](#no-inconsistent-quotes)       | `no-inconsistent-quotes`    |    ✅    |
 | [Filename Snake Case](#filename-snake-case)             | `filename-snake-case`       |    ❌    |
+| [Filename Kebab Case](#filename-kebab-case)             | `filename-kebab-case`       |    ❌    |
 
 ### Allowed Tags
 
@@ -652,6 +653,32 @@ Enable the rule and set severity
 export default {
   rules: {
     'filename-snake-case': 'error',
+  }
+}
+```
+
+### Filename Kebab Case
+
+File names should be in kebab-case.
+
+**Examples**
+
+Enable the rule
+
+```typescript
+export default {
+  rules: {
+    'filename-kebab-case': 'on',
+  }
+}
+```
+
+Enable the rule and set severity
+
+```typescript
+export default {
+  rules: {
+    'filename-kebab-case': 'error',
   }
 }
 ```

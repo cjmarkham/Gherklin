@@ -1,4 +1,4 @@
-Feature: File Name Snake Case
+Feature: File Name Kebab Case
 
   Scenario Outline: Invalid
     Given the following feature files
@@ -6,20 +6,20 @@ Feature: File Name Snake Case
       | <FILENAME> |
     When Gherklin is ran with the following configuration
       | rules                         |
-      | {"filename-snake-case": "on"} |
+      | {"filename-kebab-case": "on"} |
     Then there is 1 file with errors
     And the errors are
       | location                 | severity | rule                | message                                                    |
-      | {"line": 1, "column": 1} | warn     | filename-snake-case | File names should be snake_case. Got "<FILENAME>.feature". |
+      | {"line": 1, "column": 1} | warn     | filename-kebab-case | File names should be kebab-case. Got "<FILENAME>.feature". |
 
     Examples:
       | FILENAME            |
-      | kebab-case          |
-      | snake_case-mixed    |
       | PascalCase          |
       | camelCase           |
       | spaces case         |
       | snake_With_capitals |
+      | snake_case          |
+      | kebab-With-capitals |
 
   Scenario Outline: Valid
     Given the following feature files
@@ -27,11 +27,11 @@ Feature: File Name Snake Case
       | <FILENAME> |
     When Gherklin is ran with the following configuration
       | rules                         |
-      | {"filename-snake-case": "on"} |
+      | {"filename-kebab-case": "on"} |
     Then there are 0 files with errors
 
     Examples:
       | FILENAME        |
-      | snake_case      |
-      | long_snake_case |
+      | kebab-case      |
+      | long-kebab-case |
       | nocase          |
