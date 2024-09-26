@@ -17,10 +17,16 @@ export default class FilenameSnakeCase implements Rule {
 
   public async run(document: Document): Promise<void> {
     if (!/^\w+.feature$/.test(document.filename)) {
-      document.addError(this.name, 'File names should be snake_case.', { line: 1, column: 1 })
+      document.addError(this.name, `File names should be snake_case. Got "${document.filename}".`, {
+        line: 1,
+        column: 1,
+      })
     }
     if (document.filename !== document.filename.toLowerCase()) {
-      document.addError(this.name, 'File names should be snake_case.', { line: 1, column: 1 })
+      document.addError(this.name, `File names should be snake_case. Got "${document.filename}".`, {
+        line: 1,
+        column: 1,
+      })
     }
   }
 }

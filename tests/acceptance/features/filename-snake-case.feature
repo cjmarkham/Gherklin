@@ -9,8 +9,8 @@ Feature: File Name Snake Case
       | {"filename-snake-case": "on"} |
     Then there is 1 file with errors
     And the errors are
-      | location                 | severity | rule                | message                          |
-      | {"line": 1, "column": 1} | warn     | filename-snake-case | File names should be snake_case. |
+      | location                 | severity | rule                | message                                                    |
+      | {"line": 1, "column": 1} | warn     | filename-snake-case | File names should be snake_case. Got "<FILENAME>.feature". |
 
     Examples:
       | FILENAME            |
