@@ -39,6 +39,8 @@ option.
 | [Filename Kebab Case](#filename-kebab-case)             | `filename-kebab-case`       |    ❌    |
 | [Unique Examples](#unique-examples)                     | `unique-examples`           |    ❌    |
 | [Feature Description](#feature-description)             | `feature-description`       |    ❌    |
+| [Scenario Action](#scenario-action)                     | `scenario-action`           |    ❌    |
+| [Scenario Verification](#scenario-verification)         | `scenario-verification`     |    ❌    |
 
 ### Allowed Tags
 
@@ -733,6 +735,58 @@ Enable the rule and set severity
 export default {
   rules: {
     'feature-description': 'error',
+  }
+}
+```
+
+### Scenario Action
+
+Scenarios should have a "When" to denote an action
+
+**Examples**
+
+Enable the rule
+
+```typescript
+export default {
+  rules: {
+    'scenario-action': 'on',
+  }
+}
+```
+
+Enable the rule and set severity
+
+```typescript
+export default {
+  rules: {
+    'scenario-action': 'error',
+  }
+}
+```
+
+### Scenario Verification
+
+Scenarios should have a "Then" to denote verification of an action
+
+**Examples**
+
+Enable the rule
+
+```typescript
+export default {
+  rules: {
+    'scenario-verification': 'on',
+  }
+}
+```
+
+Enable the rule and set severity
+
+```typescript
+export default {
+  rules: {
+    'scenario-verification': 'error',
   }
 }
 ```
