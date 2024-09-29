@@ -37,6 +37,7 @@ option.
 | [No Inconsistent Quotes](#no-inconsistent-quotes)       | `no-inconsistent-quotes`    |    ✅    |
 | [Filename Snake Case](#filename-snake-case)             | `filename-snake-case`       |    ❌    |
 | [Filename Kebab Case](#filename-kebab-case)             | `filename-kebab-case`       |    ❌    |
+| [Unique Examples](#unique-examples)                     | `unique-examples`           |    ❌    |
 
 ### Allowed Tags
 
@@ -679,6 +680,32 @@ Enable the rule and set severity
 export default {
   rules: {
     'filename-kebab-case': 'error',
+  }
+}
+```
+
+### Unique Examples
+
+Examples should have a unique name if there are more than 1 in a scenario outline.
+
+**Examples**
+
+Enable the rule
+
+```typescript
+export default {
+  rules: {
+    'unique-examples': 'on',
+  }
+}
+```
+
+Enable the rule and set severity
+
+```typescript
+export default {
+  rules: {
+    'unique-examples': 'error',
   }
 }
 ```
