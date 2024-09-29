@@ -790,3 +790,39 @@ export default {
   }
 }
 ```
+
+### Scenario Name Length
+
+Scenarios should have a length no longer than specified.
+
+**Examples**
+
+Enable the rule
+
+```typescript
+export default {
+  rules: {
+    'scenario-name-length': 'on',
+  }
+}
+```
+
+Enable the rule and set severity
+
+```typescript
+export default {
+  rules: {
+    'scenario-name-length': 'error',
+  }
+}
+```
+
+Enable the rule and set args
+
+```typescript
+export default {
+  rules: {
+    'scenario-name-length': ['error', 99],
+  }
+}
+```

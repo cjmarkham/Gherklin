@@ -1,4 +1,4 @@
-Feature: Feature Description
+Feature: Scenario Verification
 
   Scenario: Invalid
     Given the following feature file
