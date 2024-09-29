@@ -41,6 +41,7 @@ option.
 | [Feature Description](#feature-description)             | `feature-description`       |    ❌    |
 | [Scenario Action](#scenario-action)                     | `scenario-action`           |    ❌    |
 | [Scenario Verification](#scenario-verification)         | `scenario-verification`     |    ❌    |
+| [Scenario Name Length](#scenario-name-length)           | `scenario-name-length`      |    ❌    |
 
 ### Allowed Tags
 
@@ -787,6 +788,42 @@ Enable the rule and set severity
 export default {
   rules: {
     'scenario-verification': 'error',
+  }
+}
+```
+
+### Scenario Name Length
+
+Scenarios should have a length no longer than specified.
+
+**Examples**
+
+Enable the rule
+
+```typescript
+export default {
+  rules: {
+    'scenario-name-length': 'on',
+  }
+}
+```
+
+Enable the rule and set severity
+
+```typescript
+export default {
+  rules: {
+    'scenario-name-length': 'error',
+  }
+}
+```
+
+Enable the rule and set args
+
+```typescript
+export default {
+  rules: {
+    'scenario-name-length': ['error', 99],
   }
 }
 ```
