@@ -38,6 +38,7 @@ option.
 | [Filename Snake Case](#filename-snake-case)             | `filename-snake-case`       |    ❌    |
 | [Filename Kebab Case](#filename-kebab-case)             | `filename-kebab-case`       |    ❌    |
 | [Unique Examples](#unique-examples)                     | `unique-examples`           |    ❌    |
+| [Feature Description](#feature-description)             | `feature-description`       |    ❌    |
 
 ### Allowed Tags
 
@@ -706,6 +707,32 @@ Enable the rule and set severity
 export default {
   rules: {
     'unique-examples': 'error',
+  }
+}
+```
+
+### Feature Description
+
+Features should have descriptions to outline what behaviour they are testing.
+
+**Examples**
+
+Enable the rule
+
+```typescript
+export default {
+  rules: {
+    'feature-description': 'on',
+  }
+}
+```
+
+Enable the rule and set severity
+
+```typescript
+export default {
+  rules: {
+    'feature-description': 'error',
   }
 }
 ```
