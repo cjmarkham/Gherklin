@@ -41,6 +41,7 @@ option.
 | [Feature Description](#feature-description)             | `feature-description`       |    ❌    |
 | [Scenario Action](#scenario-action)                     | `scenario-action`           |    ❌    |
 | [Scenario Verification](#scenario-verification)         | `scenario-verification`     |    ❌    |
+| [Scenario Name Length](#scenario-name-length)           | `scenario-name-length`      |    ❌    |
 
 ### Allowed Tags
 
