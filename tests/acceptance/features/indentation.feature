@@ -3,7 +3,7 @@ Feature: Indentation
   Scenario: Invalid Indentation
     Given the following feature file
       """
-      Feature: Invalid Tag
+      Feature: Invalid
       Scenario: Doing something
           Given I do something
          When I do another thing
@@ -27,7 +27,7 @@ Feature: Indentation
   Scenario: Valid Indentation
     Given the following feature file
       """
-      Feature: Invalid Tag
+      Feature: Invalid
         Scenario: Doing something
           Given I do something
           When I do another thing
