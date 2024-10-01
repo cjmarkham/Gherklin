@@ -1,6 +1,6 @@
 import chalk from 'chalk'
 
-import { LintError } from '../error'
+import { LintError } from '../types'
 import Reporter from './reporter'
 import logger from '../logger'
 
@@ -30,14 +30,14 @@ export default class STDOUTReporter extends Reporter {
 
         const errorWithLongestMessage = lintErrors.reduce((a, b) => (a.message.length < b.message.length ? b : a))
         const errorWithLongestLocation = lintErrors.reduce((a, b) =>
-          a.location.column.toString().length + a.location.line.toString().length <
-          b.location.column.toString().length + b.location.line.toString().length
+          (a.location.column || 0).toString().length + a.location.line.toString().length <
+          (b.location.column || 0).toString().length + b.location.line.toString().length
             ? b
             : a,
         )
         const maxMessageLength = errorWithLongestMessage.message.length
         const maxLocationLength =
-          errorWithLongestLocation.location.column.toString().length +
+          (errorWithLongestLocation.location.column || 0).toString().length +
           errorWithLongestLocation.location.line.toString().length
 
         const location = (err.location.line + ':' + (err.location.column || 0)).toString().padEnd(maxLocationLength + 1)

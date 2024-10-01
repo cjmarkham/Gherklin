@@ -2,15 +2,12 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { pathToFileURL } from 'node:url'
 
-import Schema from './schema'
 import Rule from './rule'
 import Document from './document'
 import { GherklinConfiguration, LintError, RawSchema } from './types'
 
 export default class RuleLoader {
   private config: GherklinConfiguration
-
-  public schema: Schema
 
   private rules: Array<Rule> = []
 

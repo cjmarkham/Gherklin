@@ -7,7 +7,7 @@ export default class Schema {
 
   public severity: Severity = Severity.warn
 
-  public args: RuleArguments = undefined
+  public args?: RuleArguments
 
   public enabled: boolean = true
 
