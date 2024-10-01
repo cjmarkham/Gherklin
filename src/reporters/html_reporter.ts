@@ -24,6 +24,10 @@ export default class HTMLReporter extends Reporter {
       const lines = content.split('\n')
 
       const errors = this.errors.get(key)
+      if (!errors) {
+        continue
+      }
+
       const hasErrors = errors.some((e) => e.severity === Severity.error)
       const fileInfo = {
         path: key,
