@@ -1,18 +1,63 @@
 import path from 'node:path'
-import * as fs from 'node:fs'
+import { existsSync } from 'node:fs'
 import { pathToFileURL } from 'node:url'
 
-import { GherklinConfiguration } from './types'
+import { GherklinConfiguration, ReporterConfig, RuleConfiguration } from './types'
 
+/**
+ * The config class is responsible for loading and parsing config.
+ *
+ * It can accept inline config passed to its constructor.
+ * It can also load configuration from a gherklin.config.ts file.
+ *
+ * Once loaded, the config is parsed and added to member variables for access.
+ */
 export default class Config {
-  public fromInline = (config: GherklinConfiguration): GherklinConfiguration => {
-    this.validate(config)
-    return config
+  // The directory where the gherklin.config.ts file is located
+  public configDirectory?: string
+
+  // The directory housing custom rules
+  public customRulesDirectory?: string
+
+  // The directory where the features are located
+  public featureDirectory?: string
+
+  // Configuration for each rule
+  public rules?: RuleConfiguration
+
+  // Configuration for the reporter
+  public reporter?: ReporterConfig
+
+  // The feature file to test
+  public featureFile?: string
+
+  // Whether or not to attempt to fix issues
+  public fix?: boolean
+
+  public constructor(inlineConfig?: GherklinConfiguration) {
+    if (inlineConfig) {
+      this.parse(inlineConfig)
+
+      this.validate()
+    }
   }
 
-  public fromFile = async (): Promise<GherklinConfiguration> => {
+  private parse = (config: GherklinConfiguration): void => {
+    this.configDirectory = config.configDirectory
+    this.customRulesDirectory = config.customRulesDirectory
+    this.featureDirectory = config.featureDirectory
+    this.rules = config.rules
+    this.reporter = config.reporter
+    this.featureFile = config.featureFile
+    this.fix = config.fix
+  }
+
+  /**
+   * Attempts to load config from a gherklin.config.ts file
+   */
+  public fromFile = async (): Promise<Config> => {
     const importPath = path.join(process.cwd(), 'gherklin.config.ts')
-    if (!fs.existsSync(importPath)) {
+    if (!existsSync(importPath)) {
       throw new Error(`could not find gherklin.config.ts`)
     }
     const module = await import(pathToFileURL(importPath).href)
@@ -23,22 +68,31 @@ export default class Config {
     const config = module.default as GherklinConfiguration
     config.configDirectory = process.cwd()
 
-    this.validate(config)
+    this.parse(config)
+    this.validate()
 
-    return config
+    return this
   }
 
-  private validate = (configuration: GherklinConfiguration): void => {
-    if (!configuration) {
-      throw new Error(`Could not find a gherkin-lint.config.ts configuration file.`)
+  /**
+   * Validates that the configuration contains all the neccessary
+   * information for Gherklin to run.
+   */
+  public validate = (): void => {
+    if (!this.featureDirectory && !this.featureFile) {
+      throw new Error('Please specify either a featureDirectory or featureFile configuration option.')
     }
 
-    if (!configuration.featureDirectory && !configuration.featureFile) {
-      throw new Error(`Could not find a featureDirectory or featureFile configuration option.`)
+    if (!this.rules) {
+      throw new Error('Please specify a list of rules in your configuration.')
     }
 
-    if (!configuration.rules) {
-      throw new Error(`Could not find a rules configuration option.`)
+    if (!Object.keys(this.rules).length) {
+      throw new Error('Please specify a list of rules in your configuration.')
+    }
+
+    if (this.featureDirectory && this.featureFile) {
+      throw new Error('Please only specify either a feature file or feature directory.')
     }
   }
 }
