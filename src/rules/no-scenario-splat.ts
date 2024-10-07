@@ -23,7 +23,7 @@ export default class NoScenarioSplat implements Rule {
 
       child.scenario.steps.forEach((step): void => {
         if (step.keyword.trim() === '*') {
-          document.addError(this.name, 'Found a splat (*) inside a scenario.', step.location)
+          document.addError(this, 'Found a splat (*) inside a scenario.', step.location)
         }
       })
     })

@@ -54,8 +54,6 @@ export default class RuleLoader {
   }
 
   public runRules = async (document: Document): Promise<Array<LintError>> => {
-    const errors: Array<LintError> = []
-
     for (const rule of this.rules) {
       if (!rule.schema.enabled || document.disabled) {
         continue
@@ -67,16 +65,8 @@ export default class RuleLoader {
       }
 
       await rule.run(document)
-      if (document.errors.length) {
-        document.errors.forEach((_, index) => {
-          document.errors[index].severity = rule.schema.severity
-          document.errors[index].rule = rule.name
-        })
-
-        errors.push(...document.errors)
-      }
     }
 
-    return errors
+    return document.errors
   }
 }

@@ -24,7 +24,7 @@ export default class ScenarioVerification implements Rule {
       const whens = child.scenario.steps.filter((s) => s.keyword.trim() === 'Then')
       if (whens.length === 0) {
         document.addError(
-          this.name,
+          this,
           'Scenario should contain a "Then" to denote verification of an action.',
           child.scenario.location,
         )

@@ -17,14 +17,14 @@ export default class FilenameKebabCase implements Rule {
 
   public async run(document: Document): Promise<void> {
     if (!/^[^_|\s]+(?=-?)[^_|\s]+.feature$/.test(document.filename)) {
-      document.addError(this.name, `File names should be kebab-case. Got "${document.filename}".`, {
+      document.addError(this, `File names should be kebab-case. Got "${document.filename}".`, {
         line: 1,
         column: 1,
       })
       return
     }
     if (document.filename !== document.filename.toLowerCase()) {
-      document.addError(this.name, `File names should be kebab-case. Got "${document.filename}".`, {
+      document.addError(this, `File names should be kebab-case. Got "${document.filename}".`, {
         line: 1,
         column: 1,
       })

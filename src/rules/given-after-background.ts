@@ -28,7 +28,7 @@ export default class GivenAfterBackground implements Rule {
 
       child.scenario.steps.forEach((step): void => {
         if (step.keyword.trim() === 'Given') {
-          document.addError(this.name, 'Found "Given" in scenario when background exists.', step.location)
+          document.addError(this, 'Found "Given" in scenario when background exists.', step.location)
         }
       })
     })
