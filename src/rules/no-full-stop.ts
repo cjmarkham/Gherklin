@@ -20,7 +20,7 @@ export default class NoFullStop implements Rule {
     document.lines.forEach((line: Line, index: number): void => {
       const trimmed = line.text.trimEnd()
       if (trimmed[trimmed.length - 1] === '.') {
-        document.addError(this.name, `Line ends with a full stop.`, {
+        document.addError(this, `Line ends with a full stop.`, {
           line: index + 1,
           column: (line.keyword + trimmed).length,
         })

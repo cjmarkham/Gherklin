@@ -6,6 +6,7 @@ import Gherkin from '@cucumber/gherkin'
 import { LintError, Location } from './types'
 import { writeFileSync } from 'node:fs'
 import Line from './line'
+import Rule from './rule'
 
 export default class Document {
   public filename: string
@@ -66,19 +67,21 @@ export default class Document {
     }
   }
 
-  public addError = (ruleName: string, message: string, location: Location): void => {
+  public addError = (rule: Rule, message: string, location: Location): void => {
     // Don't add the error if the line has been disabled
     if (this.linesDisabled.get(location.line)) {
       return
     }
 
-    if (this.rulesDisabled.get(ruleName) === true) {
+    if (this.rulesDisabled.get(rule.name) === true) {
       return
     }
 
     this.errors.push({
       message,
       location,
+      severity: rule.schema.severity,
+      rule: rule.name,
     } as LintError)
   }
 

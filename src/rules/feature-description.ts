@@ -19,7 +19,7 @@ export default class FeatureDescription implements Rule {
 
   public async run(document: Document): Promise<void> {
     if (!document.feature.description) {
-      document.addError(this.name, 'Feature is missing a description.', document.feature.location)
+      document.addError(this, 'Feature is missing a description.', document.feature.location)
     }
   }
 }

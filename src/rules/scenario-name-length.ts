@@ -28,7 +28,7 @@ export default class ScenarioNameLength implements Rule {
 
       if (child.scenario.name.length > maxLength) {
         document.addError(
-          this.name,
+          this,
           `Scenario name is too long. Expected max ${maxLength}, got ${child.scenario.name.length}.`,
           child.scenario.location,
         )
