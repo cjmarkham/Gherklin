@@ -35,7 +35,7 @@ export default class NoDupeScenarios implements Rule {
           this.scenarios.set(scenarioName, [path.basename(document.filename), ...this.scenarios.get(scenarioName)])
         }
         document.addError(
-          this.name,
+          this,
           `Found duplicate scenario "${scenarioName}" in "${this.scenarios.get(scenarioName).join(', ')}".`,
           child.scenario.location,
         )

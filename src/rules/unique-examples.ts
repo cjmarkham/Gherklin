@@ -36,7 +36,7 @@ export default class UniqueExamples implements Rule {
           return
         }
 
-        document.addError(this.name, 'Examples should contain a unique name if there are more than one.', e.location)
+        document.addError(this, 'Examples should contain a unique name if there are more than one.', e.location)
       })
     })
   }

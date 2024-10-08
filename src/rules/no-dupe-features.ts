@@ -26,7 +26,7 @@ export default class NoDupeFeatures implements Rule {
     } else {
       this.features.set(featureName, [path.basename(document.filename), ...this.features.get(featureName)])
       document.addError(
-        this.name,
+        this,
         `Found duplicate feature "${featureName}" in "${this.features.get(featureName).join(', ')}".`,
         document.feature.location,
       )

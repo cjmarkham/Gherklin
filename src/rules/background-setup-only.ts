@@ -24,7 +24,7 @@ export default class BackgroundSetupOnly implements Rule {
       child.background.steps.forEach((step): void => {
         if (!['Given', '*'].includes(step.keyword.trim())) {
           document.addError(
-            this.name,
+            this,
             `Background should only be used for set up. Found "${step.keyword.trim()}".`,
             step.location,
           )
