@@ -41,7 +41,7 @@ export default class NoInconsistentQuotes implements Rule {
     if (quotesUsed.get(`'`).length > 0 && quotesUsed.get(`"`).length > 0) {
       quotesUsed.forEach((locations: Array<Location>) => {
         locations.forEach((location: Location): void => {
-          document.addError(this.name, 'Found a mix of single and double quotes.', location)
+          document.addError(this, 'Found a mix of single and double quotes.', location)
         })
       })
     }

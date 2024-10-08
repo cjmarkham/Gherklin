@@ -1,35 +1,31 @@
-import fs from 'node:fs'
 import path from 'node:path'
+import { existsSync } from 'node:fs'
 import { pathToFileURL } from 'node:url'
 
 import Rule from './rule'
 import Document from './document'
-import { GherklinConfiguration, LintError, RawSchema } from './types'
+import { LintError, RawSchema } from './types'
+import Config from './config'
 
 export default class RuleLoader {
-  private config: GherklinConfiguration
+  private config: Config
 
   private rules: Array<Rule> = []
 
-  public constructor(config: GherklinConfiguration) {
+  public constructor(config: Config) {
     this.config = config
   }
 
-  public load = async (
-    configLocation: string,
-    ruleName: string,
-    rawSchema: RawSchema,
-    customDir?: string,
-  ): Promise<void> => {
+  public load = async (ruleName: string, rawSchema: RawSchema, customDir?: string): Promise<void> => {
     let location = path.resolve(import.meta.dirname, `./rules/${ruleName}.ts`)
 
     // If this rule doesn't appear in the defaults, we'll need to look for it in the custom rules dir
-    if (!fs.existsSync(location)) {
+    if (!existsSync(location)) {
       if (customDir) {
         // Import files relative to the location of the config file
-        const customLocation = path.join(configLocation, customDir, `${ruleName}.ts`)
+        const customLocation = path.join(this.config.configDirectory, customDir, `${ruleName}.ts`)
 
-        if (!fs.existsSync(customLocation)) {
+        if (!existsSync(customLocation)) {
           throw new Error(`could not find rule "${ruleName}" in default rules or "${customDir}".`)
         }
         location = customLocation
@@ -58,8 +54,6 @@ export default class RuleLoader {
   }
 
   public runRules = async (document: Document): Promise<Array<LintError>> => {
-    const errors: Array<LintError> = []
-
     for (const rule of this.rules) {
       if (!rule.schema.enabled || document.disabled) {
         continue
@@ -71,16 +65,8 @@ export default class RuleLoader {
       }
 
       await rule.run(document)
-      if (document.errors.length) {
-        document.errors.forEach((_, index) => {
-          document.errors[index].severity = rule.schema.severity
-          document.errors[index].rule = rule.name
-        })
-
-        errors.push(...document.errors)
-      }
     }
 
-    return errors
+    return document.errors
   }
 }

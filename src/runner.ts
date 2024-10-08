@@ -16,7 +16,7 @@ import Document from './document'
 export default class Runner {
   public gherkinFiles: Array<string> = []
 
-  private config: GherklinConfiguration
+  private config: Config
 
   private reporter: Reporter
 
@@ -24,7 +24,7 @@ export default class Runner {
 
   constructor(gherklinConfig?: GherklinConfiguration) {
     if (gherklinConfig) {
-      this.config = new Config().fromInline(gherklinConfig)
+      this.config = new Config(gherklinConfig)
     }
   }
 
@@ -47,12 +47,7 @@ export default class Runner {
 
     // Import and validate all default rules
     for (const ruleName in this.config.rules) {
-      await this.ruleLoader.load(
-        this.config.configDirectory,
-        ruleName,
-        this.config.rules[ruleName],
-        this.config.customRulesDirectory,
-      )
+      await this.ruleLoader.load(ruleName, this.config.rules[ruleName], this.config.customRulesDirectory)
 
       const schemaErrors = this.ruleLoader.validateRules()
       if (schemaErrors.size) {

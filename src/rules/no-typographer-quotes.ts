@@ -21,7 +21,7 @@ export default class NoTypographerQuotes implements Rule {
     document.lines.forEach((line: Line, index: number): void => {
       quotes.forEach((quote) => {
         if (line.text.includes(quote)) {
-          document.addError(this.name, 'Found typographer quote', {
+          document.addError(this, 'Found typographer quote', {
             line: index + 1,
             column: line.indentation + line.keyword.length + (line.text.indexOf(quote) + 1),
           })

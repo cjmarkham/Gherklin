@@ -23,7 +23,7 @@ export default class ScenarioAction implements Rule {
 
       const whens = child.scenario.steps.filter((s) => s.keyword.trim() === 'When')
       if (whens.length === 0) {
-        document.addError(this.name, 'Scenario should contain a "When" to denote an action.', child.scenario.location)
+        document.addError(this, 'Scenario should contain a "When" to denote an action.', child.scenario.location)
       }
     })
   }

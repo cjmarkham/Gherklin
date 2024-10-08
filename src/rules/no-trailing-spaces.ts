@@ -22,7 +22,7 @@ export default class NoTrailingSpaces implements Rule {
     document.lines.forEach((line) => {
       const joined = `${line.keyword}${line.text}`
       if (joined.charCodeAt(joined.length - 1) === 32) {
-        document.addError(this.name, 'Found trailing whitespace.', {
+        document.addError(this, 'Found trailing whitespace.', {
           line: lineNumber,
           column: joined.length,
         })
