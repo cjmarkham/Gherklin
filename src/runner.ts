@@ -55,6 +55,7 @@ export default class Runner {
         return {
           success: false,
           schemaErrors: schemaErrors,
+          errorCount: 0,
           errors: new Map(),
         }
       }
@@ -63,6 +64,7 @@ export default class Runner {
     return {
       success: true,
       schemaErrors: new Map(),
+      errorCount: 0,
       errors: new Map(),
     }
   }
@@ -79,6 +81,7 @@ export default class Runner {
     }
 
     if (this.reporter.errors.size) {
+      let maxAllowedErrors = this.config.maxErrors ?? 0
       let allWarns = true
 
       for (const key of this.reporter.errors.keys()) {
@@ -89,11 +92,15 @@ export default class Runner {
         }
       }
 
+      const totalErrorCount = this.reporter.errorCount()
+      const success = allWarns === true || totalErrorCount <= maxAllowedErrors
+
       this.reporter.write()
 
       return {
-        success: allWarns === true,
+        success,
         errors: this.reporter.errors,
+        errorCount: totalErrorCount,
         schemaErrors: new Map(),
       }
     }
@@ -105,6 +112,7 @@ export default class Runner {
     return {
       success: true,
       errors: new Map(),
+      errorCount: 0,
       schemaErrors: new Map(),
     }
   }

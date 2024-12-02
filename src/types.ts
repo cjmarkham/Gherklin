@@ -62,6 +62,7 @@ export interface GherklinConfiguration {
   configDirectory?: string
   customRulesDirectory?: string
   featureDirectory?: string
+  maxErrors?: number
   rules?: RuleConfiguration
   reporter?: ReporterConfig
   featureFile?: string

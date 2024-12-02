@@ -57,9 +57,10 @@ export default class STDOUTReporter extends Reporter {
       if (!totalErrors) {
         color = chalk.bold.yellow
       }
+
       logger.info(
         color(
-          `\nx ${totalErrors + totalWarns} problems (${totalErrors} error${totalErrors ? 's' : ''}, ${totalWarns} warning${totalWarns ? 's' : ''})`,
+          `\n${totalErrors + totalWarns} problems (${totalErrors} error${totalErrors > 1 || totalErrors === 0 ? 's' : ''}, ${totalWarns} warning${totalWarns > 1 || totalWarns === 0 ? 's' : ''})`,
         ),
       )
     }

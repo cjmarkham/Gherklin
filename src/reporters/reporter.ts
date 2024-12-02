@@ -18,5 +18,18 @@ export default class Reporter {
     this.errors.set(key, errors)
   }
 
+  /**
+   * Since errors are grouped under their file name, this is a helper function
+   * to return the total number of errors across all files
+   */
+  public errorCount(): number {
+    let count = 0
+    this.errors.forEach((err) => {
+      count += err.length
+    })
+
+    return count
+  }
+
   public write = (): void => {}
 }

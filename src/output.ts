@@ -6,6 +6,7 @@ import { LintError } from './types'
 export interface Results {
   success: boolean
   errors?: Map<string, Array<LintError>>
+  errorCount: number
   schemaErrors?: Map<string, Array<string>>
 }
 

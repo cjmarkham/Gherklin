@@ -104,6 +104,18 @@ Then('the file has the content', function (table: DataTable) {
   })
 })
 
+Then('the linter succeeds', function () {
+  expect(this.runResult.success).to.eq(true)
+})
+
+Then('the linter fails', function () {
+  expect(this.runResult.success).to.eq(false)
+})
+
+Then('there are {int} total errors', function (amount: number): void {
+  expect(this.runResult.errorCount).to.eq(amount)
+})
+
 const parse = (value: string) => {
   if (value === 'true' || value === 'false') {
     return Boolean(value)
