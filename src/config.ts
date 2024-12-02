@@ -22,6 +22,9 @@ export default class Config {
   // The directory where the features are located
   public featureDirectory?: string
 
+  // The max amount of errors before the process fails
+  public maxErrors?: number
+
   // Configuration for each rule
   public rules?: RuleConfiguration
 
@@ -49,6 +52,7 @@ export default class Config {
     this.rules = config.rules
     this.reporter = config.reporter
     this.featureFile = config.featureFile
+    this.maxErrors = config.maxErrors
     this.fix = config.fix
   }
 
