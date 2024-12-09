@@ -33,7 +33,7 @@
   "author": "Carl Markham <admin@gherklin.com>",
   "license": "ISC",
   "dependencies": {
-    "@cucumber/gherkin": "^29.0.0",
+    "@cucumber/gherkin": "^30.0.4",
     "chai": "^5.1.1",
     "chalk": "^5.3.0",
     "handlebars": "^4.7.8",
