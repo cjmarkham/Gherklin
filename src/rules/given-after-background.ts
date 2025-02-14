@@ -16,7 +16,9 @@ export default class GivenAfterBackground implements Rule {
   }
 
   public async run(document: Document): Promise<void> {
-    const backgrounds = document.feature.children.filter((child) => child.background !== undefined)
+    const backgrounds = document.feature.children.filter(
+      (child): boolean => child.background !== undefined,
+    )
     if (!backgrounds.length) {
       return
     }

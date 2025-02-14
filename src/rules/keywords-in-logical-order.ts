@@ -42,7 +42,10 @@ export default class KeywordsInLogicalOrder implements Rule {
         const trimmedBut = but.map((w) => w.trim())
 
         // Check for Given, followed by When, And or But
-        if (given.includes(step.keyword) && ![...and, ...but, ...when].includes(nextStep.keyword)) {
+        if (
+          given.includes(step.keyword) &&
+          ![...and, ...but, ...when].includes(nextStep.keyword)
+        ) {
           document.addError(
             this,
             `Expected "${step.keyword.trim()}" to be followed by "${[...trimmedAnd, ...trimmedBut, ...trimmedWhen].join(', ')}", got "${nextTrimmed}"`,
@@ -51,7 +54,10 @@ export default class KeywordsInLogicalOrder implements Rule {
         }
 
         // Check for When, followed by Then, And or But
-        if (when.includes(step.keyword) && ![...and, ...but, ...then].includes(nextStep.keyword)) {
+        if (
+          when.includes(step.keyword) &&
+          ![...and, ...but, ...then].includes(nextStep.keyword)
+        ) {
           document.addError(
             this,
             `Expected "${step.keyword.trim()}" to be followed by "${[...trimmedAnd, ...trimmedBut, ...trimmedThen].join(', ')}", got "${nextTrimmed}"`,
@@ -60,7 +66,10 @@ export default class KeywordsInLogicalOrder implements Rule {
         }
 
         // Check for Then, followed by And or When
-        if (then.includes(step.keyword) && ![...and, ...when].includes(nextStep.keyword)) {
+        if (
+          then.includes(step.keyword) &&
+          ![...and, ...when].includes(nextStep.keyword)
+        ) {
           document.addError(
             this,
             `Expected "${step.keyword.trim()}" to be followed by "${[...trimmedAnd, ...trimmedWhen].join(', ')}", got "${nextTrimmed}"`,

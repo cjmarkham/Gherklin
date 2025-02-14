@@ -7,7 +7,8 @@ import Document from '../document'
 export default class ScenarioNameLength implements Rule {
   public readonly name: string = 'scenario-name-length'
 
-  public readonly acceptedSchema: AcceptedSchema = offOrNumberOrSeverityAndNumber
+  public readonly acceptedSchema: AcceptedSchema =
+    offOrNumberOrSeverityAndNumber
 
   public readonly schema: Schema
 

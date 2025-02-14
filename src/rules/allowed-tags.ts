@@ -7,7 +7,8 @@ import Document from '../document'
 export default class AllowedTags implements Rule {
   public readonly name: string = 'allowed-tags'
 
-  public readonly acceptedSchema: AcceptedSchema = offOrStringArrayOrSeverityAndStringArray
+  public readonly acceptedSchema: AcceptedSchema =
+    offOrStringArrayOrSeverityAndStringArray
 
   public readonly schema: Schema
 

@@ -106,7 +106,9 @@ export default class Document {
           return
         }
 
-        const disableRuleMatch = text.match(/^# gherklin-disable ([a-zA-Z0-9-,\s]+)$/)
+        const disableRuleMatch = text.match(
+          /^# gherklin-disable ([a-zA-Z0-9-,\s]+)$/,
+        )
         if (disableRuleMatch) {
           const rules = (disableRuleMatch[1] || '').split(',')
           rules.forEach((rule) => {
@@ -115,7 +117,9 @@ export default class Document {
         }
       }
 
-      const disableNextLineMatches = text.match(/#\sgherklin-disable-next-line\s?([a-zA-Z0-9-,\s]+)?/)
+      const disableNextLineMatches = text.match(
+        /#\sgherklin-disable-next-line\s?([a-zA-Z0-9-,\s]+)?/,
+      )
       if (disableNextLineMatches && disableNextLineMatches.length) {
         const specificRules = disableNextLineMatches[1]
         this.linesDisabled.set(comment.location.line + 1, specificRules?.split(',').map((r): string => r.trim()) ?? [])

@@ -16,10 +16,15 @@ export default class RuleLoader {
     this.config = config
   }
 
-  public load = async (ruleName: string, rawSchema: RawSchema, customDir?: string): Promise<void> => {
+  public load = async (
+    ruleName: string,
+    rawSchema: RawSchema,
+    customDir?: string,
+  ): Promise<void> => {
     let location = path.resolve(import.meta.dirname, `./rules/${ruleName}.ts`)
 
-    // If this rule doesn't appear in the defaults, we'll need to look for it in the custom rules dir
+    // If this rule doesn't appear in the defaults,
+    // we'll need to look for it in the custom rules dir
     if (!existsSync(location)) {
       if (customDir) {
         // Import files relative to the location of the config file

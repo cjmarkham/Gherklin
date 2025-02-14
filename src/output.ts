@@ -10,7 +10,9 @@ export interface Results {
   schemaErrors?: Map<string, Array<string>>
 }
 
-export const outputSchemaErrors = (schemaErrors: Map<string, Array<string>>): void => {
+export const outputSchemaErrors = (
+  schemaErrors: Map<string, Array<string>>,
+): void => {
   if (!schemaErrors.size) {
     return
   }

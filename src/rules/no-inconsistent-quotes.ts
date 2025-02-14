@@ -8,7 +8,8 @@ import Line from '../line'
 export default class NoInconsistentQuotes implements Rule {
   public readonly name: string = 'no-inconsistent-quotes'
 
-  public readonly acceptedSchema: AcceptedSchema = switchOrSeverityorSeverityAndStringSchema
+  public readonly acceptedSchema: AcceptedSchema =
+    switchOrSeverityorSeverityAndStringSchema
 
   public readonly schema: Schema
 
@@ -26,14 +27,20 @@ export default class NoInconsistentQuotes implements Rule {
       if (singleIndex > -1) {
         quotesUsed.set(`'`, [
           ...quotesUsed.get(`'`),
-          { line: index + 1, column: line.indentation + line.keyword.length + singleIndex + 1 },
+          {
+            line: index + 1,
+            column: line.indentation + line.keyword.length + singleIndex + 1,
+          },
         ])
       }
       const doubleIndex = line.text.indexOf(`"`)
       if (doubleIndex > -1) {
         quotesUsed.set(`"`, [
           ...quotesUsed.get(`"`),
-          { line: index + 1, column: line.indentation + line.keyword.length + doubleIndex + 1 },
+          {
+            line: index + 1,
+            column: line.indentation + line.keyword.length + doubleIndex + 1,
+          },
         ])
       }
     })

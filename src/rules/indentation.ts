@@ -8,7 +8,8 @@ import Line from '../line'
 export default class Indentation implements Rule {
   public readonly name: string = 'indentation'
 
-  public readonly acceptedSchema: AcceptedSchema = offOrKeywordIntsOrSeverityAndKeywordInts
+  public readonly acceptedSchema: AcceptedSchema =
+    offOrKeywordIntsOrSeverityAndKeywordInts
 
   public readonly schema: Schema
 
@@ -92,7 +93,9 @@ export default class Indentation implements Rule {
             }
 
             if (example.tableHeader && args.exampleTableHeader !== undefined) {
-              if (example.tableHeader.location.column !== args.exampleTableHeader) {
+              if (
+                example.tableHeader.location.column !== args.exampleTableHeader
+              ) {
                 document.addError(
                   this,
                   `Invalid indentation for "example table header". Got ${example.tableHeader.location.column}, wanted ${args.exampleTableHeader}`,

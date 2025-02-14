@@ -15,9 +15,9 @@ export default [
       sourceType: 'module',
     },
     rules: {
-      '@stylistic/eol-last': 'warn',
-      '@stylistic/max-len': ['warn', { code: 80 }],
-      '@stylistic/comma-dangle': ['warn', 'always-multiline'],
+      '@stylistic/eol-last': 'error',
+      '@stylistic/max-len': ['error', { code: 80, ignoreStrings: true, ignoreTemplateLiterals: true }],
+      '@stylistic/comma-dangle': ['error', 'always-multiline'],
       'class-methods-use-this': 'off',
       '@typescript-eslint/explicit-function-return-type': 'error',
     },

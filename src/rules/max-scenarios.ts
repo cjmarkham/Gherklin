@@ -7,7 +7,8 @@ import Document from '../document'
 export default class MaxScenarios implements Rule {
   public readonly name: string = 'max-scenarios'
 
-  public readonly acceptedSchema: AcceptedSchema = offOrNumberOrSeverityAndNumber
+  public readonly acceptedSchema: AcceptedSchema =
+    offOrNumberOrSeverityAndNumber
 
   public readonly schema: Schema
 
