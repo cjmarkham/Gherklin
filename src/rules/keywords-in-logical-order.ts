@@ -35,26 +35,31 @@ export default class KeywordsInLogicalOrder implements Rule {
         const when = dialect.when.filter((w) => w !== '* ')
         const then = dialect.then.filter((w) => w !== '* ')
         const and = dialect.and.filter((w) => w !== '* ')
+        const but = dialect.but.filter((w) => w !== '* ')
         const trimmedWhen = when.map((w) => w.trim())
         const trimmedThen = then.map((w) => w.trim())
         const trimmedAnd = and.map((w) => w.trim())
+        const trimmedBut = but.map((w) => w.trim())
 
-        if (given.includes(step.keyword) && !when.includes(nextStep.keyword)) {
+        // Check for Given, followed by When, And or But
+        if (given.includes(step.keyword) && ![...and, ...but, ...when].includes(nextStep.keyword)) {
           document.addError(
             this,
-            `Expected "${step.keyword.trim()}" to be followed by "${trimmedWhen.join(', ')}", got "${nextTrimmed}"`,
+            `Expected "${step.keyword.trim()}" to be followed by "${[...trimmedAnd, ...trimmedBut, ...trimmedWhen].join(', ')}", got "${nextTrimmed}"`,
             step.location,
           )
         }
 
-        if (when.includes(step.keyword) && !then.includes(nextStep.keyword)) {
+        // Check for When, followed by Then, And or But
+        if (when.includes(step.keyword) && ![...and, ...but, ...then].includes(nextStep.keyword)) {
           document.addError(
             this,
-            `Expected "${step.keyword.trim()}" to be followed by "${trimmedThen.join(', ')}", got "${nextTrimmed}"`,
+            `Expected "${step.keyword.trim()}" to be followed by "${[...trimmedAnd, ...trimmedBut, ...trimmedThen].join(', ')}", got "${nextTrimmed}"`,
             step.location,
           )
         }
 
+        // Check for Then, followed by And or When
         if (then.includes(step.keyword) && ![...and, ...when].includes(nextStep.keyword)) {
           document.addError(
             this,
