@@ -26,13 +26,12 @@ Tests are written using [Mocha](https://mochajs.org/), with [Sinon](https://sino
 Each new rule must have acceptance tests.
 
 # Pull Requests
-Gherklin uses [ESLint](https://eslint.org/) and [Prettier](https://prettier.io/) for code formatting. It may be useful
+Gherklin uses [ESLint](https://eslint.org/) for code formatting. It may be useful
 to set up your IDE to automatically format on save. 
 
 You can also run the following if that is not an option:
 ```shell
 npm run eslint:fix
-npm run prettier:fix
 ```
 
 Please be as descriptive as possible in your PR description, mentioning any issue(s) that are resolved by your PR.

@@ -7,8 +7,6 @@
     "acceptance": "NODE_OPTIONS=--import=tsx ./node_modules/.bin/cucumber-js --config tests/acceptance/cucumber.mjs",
     "eslint": "node_modules/.bin/eslint",
     "eslint:fix": "node_modules/.bin/eslint --fix",
-    "prettier": "node_modules/.bin/prettier --check src/**/*.ts",
-    "prettier:fix": "node_modules/.bin/prettier --check src/**/*.ts --write",
     "gherklin": "npx tsx ./bin/gherklin"
   },
   "engines": {
@@ -52,8 +50,6 @@
     "@typescript-eslint/parser": "^8.2.0",
     "chai-as-promised": "^8.0.0",
     "eslint": "^9.9.0",
-    "eslint-config-prettier": "^10.0.1",
-    "eslint-plugin-prettier": "^5.2.1",
     "gherklin": "./",
     "globals": "^15.9.0",
     "mocha": "^10.7.3",
