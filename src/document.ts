@@ -27,8 +27,8 @@ export default class Document {
   public disabled: boolean = false
 
   // A list of lines that are disabled by the gherklin-disable-next-line comment
-  // Uses a map of line number => boolean for faster lookups
-  public linesDisabled: Map<number, boolean> = new Map()
+  // Uses a map of line number => array of rules to disable
+  public linesDisabled: Map<number, Array<string>> = new Map()
 
   // A list of rules that are disabled by the gherklin-disable rule-name comment
   public rulesDisabled: Map<string, boolean> = new Map()
@@ -69,10 +69,21 @@ export default class Document {
 
   public addError = (rule: Rule, message: string, location: Location): void => {
     // Don't add the error if the line has been disabled
-    if (this.linesDisabled.get(location.line)) {
-      return
+    const disabledLine = this.linesDisabled.get(location.line)
+    if (disabledLine) {
+      // If the array is empty, we disable all rules
+      if (disabledLine.length === 0) {
+        return
+      }
+
+      // Specific rule disabled for next line
+      if (disabledLine.includes(rule.name)) {
+        return
+      }
     }
 
+    // Don't add the error if the rule is disabled via
+    // # gherklin-disable rule-name
     if (this.rulesDisabled.get(rule.name) === true) {
       return
     }
@@ -104,8 +115,10 @@ export default class Document {
         }
       }
 
-      if (text === '# gherklin-disable-next-line') {
-        this.linesDisabled.set(comment.location.line + 1, true)
+      const disableNextLineMatches = text.match(/#\sgherklin-disable-next-line\s?([a-zA-Z0-9-,\s]+)?/)
+      if (disableNextLineMatches && disableNextLineMatches.length) {
+        const specificRules = disableNextLineMatches[1]
+        this.linesDisabled.set(comment.location.line + 1, specificRules?.split(',').map((r): string => r.trim()) ?? [])
       }
     })
   }

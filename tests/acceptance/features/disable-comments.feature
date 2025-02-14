@@ -90,6 +90,66 @@ Feature: Disabling Comments
       | {"no-unnamed-scenarios": "on"} |
     Then there are 1 file with errors
 
+  Scenario: Disable next line with specific rules
+    Given the following feature file
+        """
+        Feature: Empty Scenario
+          # gherklin-disable-next-line no-unnamed-scenarios
+          Scenario:
+        """
+    When Gherklin is ran with the following configuration
+      | rules                          |
+      | {"no-unnamed-scenarios": "on"} |
+    Then there are 0 files with errors
+
+  Scenario: Disable next line with multiple specific rules
+    Given the following feature file
+        """
+        Feature: Empty Scenario
+          # gherklin-disable-next-line no-unnamed-scenarios, indentation
+          Scenario:
+        """
+    When Gherklin is ran with the following configuration
+      | rules                          |
+      | {"no-unnamed-scenarios": "on", "indentation": {"scenario": 0}} |
+    Then there is 0 files with errors
+
+  Scenario: Disable next line with specific rules regardless of indentation
+    Given the following feature file
+        """
+        Feature: Empty Scenario
+              # gherklin-disable-next-line no-unnamed-scenarios
+          Scenario:
+        """
+    When Gherklin is ran with the following configuration
+      | rules                          |
+      | {"no-unnamed-scenarios": "on"} |
+    Then there are 0 files with errors
+
+  Scenario: Disable next line with specific rules but comment is not correctly formatted
+    Given the following feature file
+        """
+        Feature: Empty Scenario
+          #gherklin-disable-next-line no-unnamed-scenarios
+          Scenario:
+        """
+    When Gherklin is ran with the following configuration
+      | rules                          |
+      | {"no-unnamed-scenarios": "on"} |
+    Then there are 1 files with errors
+
+  Scenario: Disable next line with specific rules with no space between rules
+    Given the following feature file
+        """
+        Feature: Empty Scenario
+          # gherklin-disable-next-line no-unnamed-scenarios,indentation
+          Scenario:
+        """
+    When Gherklin is ran with the following configuration
+      | rules                          |
+      | {"no-unnamed-scenarios": "on", "indentation": {"scenario": 0}} |
+    Then there are 0 files with errors
+
   Scenario: Disable specific rule
     Given the following feature file
         """
