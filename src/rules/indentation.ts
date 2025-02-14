@@ -18,6 +18,9 @@ export default class Indentation implements Rule {
 
   public async run(document: Document): Promise<void> {
     const args = this.schema.args as GherkinKeywordNumericals
+    if (!args) {
+      return
+    }
 
     if (args.feature !== undefined) {
       if (document.feature.location.column !== args.feature) {

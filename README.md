@@ -154,6 +154,16 @@ Feature: The below tag is invalid
   Scenario:
 ```
 
+This also works for disabling rules on the next line.
+
+### Example
+```gherkin
+Feature: The below tag is invalid
+  @invalid-tag
+  # gherklin-disable-next-line no-unnamed-scenario
+  Scenario:
+```
+
 # Automatic Fixing
 
 Gherklin supports automatic fixing for a small set of rules, usually those to do with whitespace.
