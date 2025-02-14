@@ -36,8 +36,12 @@ export default class HTMLReporter extends Reporter {
         issueCount: errors.length,
       } as ReportFile
 
-      values.totalErrors += errors.map((e) => e.severity === Severity.error).length
-      values.totalWarns += errors.map((e) => e.severity === Severity.warn).length
+      values.totalErrors += errors.map(
+        (e): boolean => e.severity === Severity.error,
+      ).length
+      values.totalWarns += errors.map(
+        (e): boolean => e.severity === Severity.warn,
+      ).length
       values.totalLines += lines.length
 
       lines.forEach((line: string, index: number) => {
@@ -46,7 +50,7 @@ export default class HTMLReporter extends Reporter {
         const lineInfo = {
           number: index + 1,
           hasError: lineIssue !== undefined,
-          errorSeverity: lineIssue && lineIssue.severity.toString().toLowerCase(),
+          errorSeverity: lineIssue?.severity?.toString()?.toLowerCase(),
           content: this.syntaxHighlight(line),
           ruleName: lineIssue && lineIssue.rule,
           ruleDescription: lineIssue && lineIssue.message,

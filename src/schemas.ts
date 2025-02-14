@@ -23,7 +23,9 @@ export const keywordInts = z
 // warn | error
 export const severitySchema = z.nativeEnum(Severity)
 // on | off | warn | error
-export const switchOrSeveritySchema = z.union([z.nativeEnum(Switch), z.nativeEnum(Severity)])
+export const switchOrSeveritySchema = z.union(
+  [z.nativeEnum(Switch), z.nativeEnum(Severity)],
+)
 
 export const switchOrSeverityorSeverityAndStringSchema = z.union([
   z.nativeEnum(Switch),

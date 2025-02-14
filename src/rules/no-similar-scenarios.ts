@@ -8,7 +8,8 @@ import { levenshtein } from '../utils'
 export default class NoSimilarScenarios implements Rule {
   public readonly name: string = 'no-similar-scenarios'
 
-  public readonly acceptedSchema: AcceptedSchema = offOrNumberOrSeverityOrSeverityAndNumber
+  public readonly acceptedSchema: AcceptedSchema =
+    offOrNumberOrSeverityOrSeverityAndNumber
 
   public readonly schema: Schema
 

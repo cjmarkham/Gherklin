@@ -37,7 +37,9 @@ export default class Runner {
     this.reporter = this.getReporter()
 
     if (this.config.featureFile) {
-      this.gherkinFiles = [path.resolve(this.config.configDirectory, this.config.featureFile)]
+      this.gherkinFiles = [
+        path.resolve(this.config.configDirectory, this.config.featureFile),
+      ]
     } else {
       this.gherkinFiles = await getFiles(
         path.resolve(this.config.configDirectory, this.config.featureDirectory),
@@ -47,7 +49,11 @@ export default class Runner {
 
     // Import and validate all default rules
     for (const ruleName in this.config.rules) {
-      await this.ruleLoader.load(ruleName, this.config.rules[ruleName], this.config.customRulesDirectory)
+      await this.ruleLoader.load(
+        ruleName,
+        this.config.rules[ruleName],
+        this.config.customRulesDirectory,
+      )
 
       const schemaErrors = this.ruleLoader.validateRules()
       if (schemaErrors.size) {
@@ -86,7 +92,9 @@ export default class Runner {
 
       for (const key of this.reporter.errors.keys()) {
         const errors = this.reporter.errors.get(key)
-        const hasErrorSeverity = errors.some((err) => err.severity === Severity.error)
+        const hasErrorSeverity = errors.some((err): boolean =>
+          err.severity === Severity.error,
+        )
         if (hasErrorSeverity) {
           allWarns = false
         }

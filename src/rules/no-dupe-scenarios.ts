@@ -32,7 +32,13 @@ export default class NoDupeScenarios implements Rule {
         const existing = this.scenarios.get(scenarioName)
         // Prevent duplicates
         if (existing.indexOf(path.basename(document.filename)) === -1) {
-          this.scenarios.set(scenarioName, [path.basename(document.filename), ...this.scenarios.get(scenarioName)])
+          this.scenarios.set(
+            scenarioName,
+            [
+              path.basename(document.filename),
+              ...this.scenarios.get(scenarioName),
+            ],
+          )
         }
         document.addError(
           this,

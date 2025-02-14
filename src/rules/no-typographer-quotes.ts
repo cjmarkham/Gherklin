@@ -8,7 +8,8 @@ import Line from '../line'
 export default class NoTypographerQuotes implements Rule {
   public readonly name: string = 'no-typographer-quotes'
 
-  public readonly acceptedSchema: AcceptedSchema = switchOrSeverityorSeverityAndStringSchema
+  public readonly acceptedSchema: AcceptedSchema =
+    switchOrSeverityorSeverityAndStringSchema
 
   public readonly schema: Schema
 
@@ -23,7 +24,9 @@ export default class NoTypographerQuotes implements Rule {
         if (line.text.includes(quote)) {
           document.addError(this, 'Found typographer quote', {
             line: index + 1,
-            column: line.indentation + line.keyword.length + (line.text.indexOf(quote) + 1),
+            column: line.indentation
+              + line.keyword.length
+              + (line.text.indexOf(quote) + 1),
           })
         }
       })

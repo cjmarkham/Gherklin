@@ -1,6 +1,12 @@
 import { z } from 'zod'
 
-import { GherkinKeywordNumericals, RawSchema, RuleArguments, Severity, Switch } from './types'
+import {
+  GherkinKeywordNumericals,
+  RawSchema,
+  RuleArguments,
+  Severity,
+  Switch,
+} from './types'
 
 export default class Schema {
   private readonly rawSchema: RawSchema
@@ -20,7 +26,12 @@ export default class Schema {
   private parse(): void {
     // If it's a string, it's a severity or switch
     if (typeof this.rawSchema === 'string') {
-      if ([Severity.error.toString(), Severity.warn.toString()].includes(this.rawSchema)) {
+      if (
+        [
+          Severity.error.toString(),
+          Severity.warn.toString(),
+        ].includes(this.rawSchema)
+      ) {
         this.severity = this.rawSchema as Severity
       } else {
         this.enabled = this.rawSchema === Switch.on
@@ -30,9 +41,17 @@ export default class Schema {
     }
 
     if (Array.isArray(this.rawSchema)) {
-      if ([Severity.warn, Severity.error, Switch.on, Switch.off].includes(this.rawSchema[0] as Severity | Switch)) {
-        this.severity = this.rawSchema[0] as Severity
-        this.args = this.rawSchema[1] as GherkinKeywordNumericals | Array<string>
+      if (
+        [
+          Severity.warn,
+          Severity.error,
+          Switch.on,
+          Switch.off,
+        ].includes(this.rawSchema[0] as Severity | Switch)
+      ) {
+        const [severity, args] = this.rawSchema
+        this.severity = severity as Severity
+        this.args = args as GherkinKeywordNumericals | Array<string>
       } else {
         this.args = this.rawSchema as GherkinKeywordNumericals | Array<string>
       }
