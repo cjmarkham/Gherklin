@@ -8,11 +8,11 @@ Feature: Not Allowed Tags
       """
     When Gherklin is ran with the following configuration
       | rules                                  |
-      | {"not-allowed-tags": ["@testing"]} |
+      | {"disallowed-tags": ["@testing"]} |
     Then there is 1 file with errors
     And the errors are
       | location                 | severity | rule             | message                                                                           |
-      | {"line": 1, "column": 1} | warn     | not-allowed-tags | Found a feature tag that is not allowed: @testing.                                |
+      | {"line": 1, "column": 1} | warn     | disallowed-tags | Found a feature tag that is not allowed: @testing.                                |
 
   Scenario: Valid Tags
     Given the following feature file
@@ -22,5 +22,5 @@ Feature: Not Allowed Tags
       """
     When Gherklin is ran with the following configuration
       | rules                                  |
-      | {"not-allowed-tags": ["@testing"]} |
+      | {"disallowed-tags": ["@testing"]} |
     Then there are 0 files with errors

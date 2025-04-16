@@ -4,8 +4,8 @@ import Rule from '../rule'
 import { RawSchema, AcceptedSchema } from '../types'
 import Document from '../document'
 
-export default class NotAllowedTags implements Rule {
-  public readonly name: string = 'not-allowed-tags'
+export default class DisallowedTags implements Rule {
+  public readonly name: string = 'disallowed-tags'
 
   public readonly acceptedSchema: AcceptedSchema = offOrStringArrayOrSeverityAndStringArray
 
@@ -16,13 +16,13 @@ export default class NotAllowedTags implements Rule {
   }
 
   public async run(document: Document): Promise<void> {
-    let notAllowedTags = this.schema.args as Array<string>
-    if (!notAllowedTags.length) {
+    let DisallowedTags = this.schema.args as Array<string>
+    if (!DisallowedTags.length) {
       return
     }
 
     document.feature.tags.forEach((tag) => {
-      if (notAllowedTags.includes(tag.name)) {
+      if (DisallowedTags.includes(tag.name)) {
         document.addError(
           this,
           `Found a feature tag that is not allowed. Got '${tag.name}'.`,
@@ -37,7 +37,7 @@ export default class NotAllowedTags implements Rule {
       }
 
       child.scenario.tags.forEach((tag) => {
-        if (notAllowedTags.includes(tag.name)) {
+        if (DisallowedTags.includes(tag.name)) {
           document.addError(
             this,
             `Found a scenario tag that is not allowed. Got '${tag.name}'.`,
