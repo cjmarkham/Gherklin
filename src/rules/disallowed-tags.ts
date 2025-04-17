@@ -16,13 +16,13 @@ export default class DisallowedTags implements Rule {
   }
 
   public async run(document: Document): Promise<void> {
-    let DisallowedTags = this.schema.args as Array<string>
-    if (!DisallowedTags.length) {
+    let disallowedTags = this.schema.args as Array<string>
+    if (!disallowedTags.length) {
       return
     }
 
     document.feature.tags.forEach((tag) => {
-      if (DisallowedTags.includes(tag.name)) {
+      if (disallowedTags.includes(tag.name)) {
         document.addError(
           this,
           `Found a feature tag that is not allowed. Got '${tag.name}'.`,
@@ -37,7 +37,7 @@ export default class DisallowedTags implements Rule {
       }
 
       child.scenario.tags.forEach((tag) => {
-        if (DisallowedTags.includes(tag.name)) {
+        if (disallowedTags.includes(tag.name)) {
           document.addError(
             this,
             `Found a scenario tag that is not allowed. Got '${tag.name}'.`,

@@ -22,5 +22,5 @@ Feature: Not Allowed Tags
       """
     When Gherklin is ran with the following configuration
       | rules                                  |
-      | {"disallowed-tags": ["@testing"]} |
+      | {"disallowed-tags": ["@testing"]}      |
     Then there are 0 files with errors
