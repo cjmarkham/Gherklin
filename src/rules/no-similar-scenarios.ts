@@ -36,7 +36,7 @@ export default class NoSimilarScenarios implements Rule {
       otherScenarios.forEach((other) => {
         totalLev += thisSteps
           .map((step, i): number => {
-            const nextStep = other.steps[i]
+            const nextStep = other?.steps[i]
             if (!nextStep) {
               return 0
             }
@@ -45,7 +45,7 @@ export default class NoSimilarScenarios implements Rule {
             maxPossibleLev += comparison[0].length + comparison[1].length
             return levenshtein(comparison[0], comparison[1])
           })
-          .reduce((a, b) => a + b)
+          .reduce((a, b) => a + b,0)
 
         const percentage = 100 - (totalLev / maxPossibleLev) * 100
 
