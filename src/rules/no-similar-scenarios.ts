@@ -45,7 +45,7 @@ export default class NoSimilarScenarios implements Rule {
             maxPossibleLev += comparison[0].length + comparison[1].length
             return levenshtein(comparison[0], comparison[1])
           })
-          .reduce((a, b) => a + b,0)
+          .reduce((a, b) => a + b, 0)
 
         const percentage = 100 - (totalLev / maxPossibleLev) * 100
 
