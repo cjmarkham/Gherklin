@@ -50,6 +50,11 @@ npm install gherklin
 yarn add gherklin
 ```
 
+Gherklin currently supports the following `Node` versions:
+* 22.x
+
+Other versions may work, but are not tested.
+
 # Usage
 
 #### Bin script
@@ -233,4 +238,7 @@ the [Rules README](./src/rules/README.md).
 Tests use the [Mocha Test Framework](https://mochajs.org/) and live in the [tests](./tests)
 directory.
 
-Tests can be ran with `npm test`.
+Unit tests can be ran with `npm test`.
+
+Acceptance tests can be ran with `npm run acceptance`. These include Gherkin feature files
+to test the various built in rules.
