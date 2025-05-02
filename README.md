@@ -246,17 +246,30 @@ to test the various built in rules.
 
 # Contributors
 
-<div style="display: flex; flex: 1; flex-direction:row">
-  <div style="display: flex; flex-direction:column; margin-right: 1rem; align-items: center">
-    <img src="https://avatars.githubusercontent.com/u/604017?v=4" alt="osdamv" width="50" height="50" style="border-radius:100%" />
-    <a href="https://github.com/cjmarkham" target="_blank">cjmarkham</a>
-  </div>
-  <div style="display: flex; flex-direction:column; margin-right: 1rem; align-items: center">
-    <img src="https://avatars.githubusercontent.com/u/4120796?v=4" alt="osdamv" width="50" height="50" style="border-radius:100%" />
-    <a href="https://github.com/osdamv" target="_blank">osdamv</a>
-  </div>
-  <div style="display: flex; flex-direction:column; margin-right: 1rem; align-items: center">
-    <img src="https://avatars.githubusercontent.com/u/112733792?v=4" alt="osdamv" width="50" height="50" style="border-radius:100%" />
-    <a href="https://github.com/Antoineio" target="_blank">Antoineio</a>
-  </div>
-</div>
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%">
+        <a href="https://github.com/cjmarkham" target="_blank">
+          <img src="https://avatars.githubusercontent.com/u/604017" width="100px;" alt="Kent C. Dodds"/>
+          <br />
+          <sub><b>cjmarkham</b></sub>
+        </a>
+      </td>
+      <td align="center" valign="top" width="14.28%">
+        <a href="https://github.com/osdamv" target="_blank">
+          <img src="https://avatars.githubusercontent.com/u/4120796" width="100px;" alt="Kent C. Dodds"/>
+          <br />
+          <sub><b>osdamv</b></sub>
+        </a>
+      </td>
+      <td align="center" valign="top" width="14.28%">
+        <a href="https://github.com/Antoineio" target="_blank">
+          <img src="https://avatars.githubusercontent.com/u/112733792" width="100px;" alt="Kent C. Dodds"/>
+          <br />
+          <sub><b>Antoineio</b></sub>
+        </a>
+      </td>
+    </tr>
+  </tbody>
+</table>
