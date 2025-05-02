@@ -40,6 +40,7 @@
   * [Reporter Configuration](#reporter-configuration)
 * [Contributing](#contributing)
 * [Testing](#testing)
+* [Contributors](#contributors)
 
 # Installation
 Gherklin can be installed either via NPM or Yarn
@@ -242,3 +243,20 @@ Unit tests can be ran with `npm test`.
 
 Acceptance tests can be ran with `npm run acceptance`. These include Gherkin feature files
 to test the various built in rules.
+
+# Contributors
+
+<div style="display: flex; flex: 1; flex-direction:row">
+  <div style="display: flex; flex-direction:column; margin-right: 1rem; align-items: center">
+    <img src="https://avatars.githubusercontent.com/u/604017?v=4" alt="osdamv" width="50" height="50" style="border-radius:100%" />
+    <a href="https://github.com/cjmarkham" target="_blank">cjmarkham</a>
+  </div>
+  <div style="display: flex; flex-direction:column; margin-right: 1rem; align-items: center">
+    <img src="https://avatars.githubusercontent.com/u/4120796?v=4" alt="osdamv" width="50" height="50" style="border-radius:100%" />
+    <a href="https://github.com/osdamv" target="_blank">osdamv</a>
+  </div>
+  <div style="display: flex; flex-direction:column; margin-right: 1rem; align-items: center">
+    <img src="https://avatars.githubusercontent.com/u/112733792?v=4" alt="osdamv" width="50" height="50" style="border-radius:100%" />
+    <a href="https://github.com/Antoineio" target="_blank">Antoineio</a>
+  </div>
+</div>
