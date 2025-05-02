@@ -251,21 +251,21 @@ to test the various built in rules.
     <tr>
       <td align="center" valign="top" width="14.28%">
         <a href="https://github.com/cjmarkham" target="_blank">
-          <img src="https://avatars.githubusercontent.com/u/604017" width="100px;" alt="Kent C. Dodds"/>
+          <img src="https://avatars.githubusercontent.com/u/604017?s=100" width="100px;" alt="Kent C. Dodds"/>
           <br />
           <sub><b>cjmarkham</b></sub>
         </a>
       </td>
       <td align="center" valign="top" width="14.28%">
         <a href="https://github.com/osdamv" target="_blank">
-          <img src="https://avatars.githubusercontent.com/u/4120796" width="100px;" alt="Kent C. Dodds"/>
+          <img src="https://avatars.githubusercontent.com/u/4120796?s=100" width="100px;" alt="Kent C. Dodds"/>
           <br />
           <sub><b>osdamv</b></sub>
         </a>
       </td>
       <td align="center" valign="top" width="14.28%">
         <a href="https://github.com/Antoineio" target="_blank">
-          <img src="https://avatars.githubusercontent.com/u/112733792" width="100px;" alt="Kent C. Dodds"/>
+          <img src="https://avatars.githubusercontent.com/u/112733792?s=100" width="100px;" alt="Kent C. Dodds"/>
           <br />
           <sub><b>Antoineio</b></sub>
         </a>
