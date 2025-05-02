@@ -17,6 +17,7 @@ option.
 | Name                                                    | Rule                        | Fixable |
 |---------------------------------------------------------|-----------------------------|:-------:|
 | [Allowed Tags](#allowed-tags)                           | `allowed-tags`              |    ❌    | 
+| [Disallowed Tags](#disallowed-tags)                     | `disallowed-tags`           |    ❌    | 
 | [Indentation](#indentation)                             | `indentation`               |    ✅    |
 | [Max Scenarios](#max-scenarios)                         | `max-scenarios`             |    ❌    |
 | [New Line at EOF](#new-line-at-eof)                     | `new-line-at-eof`           |    ✅    |
@@ -67,6 +68,35 @@ export default {
   rules: {
     'allowed-tags': ['error', '@development'],
   }
+}
+```
+
+<hr>
+
+### Disallowed Tags
+
+Restrict which tags are **not allowed** in feature files by specifying a list. This rule
+checks for invalid tags at both the feature level and the scenario level.
+
+**Examples**
+
+Enable the rule with arguments
+
+```typescript
+export default {
+  rules: {
+    'disallowed-tags': ['@development'],
+  },
+}
+```
+
+Enable the rule and set severity
+
+```typescript
+export default {
+  rules: {
+    'disallowed-tags': ['error', '@development'],
+  },
 }
 ```
 
