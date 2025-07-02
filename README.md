@@ -40,6 +40,7 @@
   * [Reporter Configuration](#reporter-configuration)
 * [Contributing](#contributing)
 * [Testing](#testing)
+* [Contributors](#contributors)
 
 # Installation
 Gherklin can be installed either via NPM or Yarn
@@ -242,3 +243,30 @@ Unit tests can be ran with `npm test`.
 
 Acceptance tests can be ran with `npm run acceptance`. These include Gherkin feature files
 to test the various built in rules.
+
+# Contributors
+
+<table>
+  <tbody>
+    <tr>
+      <td align="center">
+        <a href="https://github.com/cjmarkham" target="_blank">
+          <img src="https://avatars.githubusercontent.com/u/604017?s=100" width="100" />
+          <p><strong>cjmarkham</strong></p>
+        </a>
+      </td>
+      <td align="center">
+        <a href="https://github.com/osdamv" target="_blank">
+          <img src="https://avatars.githubusercontent.com/u/4120796?s=100" width="100" />
+          <p><strong>osdamv</strong></p>
+        </a>
+      </td>
+      <td align="center">
+        <a href="https://github.com/Antoineio" target="_blank">
+          <img src="https://avatars.githubusercontent.com/u/112733792?s=100" width="100" />
+          <p><strong>Antoineio</strong></p>
+        </a>
+      </td>
+    </tr>
+  </tbody>
+</table>
