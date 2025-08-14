@@ -19,6 +19,7 @@ export default {
         but: 5,
         exampleTableHeader: 7,
         exampleTableBody: 7,
+        scenarioOutline: 3,
       },
     ],
     'new-line-at-eof': 'warn',
