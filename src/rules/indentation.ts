@@ -43,14 +43,16 @@ export default class Indentation implements Rule {
         }
       }
 
-      if (child.scenario && args.scenario !== undefined) {
-        const scenarioType = child.scenario.keyword === 'Scenario Outline' ? 'scenarioOutline' : 'Scenario'
-        if (child.scenario.location.column !== args[scenarioType]) {
-          document.addError(
-            this,
-            `Invalid indentation for ${child.scenario.keyword}. Got ${child.scenario.location.column}, wanted ${args[scenarioType]}`,
-            child.scenario.location,
-          )
+      if (child.scenario) {
+        const scenarioType = child.scenario.keyword === 'Scenario Outline' ? 'scenarioOutline' : 'scenario'
+        if (scenarioType in args) {
+          if (child.scenario.location.column !== args[scenarioType]) {
+            document.addError(
+              this,
+              `Invalid indentation for ${scenarioType}. Got ${child.scenario.location.column}, wanted ${args[scenarioType]}`,
+              child.scenario.location,
+            )
+          }
         }
       }
 
