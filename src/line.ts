@@ -1,5 +1,5 @@
 import { dialects } from '@cucumber/gherkin'
-import {camelise} from "./utils";
+import { camelise } from './utils'
 
 export default class Line {
   public keyword: string = ''

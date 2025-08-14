@@ -17,7 +17,7 @@ export const camelise = (str: string): string => str
   .split(' ')
   .map((e,i) => i
       ? e.charAt(0).toUpperCase() + e.slice(1).toLowerCase()
-      : e.toLowerCase()
+      : e.toLowerCase(),
   )
   .join('')
 
