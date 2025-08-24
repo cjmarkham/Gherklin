@@ -13,6 +13,14 @@ export const getFiles = async (dir: string, ext: string): Promise<Array<string>>
   return Array.prototype.concat(...files)
 }
 
+export const camelise = (str: string): string => str
+  .split(' ')
+  .map((e,i) => i
+      ? e.charAt(0).toUpperCase() + e.slice(1).toLowerCase()
+      : e.toLowerCase(),
+  )
+  .join('')
+
 // https://gist.github.com/keesey/e09d0af833476385b9ee13b6d26a2b84
 export function levenshtein(a: string, b: string): number {
   const an = a ? a.length : 0

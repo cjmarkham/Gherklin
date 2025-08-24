@@ -43,13 +43,16 @@ export default class Indentation implements Rule {
         }
       }
 
-      if (child.scenario && args.scenario !== undefined) {
-        if (child.scenario.location.column !== args.scenario) {
-          document.addError(
-            this,
-            `Invalid indentation for scenario. Got ${child.scenario.location.column}, wanted ${args.scenario}`,
-            child.scenario.location,
-          )
+      if (child.scenario) {
+        const scenarioType = child.scenario.keyword === 'Scenario Outline' ? 'scenarioOutline' : 'scenario'
+        if (scenarioType in args) {
+          if (child.scenario.location.column !== args[scenarioType]) {
+            document.addError(
+              this,
+              `Invalid indentation for ${scenarioType}. Got ${child.scenario.location.column}, wanted ${args[scenarioType]}`,
+              child.scenario.location,
+            )
+          }
         }
       }
 
@@ -122,7 +125,7 @@ export default class Indentation implements Rule {
     const expectedIndentation = this.schema.args as GherkinKeywordNumericals
 
     document.lines.forEach((line: Line, index: number) => {
-      const expected = expectedIndentation[line.keyword.trim().toLowerCase()]
+      const expected = expectedIndentation[line.safeKeyword]
       if (expected) {
         document.lines[index].indentation = expected - 1
       }

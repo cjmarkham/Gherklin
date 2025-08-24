@@ -44,14 +44,12 @@ Feature: Indentation
     Given the following feature file
       """
       Feature: Invalid Tag
-      Scenario: Doing something
-          Given I do something
-         When I do another thing
-                Then I should have done something
-             And another thing
-       But not done nothing
+      Scenario Outline: Doing something
       """
     When Gherklin is ran with the following configuration
-      | rules                                                                                                | fix  |
-      | {"indentation": {"feature": 1, "scenario": 3, "given": 5, "when": 5, "then": 5, "and": 5, "but": 5}} | true |
-    Then there is 0 files with errors
+      | rules                                                                                                                       | fix  |
+      | {"indentation": {"feature": 1, "scenario": 3, "given": 5, "when": 5, "then": 5, "and": 5, "but": 5, "scenarioOutline": 3}} | true |
+    Then there are 0 files with errors
+    And the file has the content
+      | line | content                           |
+      | 2    | Scenario Outline: Doing something |

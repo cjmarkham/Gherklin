@@ -16,6 +16,7 @@ export const keywordInts = z
     but: z.number(),
     exampleTableHeader: z.number(),
     exampleTableBody: z.number(),
+    scenarioOutline: z.number(),
   })
   .partial()
   .strict()
