@@ -8,13 +8,12 @@ on:
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
-
+    needs: define-matrix
     strategy:
       matrix:
-        node-version: [22.x]
-
+        node-version: ${{ fromJSON(needs.define-matrix.outputs.nodeVersions) }}
+        os: ${{ fromJSON(needs.define-matrix.outputs.osVersions) }}
+    runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v4
     - name: Use Node.js ${{ matrix.node-version }}

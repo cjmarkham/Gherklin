@@ -1,0 +1,24 @@
+name: Shared matrix
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  define-matrix:
+    runs-on: ${{ steps.osVersions.outputs.osVersions }}
+
+    outputs:
+      nodeVersions: ${{ steps.nodeVersions.outputs.nodeVersions }}
+
+    steps:
+      - name: Define Node Versions
+        id: nodeVersions
+        run: |
+          echo 'nodeVersions=["22.x", "24.x"]' >> "$GITHUB_OUTPUT"
+      - name: Define OS Versions
+        id: osVersions
+        run: |
+          echo 'osVersions=["ubuntu-latest", "windows"]' >> "$GITHUB_OUTPUT"

@@ -8,10 +8,11 @@ on:
 
 jobs:
   build:
+    needs: define-matrix
     strategy:
       matrix:
-        node-version: [22.x]
-        os: [ubuntu-latest, windows-latest]
+        node-version: ${{ fromJSON(needs.define-matrix.outputs.nodeVersions) }}
+        os: ${{ fromJSON(needs.define-matrix.outputs.osVersions) }}
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v4
