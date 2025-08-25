@@ -30,5 +30,6 @@ export default {
     'no-empty-file': 'warn',
     'no-trailing-spaces': 'warn',
     'no-unnamed-scenarios': 'warn',
+    'aligned-datatables': 'warn',
   },
 }
