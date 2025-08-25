@@ -126,6 +126,9 @@ export default {
       but: 5,
       exampleTableHeader: 7,
       exampleTableBody: 7,
+      dataTable: 7,
+      featureTag: 1,
+      scenarioTag: 3,
     }
   }
 }
