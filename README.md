@@ -47,6 +47,7 @@ yarn add gherklin
 
 Gherklin currently supports the following `Node` versions:
 * 22.x
+* 24.x
 
 Other versions may work, but are not tested.
 
