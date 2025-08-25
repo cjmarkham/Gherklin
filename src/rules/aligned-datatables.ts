@@ -4,8 +4,8 @@ import Rule from '../rule'
 import { RawSchema, AcceptedSchema } from '../types'
 import Document from '../document'
 
-export default class MatchingPipes implements Rule {
-  public readonly name: string = 'matching-pipes'
+export default class AlignedDatatables implements Rule {
+  public readonly name: string = 'aligned-datatables'
 
   public readonly acceptedSchema: AcceptedSchema = switchOrSeveritySchema
 

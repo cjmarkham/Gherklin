@@ -9,9 +9,9 @@ import { mkdirSync } from 'fs'
 import path from 'node:path'
 
 After(function () {
-  // this.featureFiles.forEach((featureFile) => {
-  //   rmSync(featureFile)
-  // })
+  this.featureFiles.forEach((featureFile) => {
+    rmSync(featureFile)
+  })
 })
 
 Before(function () {

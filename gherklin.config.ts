@@ -27,6 +27,6 @@ export default {
     'no-empty-file': 'warn',
     'no-trailing-spaces': 'warn',
     'no-unnamed-scenarios': 'warn',
-    'matching-pipes': 'warn',
+    'aligned-datatables': 'warn',
   },
 }
