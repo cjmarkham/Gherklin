@@ -16,6 +16,7 @@ option.
 
 | Name                                                    | Rule                        | Fixable |
 |---------------------------------------------------------|-----------------------------|:-------:|
+| [Aligned Data Tables](#aligned-datatables)              | `aligned-datatables`        |    ❌    | 
 | [Allowed Tags](#allowed-tags)                           | `allowed-tags`              |    ❌    | 
 | [Disallowed Tags](#disallowed-tags)                     | `disallowed-tags`           |    ❌    | 
 | [Indentation](#indentation)                             | `indentation`               |    ✅    |
@@ -43,6 +44,24 @@ option.
 | [Scenario Action](#scenario-action)                     | `scenario-action`           |    ❌    |
 | [Scenario Verification](#scenario-verification)         | `scenario-verification`     |    ❌    |
 | [Scenario Name Length](#scenario-name-length)           | `scenario-name-length`      |    ❌    |
+
+### Aligned Data Tables
+
+Enforces that pipes used in data tables are aligned correctly.
+
+**Examples**
+
+Enable the rule and set severity
+
+```typescript
+export default {
+  rules: {
+    'aligned-datatables': 'error',
+  }
+}
+```
+
+<hr>
 
 ### Allowed Tags
 
