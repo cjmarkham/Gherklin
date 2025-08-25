@@ -12,6 +12,7 @@ jobs:
 
     outputs:
       nodeVersions: ${{ steps.nodeVersions.outputs.nodeVersions }}
+      osVersions: ${{ steps.osVersions.outputs.osVersions }}
 
     steps:
       - name: Define Node Versions
