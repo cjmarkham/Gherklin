@@ -9,7 +9,7 @@ on:
 
 jobs:
   define-matrix:
-    runs-on: ${{ steps.osVersions.outputs.osVersions }}
+    runs-on: [ubuntu-latest]
 
     outputs:
       nodeVersions: ${{ steps.nodeVersions.outputs.nodeVersions }}
