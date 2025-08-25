@@ -1,0 +1,30 @@
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  define-matrix:
+    uses: ./define-matrix.yml
+
+  lint:
+    needs: define-matrix
+    uses: ./lint.yml
+    with:
+      nodeVersions: ${{ needs.define-matrix.outputs.nodeVersions }}
+      osVersions: ${{ needs.define-matrix.outputs.osVersions }}
+
+  test:
+    needs: define-matrix
+    uses: ./test.yml
+    with:
+      nodeVersions: ${{ needs.define-matrix.outputs.nodeVersions }}
+      osVersions: ${{ needs.define-matrix.outputs.osVersions }}
+
+  gherklin:
+    needs: define-matrix
+    uses: ./gherklin.yml
+    with:
+      nodeVersions: ${{ needs.define-matrix.outputs.nodeVersions }}
+      osVersions: ${{ needs.define-matrix.outputs.osVersions }}

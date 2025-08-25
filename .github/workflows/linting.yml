@@ -1,14 +1,17 @@
 name: Lint
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+  workflow_call:
+    inputs:
+      nodeVersions:
+        required: true
+        type: string
+      osVersions:
+        required: true
+        type: string
 
 jobs:
-  build:
-    needs: define-matrix
+  lint:
     strategy:
       matrix:
         node-version: ${{ fromJSON(needs.define-matrix.outputs.nodeVersions) }}
