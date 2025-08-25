@@ -10,7 +10,7 @@ jobs:
 
   lint:
     needs: define-matrix
-    uses: ./.github/workflows/lint.yml
+    uses: ./.github/workflows/linting.yml
     with:
       nodeVersions: ${{ needs.define-matrix.outputs.nodeVersions }}
       osVersions: ${{ needs.define-matrix.outputs.osVersions }}
