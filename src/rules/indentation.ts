@@ -22,6 +22,16 @@ export default class Indentation implements Rule {
       return
     }
 
+    if (args.featureTag && document.feature.tags.length) {
+      if (document.feature.tags[0].location.column !== args.featureTag) {
+        document.addError(
+          this,
+          `Invalid indentation for feature tags. Got ${document.feature.tags[0].location.column}, wanted ${args.featureTag}`,
+          document.feature.tags[0].location,
+        )
+      }
+    }
+
     if (args.feature !== undefined) {
       if (document.feature.location.column !== args.feature) {
         document.addError(
@@ -54,6 +64,16 @@ export default class Indentation implements Rule {
             )
           }
         }
+
+        if (args.scenarioTag && child.scenario.tags.length) {
+          if (child.scenario.tags[0].location.column !== args.scenarioTag) {
+            document.addError(
+              this,
+              `Invalid indentation for ${scenarioType} tags. Got ${child.scenario.tags[0].location.column}, wanted ${args.scenarioTag}`,
+              child.scenario.tags[0].location,
+            )
+          }
+        }
       }
 
       if (child.background) {
@@ -62,7 +82,7 @@ export default class Indentation implements Rule {
             if (step.location.column !== args[step.keyword.toLowerCase()]) {
               document.addError(
                 this,
-                `Invalid indentation for "${step.keyword.toLowerCase()}". Got ${step.location.column}, wanted ${args[step.keyword.toLowerCase()]}`,
+                `Invalid indentation for ${step.keyword.toLowerCase()}. Got ${step.location.column}, wanted ${args[step.keyword.toLowerCase()]}`,
                 child.background.location,
               )
             }
@@ -77,29 +97,31 @@ export default class Indentation implements Rule {
             if (step.location.column !== args[stepNormalized]) {
               document.addError(
                 this,
-                `Invalid indentation for "${stepNormalized}". Got ${step.location.column}, wanted ${args[stepNormalized]}`,
+                `Invalid indentation for ${stepNormalized}. Got ${step.location.column}, wanted ${args[stepNormalized]}`,
                 step.location,
+              )
+            }
+          }
+
+          if (step.dataTable && args.dataTable !== undefined) {
+            if (step.dataTable.location.column !== args.dataTable) {
+              document.addError(
+                this,
+                `Invalid indentation for ${stepNormalized} data table. Got ${step.dataTable.location.column}, wanted ${args.dataTable}`,
+                step.dataTable.location,
               )
             }
           }
         })
 
-        if (child.scenario.examples && args.examples !== undefined) {
+        if (child.scenario.examples) {
           child.scenario.examples.forEach((example) => {
-            if (example.location.column !== args.examples) {
-              document.addError(
-                this,
-                `Invalid indentation for "examples". Got ${example.location.column}, wanted ${args.examples}`,
-                example.location,
-              )
-            }
-
             if (example.tableHeader && args.exampleTableHeader !== undefined) {
               if (example.tableHeader.location.column !== args.exampleTableHeader) {
                 document.addError(
                   this,
-                  `Invalid indentation for "example table header". Got ${example.tableHeader.location.column}, wanted ${args.exampleTableHeader}`,
-                  example.location,
+                  `Invalid indentation for example table header. Got ${example.tableHeader.location.column}, wanted ${args.exampleTableHeader}`,
+                  example.tableHeader.location,
                 )
               }
             }
@@ -109,8 +131,8 @@ export default class Indentation implements Rule {
                 if (row.location.column !== args.exampleTableBody) {
                   document.addError(
                     this,
-                    `Invalid indentation for "example table row". Got ${row.location.column}, wanted ${args.exampleTableBody}`,
-                    example.location,
+                    `Invalid indentation for example table row. Got ${row.location.column}, wanted ${args.exampleTableBody}`,
+                    row.location,
                   )
                 }
               })
