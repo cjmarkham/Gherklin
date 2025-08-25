@@ -9,7 +9,7 @@ export const getFiles = async (dir: string, ext: string): Promise<Array<string>>
 
   const files = dirents
     .filter((dirent: Dirent) => dirent.name.endsWith(`.${ext}`))
-    .map((dirent: Dirent) => `${dirent.path}/${dirent.name}`)
+    .map((dirent: Dirent) => `${dirent.parentPath}/${dirent.name}`)
   return Array.prototype.concat(...files)
 }
 
