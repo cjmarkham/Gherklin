@@ -1,16 +1,26 @@
+import chalk from 'chalk'
+import winston from 'winston'
 import { expect } from 'chai'
-import * as sinon from 'sinon'
+import { Writable } from 'node:stream'
 
+import logger from '../../src/logger'
 import STDOUTReporter from '../../src/reporters/stdout_reporter'
 import { LintError, Severity } from '../../src'
-import logger from '../../src/logger'
-import chalk from 'chalk'
+
+const logs: string[] = []
+const captureStream = new Writable({
+  write(chunk, _enc, cb) {
+    logs.push(chunk.toString())
+    cb()
+  },
+})
 
 describe('STDOUTReporter', () => {
   describe('write', () => {
-    let loggerSpy = sinon.spy(logger, 'error')
-
     it('successfully writes the errors to STDOUT', () => {
+      const oldTransports = logger.transports.slice()
+      logger.clear().add(new winston.transports.Stream({ stream: captureStream }))
+
       const reporter = new STDOUTReporter({
         configDirectory: '.',
       })
@@ -27,12 +37,17 @@ describe('STDOUTReporter', () => {
         } as LintError,
       ])
 
-      reporter.write()
-      expect(loggerSpy.calledOnce).to.eq(true)
+        reporter.write()
 
-      const expectedOutput = `\n${chalk.underline('some/path.ts')}\n1:0 ${chalk.yellow('warn')} This is a fake error ${chalk.gray('some-rule')}`
-      const args = loggerSpy.args[0][0]
-      expect(args).to.eq(expectedOutput)
+        logger.clear();
+        oldTransports.forEach(t => logger.add(t));
+
+      const expectedOutput = `
+${chalk.underline('some/path.ts')}
+1:0 ${chalk.yellow('warn')} This is a fake error ${chalk.gray('some-rule')}
+${chalk.bold.yellow('\n1 problems (0 errors, 1 warning)')}
+`
+      expect(logs.join('')).to.eq(expectedOutput)
     })
   })
 })

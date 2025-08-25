@@ -59,9 +59,7 @@ export default class STDOUTReporter extends Reporter {
       }
 
       logger.info(
-        color(
-          `\n${totalErrors + totalWarns} problems (${totalErrors} error${totalErrors > 1 || totalErrors === 0 ? 's' : ''}, ${totalWarns} warning${totalWarns > 1 || totalWarns === 0 ? 's' : ''})`,
-        ),
+        color(`\n${totalErrors + totalWarns} problems (${totalErrors} error${totalErrors > 1 || totalErrors === 0 ? 's' : ''}, ${totalWarns} warning${totalWarns > 1 || totalWarns === 0 ? 's' : ''})`),
       )
     }
   }
