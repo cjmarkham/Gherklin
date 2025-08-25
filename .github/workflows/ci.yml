@@ -1,0 +1,97 @@
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  define-matrix:
+    runs-on: ubuntu-latest
+
+    outputs:
+      nodeVersions: ${{ steps.nodeVersions.outputs.nodeVersions }}
+      osVersions: ${{ steps.osVersions.outputs.osVersions }}
+
+    steps:
+      - name: Define Node Versions
+        id: nodeVersions
+        run: |
+          echo 'nodeVersions=["22.x", "24.x"]' >> "$GITHUB_OUTPUT"
+      - name: Define OS Versions
+        id: osVersions
+        run: |
+          echo 'osVersions=["ubuntu-latest", "windows-latest"]' >> "$GITHUB_OUTPUT"
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js 22.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: 'npm'
+      - name: Install Dependencies
+        run: npm ci
+      - name: Run TypeScript Linting
+        run: npm run eslint
+
+  unit-tests:
+    needs: define-matrix
+    strategy:
+      matrix:
+        node-version: ${{ fromJSON(needs.define-matrix.outputs.nodeVersions) }}
+        os: ${{ fromJSON(needs.define-matrix.outputs.osVersions) }}
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - name: Install Dependencies
+        run: npm ci
+      - name: Run Unit Tests
+        run: npm test
+
+  acceptance-tests:
+    needs: define-matrix
+    strategy:
+      matrix:
+        node-version: ${{ fromJSON(needs.define-matrix.outputs.nodeVersions) }}
+        os: ${{ fromJSON(needs.define-matrix.outputs.osVersions) }}
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - name: Install Dependencies
+        run: npm ci
+      - name: Run Acceptance Tests
+        run: npm run acceptance
+
+  gherklin:
+    needs: define-matrix
+    strategy:
+      matrix:
+        node-version: ${{ fromJSON(needs.define-matrix.outputs.nodeVersions) }}
+        os: ${{ fromJSON(needs.define-matrix.outputs.osVersions) }}
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - name: Install Dependencies
+        run: npm ci
+      - name: Run Gherklin
+        run: npm run gherklin
