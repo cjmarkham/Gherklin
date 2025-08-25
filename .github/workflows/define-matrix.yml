@@ -23,4 +23,4 @@ jobs:
       - name: Define OS Versions
         id: osVersions
         run: |
-          echo 'osVersions=["ubuntu-latest", "windows"]' >> "$GITHUB_OUTPUT"
+          echo 'osVersions=["ubuntu-latest", "windows-latest"]' >> "$GITHUB_OUTPUT"
