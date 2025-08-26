@@ -71,12 +71,34 @@ export interface GherklinConfiguration {
 
 export interface Report {
   title: string
-  files: Array<ReportFile>
-  totalErrors: number
-  totalWarns: number
-  totalLines: number
-  rules: {
-    [name: string]: number
+  generated: string
+  version: string
+  topRules: []
+  summary: {
+    files: number
+    errors: number
+    warnings: number
+    totalIssues: number
+    donut?: any
+  }
+  files: {
+    [key: string]: {
+      path: string
+      issues: Array<ReportIssue>
+      summary: {
+        errors: number,
+        warnings: number,
+      }
+    }
+  }
+}
+
+export interface ReportIssue {
+  rule: string
+  severity: string
+  location: {
+    line: number
+    column: number
   }
 }
 

@@ -1,3 +1,4 @@
 node_modules
 cucumber-report.html
 tests/acceptance/tmp
+gherklin-report.html

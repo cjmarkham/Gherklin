@@ -1,20 +1,20 @@
 export default {
   reporter: {
-    type: 'stdout',
+    type: 'html',
   },
   featureDirectory: './tests/acceptance/features',
   rules: {
     indentation: [
       'warn',
       {
-        feature: 1,
+        feature: 3,
         background: 3,
         scenario: 3,
         step: 5,
         examples: 5,
-        given: 5,
+        given: 1,
         when: 5,
-        then: 5,
+        then: 1,
         and: 5,
         but: 5,
         exampleTableHeader: 7,
@@ -27,6 +27,9 @@ export default {
     'no-empty-file': 'warn',
     'no-trailing-spaces': 'warn',
     'no-unnamed-scenarios': 'warn',
-    'aligned-datatables': 'warn',
+    'aligned-datatables': 'error',
+    'filename-snake-case': 'error',
+    'disallowed-tags': ['@development'],
+    'feature-description': 'error',
   },
 }

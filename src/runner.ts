@@ -22,6 +22,8 @@ export default class Runner {
 
   private ruleLoader: RuleLoader
 
+  private startedAt: number
+
   constructor(gherklinConfig?: GherklinConfiguration) {
     if (gherklinConfig) {
       this.config = new Config(gherklinConfig)
@@ -70,6 +72,8 @@ export default class Runner {
   }
 
   public run = async (): Promise<Results> => {
+    this.startedAt = new Date().getTime()
+
     for (const filename of this.gherkinFiles) {
       const document = new Document(filename)
       await document.load()
@@ -79,6 +83,8 @@ export default class Runner {
         this.reporter.addErrors(filename, ruleErrors)
       }
     }
+
+    this.reporter.totalTime = new Date().getTime() - this.startedAt
 
     if (this.reporter.errors.size) {
       let maxAllowedErrors = this.config.maxErrors ?? 0

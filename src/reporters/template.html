@@ -1,366 +1,201 @@
-<!DOCTYPE html>
+<!doctype html>
+<html lang="en">
 <head>
-  <title>Gherklin Report</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>{{title}}</title>
   <style>
-      :root {
-          --color-bg: white;
-          --color-grey: #ddd;
-          --color-bg-muted: rgb(246, 248, 250);
-          --color-file-info-bg: #f1f8ff;
-          --color-font-muted: #888;
-          --color-error: indianred;
-          --color-warn: #ccb021;
-          --width-container: 1200px;
-          --width-gutter: 20px;
+      :root{
+          --bg:#0b0c0f;--card:#12141a;--muted:#8b93a1;--text:#eef2f8;--subtle:#c7cedb;
+          --ok:#2ecc71;--warn:#f1c40f;--err:#e74c3c;--info:#3498db;--accent:#8bdc65;
+          --chip:#1a1f29;--border:#232733;--code:#0c0f14;--tableOdd:#0f131a
+      }
+      @media (prefers-color-scheme: light){
+          :root{
+              --bg:#f7f8fb;--card:#ffffff;--muted:#5a6576;--text:#0a0c10;--subtle:#2f3640;
+              --ok:#177d44;--warn:#8e6b00;--err:#a82922;--info:#1c63a8;--accent:#2e7d32;
+              --chip:#eef1f6;--border:#dfe5ee;--code:#f3f5f9;--tableOdd:#f7f9fc
+          }
+      }
+      *{box-sizing:border-box}
+      html,body{height:100%}
+      body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif}
+      header{padding:24px 20px;border-bottom:1px solid var(--border);background:linear-gradient(180deg, rgba(139,220,101,0.08), transparent 60%)}
+      .title{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+      .title h1{margin:0;font-size:22px;font-weight:700;letter-spacing:.2px}
+      .badge{font-size:12px;padding:2px 8px;border-radius:999px;background:var(--chip);color:var(--subtle);border:1px solid var(--border)}
+      .meta{margin-top:6px;color:var(--muted);font-size:12px}
+      .container{max-width:1200px;margin:0 auto;padding:20px}
+
+      .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+      .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px}
+      .card h3{margin:0 0 6px;font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.3px;text-transform:uppercase}
+      .card .num{font-size:24px;font-weight:800}
+      .ok{color:var(--ok)} .warn{color:var(--warn)} .err{color:var(--err)} .info{color:var(--info)}
+
+      .charts{display:grid;grid-template-columns:1.1fr 1fr;gap:12px;margin:12px 0}
+      .chart{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px}
+      .chart h3{margin:0 0 10px;font-size:12px;color:var(--muted);text-transform:uppercase}
+      .legend{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;color:var(--muted);font-size:12px}
+      .legend span{display:inline-flex;gap:6px;align-items:center}
+      .dot{width:10px;height:10px;border-radius:50%}
+
+      /* Donut (CSS variables, no TS math) */
+      .donut .ring{ stroke: var(--chip); stroke-width: 18 }
+      .donut .seg{ fill:none; stroke-width:18; stroke-linecap:butt }
+      .donut .seg.err{
+          stroke: var(--err);
+          stroke-dasharray: var(--errCount) calc(var(--total) - var(--errCount));
+          stroke-dashoffset: 0;
+      }
+      .donut .seg.warn{
+          stroke: var(--warn);
+          stroke-dasharray: var(--warnCount) calc(var(--total) - var(--warnCount));
+          stroke-dashoffset: calc(-1 * var(--errCount));
+      }
+      .donut .seg.info{
+          stroke: var(--info);
+          /* Info is whatever is left over */
+          stroke-dasharray: calc(var(--total) - var(--errCount) - var(--warnCount))
+          calc(var(--errCount) + var(--warnCount));
+          stroke-dashoffset: calc(-1 * (var(--errCount) + var(--warnCount)));
       }
 
-      body > header {
-          background: cornflowerblue;
-          color: white;
-          padding: 1rem;
-          margin-bottom: 1rem;
-          display: flex;
-          justify-content: space-between;
-      }
+      /* Top rules bars (pure CSS) */
+      .bars{display:flex;flex-direction:column;gap:8px}
+      .bar{display:grid;grid-template-columns:2fr 4fr 60px;gap:10px;align-items:center}
+      .bar-label{font-size:12px;color:var(--subtle);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+      .bar-track{height:12px;border-radius:999px;background:var(--chip);border:1px solid var(--border);overflow:hidden}
+      .bar-fill{height:100%;background:var(--info)}
 
-      body {
-          font-family: Verdana, Arial, sans-serif;
-          line-height: 1.6;
-          margin: 0;
-          padding: 0;
-          background-color: var(--color-bg);
-      }
+      details.file{margin:10px 0;border:1px solid var(--border);border-radius:12px;background:var(--card);overflow:hidden}
+      summary{list-style:none;cursor:pointer;padding:12px 14px;display:flex;gap:10px;align-items:center;font-weight:600}
+      summary::-webkit-details-marker{display:none}
+      .file-path{font-family:ui-monospace,monospace;color:var(--subtle);font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+      .chips{margin-left:auto;display:flex;gap:8px;align-items:center}
+      .chip{font-size:12px;padding:2px 8px;border-radius:999px;background:var(--chip);border:1px solid var(--border);color:var(--subtle)}
+      .table-wrap{overflow:auto;border-top:1px solid var(--border)}
+      table{width:100%;border-collapse:collapse}
+      thead th{position:sticky;top:0;background:var(--card);border-bottom:1px solid var(--border);text-align:left;font-size:12px;color:var(--muted);padding:10px}
+      tbody td{padding:10px;border-bottom:1px solid var(--border);vertical-align:top}
+      tbody tr:nth-child(odd){background:var(--tableOdd)}
+      .sev{font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;display:inline-block}
+      .sev.error{background:rgba(231,76,60,.15);color:var(--err);border:1px solid rgba(231,76,60,.3)}
+      .sev.warn{background:rgba(241,196,15,.15);color:var(--warn);border:1px solid rgba(241,196,15,.35)}
+      .sev.info{background:rgba(52,152,219,.15);color:var(--info);border:1px solid rgba(52,152,219,.35)}
+      .rule{font-family:ui-monospace,monospace;font-size:12px}
 
-      .sidebar {
-          margin-right: 1rem;
-          max-width: 18rem;
+      footer{padding:30px 20px;color:var(--muted);text-align:center;border-top:1px solid var(--border)}
+      @media (max-width: 900px){
+          .grid{grid-template-columns:repeat(2,1fr)}
+          .charts{grid-template-columns:1fr}
       }
-
-      .sidebar header {
-          background: var(--color-file-info-bg);
-          padding: 0.5rem;
-          border-bottom: 1px solid var(--color-grey);
-      }
-
-      .sidebar header > p {
-          margin: 0;
-      }
-
-      .sidebar-content {
-          padding: 0.5rem;
-      }
-
-      .stat {
-          display: flex;
-          justify-content: space-between;
-          font-size: 14px;
-      }
-
-      .stat p {
-          margin: 0;
-      }
-
-      .sidebar > div {
-          margin-bottom: 1rem;
-      }
-
-      .sidebar input#search {
-          border: 1px solid var(--color-grey);
-          padding: 0.5rem;
-          width: 12rem;
-      }
-
-      .sidebar-content > div {
-          margin-bottom: 1rem;
-      }
-
-      .container {
-          margin: 0 auto;
-          width: var(--width-container);
-          display: flex;
-      }
-
-      .file-info {
-          padding: 0.5rem;
-          background: var(--color-file-info-bg);
-          display: flex;
-          justify-content: space-between;
-          cursor: pointer;
-          user-select: none;
-      }
-
-      .file-info svg {
-          color: var(--color-font-muted);
-      }
-
-      .file-info p {
-          margin: 0;
-      }
-
-      .file-info, .error, table, .warn, .sidebar > div {
-          border: 1px solid var(--color-grey);
-      }
-
-      .file-info.error, .error {
-          border-left: 5px solid var(--color-error);
-      }
-      .file-info.warn, .warn {
-          border-left: 5px solid var(--color-warn);
-      }
-
-      .file {
-          margin-bottom: 1rem;
-      }
-
-      table {
-          border-collapse: collapse;
-          border-top: 0;
-      }
-
-      .gutter {
-          width: var(--width-gutter);
-          line-height: 1.4;
-          font-family: monospace;
-          border-right: 1px solid var(--color-grey);
-          text-align: right;
-          padding: 0 0.5rem;
-          background: var(--color-bg-muted);
-          vertical-align: top;
-      }
-
-      .line {
-          font-family: monospace;
-          padding: 0 0.5rem;
-          width: calc(var(--width-container) - var(--width-gutter));
-      }
-
-      .line pre {
-          margin: 0;
-      }
-
-      td.has-error > p {
-          text-decoration: var(--color-error) wavy underline;
-      }
-
-      .keyword {
-          color: cornflowerblue;
-      }
-
-      td .error, td .warn {
-          vertical-align: middle;
-          padding: 0.5rem;
-          margin: 0.5rem 0;
-      }
-
-      td .error svg {
-          color: var(--color-error);
-          width: 2rem;
-      }
-      td .warn svg {
-          color: var(--color-warn);
-          width: 2rem;
-      }
-
-      td .error > header p, td .warn > header p {
-          display: inline-block;
-          vertical-align: top;
-          margin: 0.1rem 0 0;
-      }
-
-      .rule-name, .text-muted {
-          color: var(--color-font-muted);
-      }
-
-      td .error .line-info {
-          color: var(--color-error);
-          font-weight: 600;
-      }
-      td .warn .line-info {
-          color: var(--color-warn);
-          font-weight: 600;
-      }
-
-      .error-count, .warn-count {
-          border-radius: 100%;
-          color: white;
-          padding: 0 0.5rem;
-      }
-      .error-count {
-          background: var(--color-error);
-      }
-      .warn-count {
-          background: var(--color-warn);
-      }
-
-      .file .file-content {
-          display: none;
-      }
-
-      .file.active .file-content {
-          display: block;
-      }
-
-      .up-arrow {
-          display: none;
-      }
-      .file.active .up-arrow {
-          display: block;
-      }
-      .file.active .down-arrow {
-          display: none;
-      }
-      .highlight {
-          background: yellow;
-      }
+      @media print{ body{background:#fff;color:#000} }
   </style>
 </head>
 <body>
 <header>
-  <div class="container">
-    <h1>Gherklin Report</h1>
+  <div class="title">
+    <h1>{{title}}</h1>
+    <span class="badge">Generated: {{generated}}</span>
+    <span class="badge">Version: {{version}}</span>
   </div>
+  <div class="meta">Feature quality report - Generated by Gherklin</div>
 </header>
+
 <div class="container">
-  <div class="sidebar">
-    <div>
-      <header>
-        Statistics
-      </header>
-      <div class="sidebar-content">
-        <div class="stat">
-          <p>Lines checked</p>
-          <p><strong>{{totalLines}}</strong></p>
+  <section class="grid" aria-label="summary">
+    <div class="card"><h3>Files scanned</h3><div class="num">{{summary.files}}</div></div>
+    <div class="card"><h3 class="err">Errors found</h3><div class="num err">{{summary.errors}}</div></div>
+    <div class="card"><h3 class="warn">Warnings found</h3><div class="num warn">{{summary.warnings}}</div></div>
+    <div class="card"><h3>Took (seconds)</h3><div class="num">{{summary.totalTime}}s</div></div>
+  </section>
+
+  <section class="charts">
+    <div class="chart">
+      <h3>Severity Overview</h3>
+      <svg viewBox="0 0 140 140" width="100%" height="220" role="img" aria-label="Severity donut chart">
+        <g transform="translate(70 70) rotate(-90)">
+          <circle r="{{summary.donut.r}}" fill="none" stroke="var(--chip)" stroke-width="{{summary.donut.stroke}}"></circle>
+          {{#each summary.donut.segments}}
+          <circle
+            r="{{../summary.donut.r}}"
+            fill="none"
+            style="stroke: {{color}}; stroke-width: {{../summary.donut.stroke}}px; stroke-linecap: butt;"
+            stroke-dasharray="{{dasharray}}"
+            stroke-dashoffset="{{dashoffset}}"
+          />
+          {{/each}}
+        </g>
+
+        <text x="70" y="74" text-anchor="middle" font-size="18" font-weight="700" fill="var(--text)">{{summary.totalIssues}}</text>
+        <text x="70" y="94" text-anchor="middle" font-size="10" fill="var(--muted)">Issues</text>
+      </svg>
+      <div class="legend">
+        <span><span class="dot" style="background:var(--err)"></span> Errors</span>
+        <span><span class="dot" style="background:var(--warn)"></span> Warnings</span>
+      </div>
+      <div class="meta">
+        Errors: {{summary.errors}} • Warnings: {{summary.warnings}}
+      </div>
+    </div>
+
+    <!-- Top rules -->
+    <div class="chart">
+      <h3>Top Rules (by occurrences)</h3>
+      <div class="bars">
+        {{#each topRules}}
+        <div class="bar">
+          <div class="bar-label" title="{{rule}}">{{rule}}</div>
+          <div class="bar-track"><div class="bar-fill" style="width: {{percent}}%"></div></div>
+          <div class="bar-value">{{count}}</div>
         </div>
-        <div class="stat">
-          <p>Errors</p>
-          <p><strong>{{totalErrors}}</strong></p>
-        </div>
-        <div class="stat">
-          <p>Warns</p>
-          <p><strong>{{totalWarns}}</strong></p>
-        </div>
-        {{#each this.rules}}
-          <div class="stat">
-            <p>{{@key}}</p>
-            <p><strong>{{this}}</strong></p>
-          </div>
         {{/each}}
       </div>
+      <div class="meta">Showing top {{topRules.length}} rules.</div>
     </div>
-    <div>
-      <header>
-        <p>Options</p>
-      </header>
-      <div class="sidebar-content">
-        <div>
-          <input type="text" id="search" placeholder="Search files...">
-        </div>
-        <div>
-          <input id="show-errors" type="checkbox" checked>
-          <label for="show-errors">Show errors</label>
-        </div>
-        <div>
-          <input id="show-warns" type="checkbox" checked>
-          <label for="show-warns">Show warnings</label>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="files">
+  </section>
+
+  <!-- Files & issues -->
+  <section id="files">
     {{#each files}}
-      <div class="file active">
-      <div class="file-info {{#if this.hasErrors}}error{{else}}warn{{/if}}">
-        <span class="{{#if this.hasErrors}}error{{else}}warn{{/if}}-count">{{this.issueCount}}</span>
-        <p>
-          {{this.path}}
-        </p>
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="down-arrow"><path d="m6 9 6 6 6-6"/></svg>
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="up-arrow"><path d="m18 15-6-6-6 6"/></svg>
-      </div>
-      <table class="file-content">
+    <details class="file {{#if @first}}open{{/if}}">
+    <summary>
+      <span class="file-path" title="{{path}}">{{path}}</span>
+      <span class="chips">
+            <span class="chip"><strong>{{summary.errors}}</strong> errors</span>
+            <span class="chip"><strong>{{summary.warnings}}</strong> warnings</span>
+          </span>
+    </summary>
+    <div class="table-wrap">
+      <table role="table">
+        <thead>
+        <tr>
+          <th style="width:70px">Line</th>
+          <th style="width:70px">Col</th>
+          <th style="width:100px">Severity</th>
+          <th style="width:220px">Rule</th>
+        </tr>
+        </thead>
         <tbody>
-        {{#each this.lines}}
-          <tr>
-          <td class="gutter">
-            {{this.number}}
-          </td>
-          <td class="line {{#if this.hasError}}has-error{{/if}}">
-            <pre>{{{this.content}}}</pre>
-            {{#if this.hasError}}
-              <div class="{{this.errorSeverity}}">
-                <header>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>
-                  <p class="text-muted">Failure on line {{this.number}}</p>
-                </header>
-                <p class="line-info">
-                  {{../this.path}}:{{this.number}}
-                </p>
-                <p>
-                  [{{this.ruleName}}]: {{this.ruleDescription}}
-                </p>
-              </div>
-            {{/if}}
-          </td>
+        {{#each issues}}
+        <tr>
+          <td>{{location.line}}</td>
+          <td>{{location.column}}</td>
+          <td><span class="sev {{severity}}">{{severity}}</span></td>
+          <td class="rule">{{rule}}</td>
         </tr>
         {{/each}}
         </tbody>
       </table>
     </div>
+    </details>
     {{/each}}
-  </div>
+  </section>
 </div>
 
-<script>
-  const collapsibles = document.getElementsByClassName('file-info')
-
-  for (let col of collapsibles) {
-    const parent = col.parentElement
-    parent.addEventListener('click', () => {
-      parent.classList.toggle('active')
-    })
-  }
-
-  const showErrors = document.getElementById('show-errors')
-  showErrors.addEventListener('click', (e) => {
-    const checked = e.currentTarget.checked
-    const errorFiles = document.getElementsByClassName('file-info error')
-
-    if (!checked) {
-      [...errorFiles].forEach((ef) => ef.parentNode.style.display = 'none')
-    } else {
-      [...errorFiles].forEach((ef) => ef.parentNode.style.display = 'block')
-    }
-  })
-  const showWarns = document.getElementById('show-warns')
-  showWarns.addEventListener('click', (e) => {
-    const checked = e.currentTarget.checked
-    const warnFiles = document.getElementsByClassName('file-info warn')
-
-    if (!checked) {
-      [...warnFiles].forEach((ef) => ef.parentNode.style.display = 'none')
-    } else {
-      [...warnFiles].forEach((ef) => ef.parentNode.style.display = 'block')
-    }
-  })
-
-  const search = document.getElementById('search')
-  search.addEventListener('keyup', (e) => {
-    const term = encodeURI(e.currentTarget.value)
-
-    const fileNames = document.querySelectorAll('.file-info > p');
-    [...fileNames].forEach((fn) => {
-      const wrapper = fn.parentNode.parentNode
-      const index = fn.innerText.indexOf(term)
-      if (index > -1) {
-        wrapper.style.display = 'block'
-        const original = fn.innerText
-        const before = original.slice(0, index)
-        const after = original.slice(index + term.length, original.length)
-        fn.innerHTML = before + `<span class="highlight">${term}</span>` + after
-      } else {
-        wrapper.style.display = 'none'
-      }
-    })
-  })
-</script>
+<footer>
+  Made with ❤ by Gherklin. Pure static HTML — perfect for CI artefacts.
+</footer>
 </body>
+</html>

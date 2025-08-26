@@ -1,9 +1,10 @@
 import { readFileSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
 import Handlebars from 'handlebars'
+import { version } from '../../package.json'
 
 import Reporter from './reporter'
-import { Report, ReportFile, ReportLine, Severity } from '../types'
+import { Report, ReportFile, ReportIssue, ReportLine, Severity } from '../types'
 
 export default class HTMLReporter extends Reporter {
   public override write = (): void => {
@@ -12,78 +13,105 @@ export default class HTMLReporter extends Reporter {
     const template = Handlebars.compile(templateHTML)
     const values = {
       title: this.config?.title || 'Gherklin Report',
-      files: [],
-      totalErrors: 0,
-      totalWarns: 0,
-      totalLines: 0,
-      rules: {},
+      generated: new Date().toISOString(),
+      version,
+      topRules: [],
+      summary: {
+        files: 0,
+        errors: 0,
+        warnings: 0,
+        totalIssues: 0,
+        totalTime: this.totalTime / 1000,
+      },
+      files: {},
     } as Report
 
-    for (const [key] of this.errors.entries()) {
-      const content = readFileSync(key, { encoding: 'utf-8' })
-      const lines = content.split('\n')
+    const ruleCounts = new Map<string, number>();
 
+    for (const [key] of this.errors.entries()) {
       const errors = this.errors.get(key)
       if (!errors) {
         continue
       }
 
-      const hasErrors = errors.some((e) => e.severity === Severity.error)
-      const fileInfo = {
-        path: key,
-        hasErrors,
-        lines: [],
-        issueCount: errors.length,
-      } as ReportFile
-
-      values.totalErrors += errors.map((e) => e.severity === Severity.error).length
-      values.totalWarns += errors.map((e) => e.severity === Severity.warn).length
-      values.totalLines += lines.length
-
-      lines.forEach((line: string, index: number) => {
-        const lineIssue = errors.find((e) => e.location.line === index + 1)
-
-        const lineInfo = {
-          number: index + 1,
-          hasError: lineIssue !== undefined,
-          errorSeverity: lineIssue && lineIssue.severity.toString().toLowerCase(),
-          content: this.syntaxHighlight(line),
-          ruleName: lineIssue && lineIssue.rule,
-          ruleDescription: lineIssue && lineIssue.message,
-        } as ReportLine
-
-        if (lineIssue) {
-          if (lineIssue.rule in values.rules) {
-            values.rules[lineIssue.rule] += 1
-          } else {
-            values.rules[lineIssue.rule] = 1
-          }
+      if (Object.keys(values.files).indexOf(key) == -1) {
+        values.files[key] = {
+          path: key,
+          issues: [],
+          summary: {
+            errors: 0,
+            warnings: 0,
+          },
         }
+      }
 
-        fileInfo.lines.push(lineInfo)
+      const errorTotal = errors.filter((e) => e.severity === Severity.error).length
+      const warnTotal = errors.filter((e) => e.severity === Severity.warn).length
+      values.summary.files += 1
+      values.summary.errors += errorTotal
+      values.summary.warnings += warnTotal
+      values.files[key].summary.errors = errorTotal
+      values.files[key].summary.warnings = warnTotal
+      values.summary.totalIssues += errors.length
+
+      errors.forEach((err) => {
+        const issueInfo = {
+          rule: err.rule,
+          severity: err.severity,
+          location: err.location,
+        } as ReportIssue
+
+        values.files[key].issues.push(issueInfo)
+
+        ruleCounts.set(err.rule, (ruleCounts.get(err.rule) || 0) + 1);
       })
-
-      values.files.push(fileInfo)
     }
+
+    values.summary.donut = this.computeDonut({
+      errors: values.summary.errors,
+      warnings: values.summary.warnings,
+      total: values.summary.totalIssues,
+    })
+
+    const topRaw = Array.from(ruleCounts, ([rule, count]) => ({ rule, count }))
+      .sort((a,b)=>b.count - a.count).slice(0,10)
+    const max = Math.max(1, ...topRaw.map(r=>r.count))
+    const topRules = topRaw.map(r => ({ ...r, percent: Math.round((r.count / max) * 100) }))
+    values.topRules = topRules
 
     const html = template(values)
     writeFileSync(path.resolve(this.config.configDirectory, this.config.outFile || 'gherklin-report.html'), html)
   }
 
-  private syntaxHighlight(line: string): string {
-    const keywords = ['Scenario Outline', 'Scenario', 'Feature', 'Given', 'When', 'Then', 'And', 'But', 'Rule']
-    let keyword
+  private computeDonut = (
+    totals: { errors: number; warnings: number; total: number },
+    r: number = 60,
+    stroke: number = 15,
+  ): object =>{
+    const total = Math.max(0, totals.total);
+    const C = 2 * Math.PI * r;
 
-    const keywordMatch = line.match(new RegExp(`${keywords.join('|')}`))
-    if (keywordMatch) {
-      keyword = keywordMatch[0]
-      line = line.replace(keyword, `<span class="keyword">${keyword}</span>`)
+    if (total === 0) {
+      return { r, stroke, total, segments: [] };
     }
 
-    if (line.trim().indexOf('#') === 0) {
-      line = `<span class="text-muted">${line}</span>`
-    }
+    // Order matters: error -> warn -> info
+    const parts = [
+      { key: "error", value: totals.errors, color: "var(--err)" },
+      { key: "warn",  value: totals.warnings,  color: "var(--warn)" },
+    ].filter(p => p.value > 0);
 
-    return line
+    let offsetFrac = 0;
+    const segments = parts.map(p => {
+      const frac = p.value / total;
+      const dash = C * frac;
+      const gap  = C - dash;
+      const dasharray  = `${dash.toFixed(2)} ${gap.toFixed(2)}`;
+      const dashoffset = `-${(C * offsetFrac).toFixed(2)}`;
+      offsetFrac += frac;
+      return { color: p.color, dasharray, dashoffset };
+    });
+
+    return { r, stroke, total, segments };
   }
 }
