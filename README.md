@@ -7,20 +7,14 @@
   </p>
 
   <p align="left">
-    <a href="https://github.com/cjmarkham/Gherklin/actions/workflows/tests.yml">
-        <img src="https://github.com/cjmarkham/gherkin-lint/actions/workflows/tests.yml/badge.svg">
-    </a>
-    <a href="https://github.com/cjmarkham/Gherklin/actions/workflows/linting.yml">
-        <img src="https://github.com/cjmarkham/gherkin-lint/actions/workflows/linting.yml/badge.svg">
-    </a>
     <a href="https://www.npmjs.com/package/gherklin">
         <img alt="npm version" src="https://img.shields.io/npm/v/gherklin.svg">
     </a>
+    <a href="https://github.com/cjmarkham/Gherklin/actions/workflows/ci.yml">
+        <img src="https://github.com/cjmarkham/gherkin-lint/actions/workflows/ci.yml/badge.svg">
+    </a>
     <a href="https://github.com/cjmarkham/Gherklin/actions/workflows/github-code-scanning/codeql">
       <img src="https://github.com/cjmarkham/Gherklin/actions/workflows/github-code-scanning/codeql/badge.svg">
-    </a>
-    <a href="https://github.com/cjmarkham/Gherklin">
-      <img src="https://img.shields.io/badge/code_style-gherklin-5B21B6.svg">
     </a>
   </p>
   <p align="left">
@@ -53,6 +47,7 @@ yarn add gherklin
 
 Gherklin currently supports the following `Node` versions:
 * 22.x
+* 24.x
 
 Other versions may work, but are not tested.
 
