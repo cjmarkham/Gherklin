@@ -3,6 +3,8 @@ import { LintError, ReporterConfig } from '../types'
 export default class Reporter {
   protected readonly config: ReporterConfig
 
+  public totalTime: number
+
   constructor(config?: ReporterConfig) {
     this.config = config
   }
