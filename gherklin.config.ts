@@ -1,6 +1,7 @@
 export default {
   reporter: {
     type: 'html',
+    theme: 'see-fee',
   },
   featureDirectory: './tests/acceptance/features',
   rules: {

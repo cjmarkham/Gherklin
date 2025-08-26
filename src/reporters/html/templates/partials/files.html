@@ -1,0 +1,35 @@
+<section id="files">
+  {{#each files}}
+  <details class="file {{#if @first}}open{{/if}}" data-path="{{path}}">
+    <summary>
+      <span class="file-path" title="{{path}}">{{path}}</span>
+      <span class="chips">
+        <span class="sev error"><strong>{{summary.errors}}</strong> errors</span>
+        <span class="sev warn"><strong>{{summary.warnings}}</strong> warnings</span>
+      </span>
+    </summary>
+    <div class="table-wrap">
+      <table role="table">
+        <thead>
+        <tr>
+          <th style="width:70px">Line</th>
+          <th style="width:70px">Col</th>
+          <th style="width:100px">Severity</th>
+          <th style="width:220px">Rule</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each issues}}
+        <tr data-sev="{{severity}}">
+          <td>{{location.line}}</td>
+          <td>{{location.column}}</td>
+          <td><span class="sev {{severity}}">{{severity}}</span></td>
+          <td class="rule">{{rule}}</td>
+        </tr>
+        {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </details>
+  {{/each}}
+</section>

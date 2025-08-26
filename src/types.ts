@@ -5,6 +5,7 @@ export interface ReporterConfig {
   title?: string
   configDirectory: string
   outFile?: string
+  theme?: string
 }
 
 export interface GherkinKeywordNumericals {
@@ -73,8 +74,13 @@ export interface Report {
   title: string
   generated: string
   version: string
-  topRules: []
+  topRules: Array<{
+    percent: number
+    rule: string
+    count: number
+  }>
   summary: {
+    allRules: Array<string>
     files: number
     errors: number
     warnings: number

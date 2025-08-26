@@ -1,14 +1,26 @@
-import { readFileSync, writeFileSync } from 'node:fs'
+import { readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
 import Handlebars from 'handlebars'
-import { version } from '../../package.json'
+import { version } from '../../../package.json'
 
-import Reporter from './reporter'
-import { Report, ReportFile, ReportIssue, ReportLine, Severity } from '../types'
+import Reporter from '../reporter'
+import { Report, ReportIssue, Severity } from '../../types'
 
 export default class HTMLReporter extends Reporter {
+  private registerPartials = (): void => {
+    const dir = path.join(import.meta.dirname, './templates/partials')
+    const files = readdirSync(dir)
+    for (const f of files) {
+      const name = path.basename(f, '.html')
+      const src = readFileSync(path.join(dir, f), 'utf8')
+      Handlebars.registerPartial(name, src)
+    }
+  }
+
   public override write = (): void => {
-    const templateHTML = readFileSync(path.join(import.meta.dirname, './template.html'), { encoding: 'utf-8' })
+    this.registerPartials()
+
+    const templateHTML = readFileSync(path.join(import.meta.dirname, `./templates/${this.config.theme || 'see-fee'}.html`), { encoding: 'utf-8' })
 
     const template = Handlebars.compile(templateHTML)
     const values = {
@@ -22,11 +34,13 @@ export default class HTMLReporter extends Reporter {
         warnings: 0,
         totalIssues: 0,
         totalTime: this.totalTime / 1000,
+        allRules: [],
       },
       files: {},
     } as Report
 
-    const ruleCounts = new Map<string, number>();
+    const ruleCounts = new Map<string, number>()
+    const allRules = new Map<string, boolean>()
 
     for (const [key] of this.errors.entries()) {
       const errors = this.errors.get(key)
@@ -62,8 +76,11 @@ export default class HTMLReporter extends Reporter {
         } as ReportIssue
 
         values.files[key].issues.push(issueInfo)
+        if (!allRules.has(err.rule)) {
+          allRules.set(err.rule, true)
+        }
 
-        ruleCounts.set(err.rule, (ruleCounts.get(err.rule) || 0) + 1);
+        ruleCounts.set(err.rule, (ruleCounts.get(err.rule) || 0) + 1)
       })
     }
 
@@ -74,44 +91,49 @@ export default class HTMLReporter extends Reporter {
     })
 
     const topRaw = Array.from(ruleCounts, ([rule, count]) => ({ rule, count }))
-      .sort((a,b)=>b.count - a.count).slice(0,10)
-    const max = Math.max(1, ...topRaw.map(r=>r.count))
-    const topRules = topRaw.map(r => ({ ...r, percent: Math.round((r.count / max) * 100) }))
-    values.topRules = topRules
+      .sort((a, b)=> b.count - a.count).slice(0, 10)
+    const max = Math.max(1, ...topRaw.map((r) => r.count))
+
+    values.topRules = topRaw.map((r) =>
+      ({ ...r, percent: Math.round((r.count / max) * 100) }))
+
+    values.summary.allRules = [...allRules.keys()]
 
     const html = template(values)
-    writeFileSync(path.resolve(this.config.configDirectory, this.config.outFile || 'gherklin-report.html'), html)
+    writeFileSync(
+      path.resolve(this.config.configDirectory, this.config.outFile || 'gherklin-report.html'),
+      html,
+    )
   }
 
   private computeDonut = (
     totals: { errors: number; warnings: number; total: number },
     r: number = 60,
     stroke: number = 15,
-  ): object =>{
-    const total = Math.max(0, totals.total);
-    const C = 2 * Math.PI * r;
+  ): {r: number, stroke: number, total: number, segments: Array<object> } =>{
+    const total = Math.max(0, totals.total)
+    const C = 2 * Math.PI * r
 
     if (total === 0) {
-      return { r, stroke, total, segments: [] };
+      return { r, stroke, total, segments: [] }
     }
 
-    // Order matters: error -> warn -> info
     const parts = [
       { key: "error", value: totals.errors, color: "var(--err)" },
       { key: "warn",  value: totals.warnings,  color: "var(--warn)" },
-    ].filter(p => p.value > 0);
+    ].filter(p => p.value > 0)
 
-    let offsetFrac = 0;
+    let offsetFrac = 0
     const segments = parts.map(p => {
-      const frac = p.value / total;
-      const dash = C * frac;
-      const gap  = C - dash;
-      const dasharray  = `${dash.toFixed(2)} ${gap.toFixed(2)}`;
-      const dashoffset = `-${(C * offsetFrac).toFixed(2)}`;
-      offsetFrac += frac;
-      return { color: p.color, dasharray, dashoffset };
-    });
+      const frac = p.value / total
+      const dash = C * frac
+      const gap  = C - dash
+      const dasharray  = `${dash.toFixed(2)} ${gap.toFixed(2)}`
+      const dashoffset = `-${(C * offsetFrac).toFixed(2)}`
+      offsetFrac += frac
+      return { color: p.color, dasharray, dashoffset }
+    })
 
-    return { r, stroke, total, segments };
+    return { r, stroke, total, segments }
   }
 }

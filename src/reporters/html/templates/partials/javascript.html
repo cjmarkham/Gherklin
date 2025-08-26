@@ -1,0 +1,45 @@
+<script>
+  (function(){
+    const $ = (s, r=document) => r.querySelector(s);
+    const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+
+    const fileSearch = $("#fileSearch");
+    const fErr = $("#fErr"), fWarn = $("#fWarn");
+    const expandAll = $("#expandAll"), collapseAll = $("#collapseAll"), clearBtn = $("#clearFilters");
+
+    function getAllowedSev(){
+      return new Set($$("input[type=checkbox][id^=f]").filter(cb => cb.checked).map(cb => cb.value));
+    }
+    function applyFilters(){
+      const term = (fileSearch.value || "").toLowerCase().trim();
+      const allowed = getAllowedSev();
+
+      $$("#files details.file").forEach((det) => {
+        const filePath = det.getAttribute("data-path") || "";
+        const fileMatch = !term || filePath.toLowerCase().includes(term);
+        if (!fileMatch) { det.classList.add("hidden"); return; }
+
+        let visibleRows = 0;
+        $$("tbody tr", det).forEach(tr => {
+          const sev = tr.getAttribute("data-sev");
+          const sevOk = allowed.has(sev);
+          tr.classList.toggle("hidden", !sevOk);
+          if (sevOk) visibleRows++;
+        });
+
+        det.classList.toggle("hidden", visibleRows === 0);
+      });
+    }
+
+    [fileSearch, fErr, fWarn].forEach(el => el && el.addEventListener("input", applyFilters));
+    expandAll && expandAll.addEventListener("click", () => $$("#files details.file").forEach(d => d.open = true));
+    collapseAll && collapseAll.addEventListener("click", () => $$("#files details.file").forEach(d => d.open = false));
+    clearBtn && clearBtn.addEventListener("click", () => {
+      fileSearch.value = "";
+      [fErr, fWarn].forEach(cb => cb.checked = true);
+      applyFilters();
+    });
+
+    applyFilters();
+  })();
+</script>
