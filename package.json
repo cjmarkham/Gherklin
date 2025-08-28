@@ -1,6 +1,6 @@
 {
   "name": "gherklin",
-  "version": "1.0.9",
+  "version": "1.0.12",
   "description": "A linter for Gherkin syntax",
   "scripts": {
     "test": "mocha",
