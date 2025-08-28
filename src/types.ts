@@ -20,6 +20,9 @@ export interface GherkinKeywordNumericals {
   but?: number
   exampleTableHeader?: number
   exampleTableBody?: number
+  dataTable?: number
+  featureTag?: number
+  scenarioTag?: number
 }
 
 export enum Switch {

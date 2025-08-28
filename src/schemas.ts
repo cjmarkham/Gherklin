@@ -17,6 +17,9 @@ export const keywordInts = z
     exampleTableHeader: z.number(),
     exampleTableBody: z.number(),
     scenarioOutline: z.number(),
+    dataTable: z.number(),
+    featureTag: z.number(),
+    scenarioTag: z.number(),
   })
   .partial()
   .strict()

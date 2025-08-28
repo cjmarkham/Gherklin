@@ -7,7 +7,7 @@ Feature: Given After Background
         Background:
           Given I set something up
           * and another thing
-          
+
         Scenario:
           Given something else is set up
       """
@@ -26,7 +26,7 @@ Feature: Given After Background
         Background:
           Given I set something up
           * and another thing
-          
+
         Scenario:
           When I take an action
       """
