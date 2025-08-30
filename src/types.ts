@@ -5,6 +5,7 @@ export interface ReporterConfig {
   title?: string
   configDirectory: string
   outFile?: string
+  theme?: string
 }
 
 export interface GherkinKeywordNumericals {
@@ -74,12 +75,39 @@ export interface GherklinConfiguration {
 
 export interface Report {
   title: string
-  files: Array<ReportFile>
-  totalErrors: number
-  totalWarns: number
-  totalLines: number
-  rules: {
-    [name: string]: number
+  generated: string
+  version: string
+  topRules: Array<{
+    percent: number
+    rule: string
+    count: number
+  }>
+  summary: {
+    allRules: Array<string>
+    files: number
+    errors: number
+    warnings: number
+    totalIssues: number
+    donut?: any
+  }
+  files: {
+    [key: string]: {
+      path: string
+      issues: Array<ReportIssue>
+      summary: {
+        errors: number,
+        warnings: number,
+      }
+    }
+  }
+}
+
+export interface ReportIssue {
+  rule: string
+  severity: string
+  location: {
+    line: number
+    column: number
   }
 }
 

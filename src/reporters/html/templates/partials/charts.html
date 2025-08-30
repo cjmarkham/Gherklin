@@ -1,0 +1,40 @@
+<section class="charts">
+  <div class="chart">
+    <h3>Severity Overview</h3>
+    <svg viewBox="0 0 140 140" width="100%" height="220" role="img" aria-label="Severity donut chart">
+      <g transform="translate(70 70) rotate(-90)">
+        <circle r="{{summary.donut.r}}" fill="none" stroke="var(--chip)" stroke-width="{{summary.donut.stroke}}"></circle>
+        {{#each summary.donut.segments}}
+        <circle
+          r="{{../summary.donut.r}}"
+          fill="none"
+          style="stroke: {{color}}; stroke-width: {{../summary.donut.stroke}}px; stroke-linecap: butt;"
+          stroke-dasharray="{{dasharray}}"
+          stroke-dashoffset="{{dashoffset}}"
+        />
+        {{/each}}
+      </g>
+      <text x="70" y="74" text-anchor="middle" font-size="18" font-weight="700" fill="var(--text)">{{summary.totalIssues}}</text>
+      <text x="70" y="94" text-anchor="middle" font-size="10" fill="var(--muted)">Issues</text>
+    </svg>
+    <div class="legend">
+      <span><span class="dot" style="background:var(--err)"></span>{{summary.errors}} Errors</span>
+      <span><span class="dot" style="background:var(--warn)"></span>{{summary.warnings}} Warnings</span>
+    </div>
+  </div>
+
+  <!-- Top rules -->
+  <div class="chart">
+    <h3>Top Rules (by occurrences)</h3>
+    <div class="bars">
+      {{#each topRules}}
+      <div class="bar">
+        <div class="bar-label" title="{{rule}}">{{rule}}</div>
+        <div class="bar-track"><div class="bar-fill" style="width: {{percent}}%"></div></div>
+        <div class="bar-value">{{count}}</div>
+      </div>
+      {{/each}}
+    </div>
+    <div class="meta">Showing top {{topRules.length}} rules.</div>
+  </div>
+</section>
