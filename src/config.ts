@@ -60,17 +60,26 @@ export default class Config {
    * Attempts to load config from a gherklin.config.ts file
    */
   public fromFile = async (): Promise<Config> => {
-    const importPath = path.join(process.cwd(), 'gherklin.config.ts')
+    let importPath = path.join(process.cwd(), 'gherklin.config.ts')
+    let configDir = process.cwd()
+
     if (!existsSync(importPath)) {
-      throw new Error(`could not find gherklin.config.ts`)
+      const envPath = process.env.GHERKLIN_CONFIG_FILE
+      if (envPath && existsSync(envPath)) {
+        importPath = envPath
+        configDir = path.dirname(envPath)
+      } else {
+        throw new Error(`could not find gherklin.config.ts or GHERKLIN_CONFIG_FILE environment variable`)
+      }
     }
+
     const module = await import(pathToFileURL(importPath).href)
     if (!('default' in module)) {
       throw new Error(`config file did not export a default function`)
     }
 
     const config = module.default as GherklinConfiguration
-    config.configDirectory = process.cwd()
+    config.configDirectory = configDir
 
     this.parse(config)
     this.validate()
@@ -83,8 +92,11 @@ export default class Config {
    * information for Gherklin to run.
    */
   public validate = (): void => {
-    if (!this.featureDirectory && !this.featureFile) {
-      throw new Error('Please specify either a featureDirectory or featureFile configuration option.')
+    const hasEnvFiles = !!process.env.GHERKLIN_FEATURE_FILES
+    const hasEnvDir = !!process.env.GHERKLIN_FEATURE_DIR
+    
+    if (!this.featureDirectory && !this.featureFile && !hasEnvFiles && !hasEnvDir) {
+      throw new Error('Please specify either a featureDirectory or featureFile configuration option, or set GHERKLIN_FEATURE_DIR or GHERKLIN_FEATURE_FILES environment variable.')
     }
 
     if (!this.rules) {

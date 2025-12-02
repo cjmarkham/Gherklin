@@ -36,8 +36,15 @@ export default class Runner {
     this.ruleLoader = new RuleLoader(this.config)
     this.reporter = this.getReporter()
 
-    if (this.config.featureFile) {
+    const envFiles = process.env.GHERKLIN_FEATURE_FILES
+    const envDir = process.env.GHERKLIN_FEATURE_DIR
+
+    if (envFiles) {
+      this.gherkinFiles = envFiles.split(',').map(f => path.resolve(f.trim()))
+    } else if (this.config.featureFile) {
       this.gherkinFiles = [path.resolve(this.config.configDirectory, this.config.featureFile)]
+    } else if (envDir) {
+      this.gherkinFiles = await getFiles(path.resolve(envDir), 'feature')
     } else {
       this.gherkinFiles = await getFiles(
         path.resolve(this.config.configDirectory, this.config.featureDirectory),
