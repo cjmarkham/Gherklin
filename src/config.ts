@@ -1,6 +1,8 @@
 import path from 'node:path'
-import { existsSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import { pathToFileURL } from 'node:url'
+
+import { parse as yamlParse } from 'yaml'
 
 import { GherklinConfiguration, ReporterConfig, RuleConfiguration } from './types'
 
@@ -60,31 +62,68 @@ export default class Config {
    * Attempts to load config from a gherklin.config.ts file
    */
   public fromFile = async (): Promise<Config> => {
-    let importPath = path.join(process.cwd(), 'gherklin.config.ts')
-    let configDir = process.cwd()
+    const configFile = this.getConfigFile()
+    const configDir = this.getConfigDir(configFile)
 
-    if (!existsSync(importPath)) {
-      const envPath = process.env.GHERKLIN_CONFIG_FILE
-      if (envPath && existsSync(envPath)) {
-        importPath = envPath
-        configDir = path.dirname(envPath)
-      } else {
-        throw new Error(`could not find gherklin.config.ts or GHERKLIN_CONFIG_FILE environment variable`)
-      }
-    }
-
-    const module = await import(pathToFileURL(importPath).href)
-    if (!('default' in module)) {
-      throw new Error(`config file did not export a default function`)
-    }
-
-    const config = module.default as GherklinConfiguration
+    const config = await this.loadConfigFromFile(configFile)
     config.configDirectory = configDir
 
     this.parse(config)
     this.validate()
 
     return this
+  }
+
+  public getConfigFile = (): string => {
+    // Check ENV first
+    const envPath = process.env.GHERKLIN_CONFIG_FILE
+    if (envPath && existsSync(envPath)) {
+      return envPath
+    }
+
+    const filesToCheck = [
+      'gherklin.config.ts',
+      'gherklin.config.yaml',
+      'gherklin.config.yml',
+    ]
+
+    for (const file of filesToCheck) {
+      const importPath = path.join(process.cwd(), file)
+      if (existsSync(importPath)) {
+        return importPath
+      }
+    }
+
+    throw new Error(
+      'could not find any config file or GHERKLIN_CONFIG_FILE environment variable',
+    )
+  }
+
+  private getConfigDir = (configFile: string): string => {
+    const envPath = process.env.GHERKLIN_CONFIG_FILE
+    if (envPath && existsSync(envPath)) {
+      return path.dirname(envPath)
+    }
+
+    return process.cwd()
+  }
+
+  public loadConfigFromFile = async (filePath: string): Promise<GherklinConfiguration> => {
+    if (filePath.endsWith('.ts')) {
+      const module = await import(pathToFileURL(filePath).href)
+      if (!('default' in module)) {
+        throw new Error(`config file did not export a default function`)
+      }
+
+      return module.default as GherklinConfiguration
+    }
+
+    if (filePath.endsWith('.yaml') || filePath.endsWith('.yml')) {
+      const content = readFileSync(filePath, { encoding: 'utf-8' })
+      return yamlParse(content) as GherklinConfiguration
+    }
+
+    throw new Error(`could not load Gherklin config from ${filePath}`)
   }
 
   /**
