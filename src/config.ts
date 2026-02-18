@@ -94,7 +94,7 @@ export default class Config {
   public validate = (): void => {
     const hasEnvFiles = !!process.env.GHERKLIN_FEATURE_FILES
     const hasEnvDir = !!process.env.GHERKLIN_FEATURE_DIR
-    
+
     if (!this.featureDirectory && !this.featureFile && !hasEnvFiles && !hasEnvDir) {
       throw new Error('Please specify either a featureDirectory or featureFile configuration option, or set GHERKLIN_FEATURE_DIR or GHERKLIN_FEATURE_FILES environment variable.')
     }
