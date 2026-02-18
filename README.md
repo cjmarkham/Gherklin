@@ -257,3 +257,4 @@ to test the various built in rules.
 * [osdamv](https://github.com/osdamv) 
 * [Antoineio](https://github.com/Antoineio)
 * [ncury](https://github.com/ncury)
+* [jandry](https://github.com/jandry)
