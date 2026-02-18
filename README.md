@@ -84,10 +84,12 @@ import { Runner } from 'gherklin'
 
 # Configuration
 
-Gherklin will look for a `gherklin.config.ts` file in the same directory as your `package.json`
+Gherklin will look for the following files to resolve a valid config file in the same directory as your `package.json`
 file.
 
-This file should default export an object, which contains the parameters for Gherklin.
+* gherklin.config.ts
+* gherklin.config.yaml
+* gherklin.config.yml
 
 ### Example
 
@@ -99,6 +101,13 @@ export default {
     'allowed-tags': 'off',
   },
 }
+```
+
+```yaml
+featureDirectory: './features'
+customRulesDirectory: './custom-rules'
+rules:
+  allowed-tags: 'off'
 ```
 
 | Parameter                     | Type     | Description                                       |
@@ -121,7 +130,11 @@ Configuration can also be provided via environment variables:
 | `GHERKLIN_FEATURE_DIR`     | Directory containing feature files                       |
 | `GHERKLIN_FEATURE_FILES`   | Comma-separated list of feature file paths              |
 
-**Note:** Environment variables take precedence over configuration file options.
+**Notes:** 
+
+Environment variables such as `GHERKLIN_FEATURE_FILES` take precedence over configuration file options.
+
+If `GHERKLIN_CONFIG_FILE` is specified, this is used in place of the config file lookup.
 
 # Disabling Rules
 
