@@ -16,7 +16,7 @@ export default [
     },
     rules: {
       '@stylistic/eol-last': 'warn',
-      '@stylistic/max-len': ['warn', { code: 80 }],
+      '@stylistic/max-len': ['warn', { code: 100 }],
       '@stylistic/comma-dangle': ['warn', 'always-multiline'],
       'class-methods-use-this': 'off',
       '@typescript-eslint/explicit-function-return-type': 'error',

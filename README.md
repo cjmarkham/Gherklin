@@ -111,6 +111,18 @@ export default {
 `rules` contains the configuration for each rule, whether built in or custom.
 Check [rules](./src/rules/README.md) for a list of built in rules.
 
+### Environment Variables
+
+Configuration can also be provided via environment variables:
+
+| Variable                   | Description                                              |
+|----------------------------|----------------------------------------------------------|
+| `GHERKLIN_CONFIG_FILE`     | Path to config file (alternative to `gherklin.config.ts`) |
+| `GHERKLIN_FEATURE_DIR`     | Directory containing feature files                       |
+| `GHERKLIN_FEATURE_FILES`   | Comma-separated list of feature file paths              |
+
+**Note:** Environment variables take precedence over configuration file options.
+
 # Disabling Rules
 
 Gherklin rules can be disabled on a per line or per file basis.
@@ -241,27 +253,7 @@ to test the various built in rules.
 
 # Contributors
 
-<table>
-  <tbody>
-    <tr>
-      <td align="center">
-        <a href="https://github.com/cjmarkham" target="_blank">
-          <img src="https://avatars.githubusercontent.com/u/604017?s=100" width="100" />
-          <p><strong>cjmarkham</strong></p>
-        </a>
-      </td>
-      <td align="center">
-        <a href="https://github.com/osdamv" target="_blank">
-          <img src="https://avatars.githubusercontent.com/u/4120796?s=100" width="100" />
-          <p><strong>osdamv</strong></p>
-        </a>
-      </td>
-      <td align="center">
-        <a href="https://github.com/Antoineio" target="_blank">
-          <img src="https://avatars.githubusercontent.com/u/112733792?s=100" width="100" />
-          <p><strong>Antoineio</strong></p>
-        </a>
-      </td>
-    </tr>
-  </tbody>
-</table>
+* [cjmarkham](https://github.com/cjmarkham) 
+* [osdamv](https://github.com/osdamv) 
+* [Antoineio](https://github.com/Antoineio)
+* [ncury](https://github.com/ncury)
