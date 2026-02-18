@@ -24,8 +24,8 @@ option.
 | [New Line at EOF](#new-line-at-eof)                     | `new-line-at-eof`           |    ✅    |
 | [No Background Only](#no-background-only)               | `no-background-only`        |    ❌    |
 | [No Dupe Features](#no-dupe-features)                   | `no-dupe-features`          |    ❌    |
-| [No Dupe Scenarios](#no-dupe-scenarios)                 | `no-dupe-scenerios`         |    ❌    |
-| [No Similar Scenarios](#no-similar-scenarios)           | `no-similar-scenerios`      |    ❌    |
+| [No Dupe Scenarios](#no-dupe-scenarios)                 | `no-dupe-scenarios`         |    ❌    |
+| [No Similar Scenarios](#no-similar-scenarios)           | `no-similar-scenarios`      |    ❌    |
 | [No Empty File](#no-empty-file)                         | `no-empty-file`             |    ❌    |
 | [No Trailing Spaces](#no-trailing-spaces)               | `no-trailing-spaces`        |    ✅    |
 | [No Unnamed Scenarios](#no-unnamed-scenarios)           | `no-unnamed-scenarios`      |    ❌    |
