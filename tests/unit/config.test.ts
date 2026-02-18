@@ -16,7 +16,7 @@ describe('Config', () => {
 
     it('can handle no file found', async () => {
       process.cwd = () => './invalid/path'
-      await expect(config.fromFile()).to.be.rejectedWith(Error, 'could not find gherklin.config.ts or GHERKLIN_CONFIG_FILE environment variable')
+      await expect(config.fromFile()).to.be.rejectedWith(Error, 'could not find any config file or GHERKLIN_CONFIG_FILE environment variable')
     })
 
     it('can handle no default export in config file', async () => {
@@ -24,16 +24,16 @@ describe('Config', () => {
       await expect(config.fromFile()).to.be.rejectedWith(Error, 'config file did not export a default function')
     })
 
-    it('uses GHERKLIN_CONFIG_FILE when default file not found', async () => {
-      process.cwd = () => './invalid/path'
-      process.env.GHERKLIN_CONFIG_FILE = './invalid/config.ts'
-      await expect(config.fromFile()).to.be.rejectedWith(Error, 'could not find gherklin.config.ts or GHERKLIN_CONFIG_FILE environment variable')
+    it('prefers GHERKLIN_CONFIG_FILE environment variable', async () => {
+      process.env.GHERKLIN_CONFIG_FILE = './gherklin.config.yaml'
+      const file = config.getConfigFile()
+      expect(file).to.eq('./gherklin.config.yaml')
     })
 
     it('throws when GHERKLIN_CONFIG_FILE points to non-existent file', async () => {
       process.cwd = () => './invalid/path'
       process.env.GHERKLIN_CONFIG_FILE = '/non/existent/path/config.ts'
-      await expect(config.fromFile()).to.be.rejectedWith(Error, 'could not find gherklin.config.ts or GHERKLIN_CONFIG_FILE environment variable')
+      await expect(config.fromFile()).to.be.rejectedWith(Error, 'could not find any config file or GHERKLIN_CONFIG_FILE environment variable')
     })
   })
 
