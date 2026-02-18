@@ -108,8 +108,20 @@ export default {
 | `rules`                       | `object` | Configuration per rule                            |
 | `maxErrors`                   | `number` | Maximum amount of errors before the process fails |
 
+### Environment Variables
+
+Configuration can also be provided via environment variables:
+
+| Variable                   | Description                                              |
+|----------------------------|----------------------------------------------------------|
+| `GHERKLIN_CONFIG_FILE`     | Path to config file (alternative to `gherklin.config.ts`) |
+| `GHERKLIN_FEATURE_DIR`     | Directory containing feature files                       |
+| `GHERKLIN_FEATURE_FILES`   | Comma-separated list of feature file paths              |
+
 `rules` contains the configuration for each rule, whether built in or custom.
 Check [rules](./src/rules/README.md) for a list of built in rules.
+
+**Note:** Environment variables take precedence over configuration file options.
 
 # Disabling Rules
 
