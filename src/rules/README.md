@@ -518,7 +518,7 @@ Enable the rule
 ```typescript
 export default {
   rules: {
-    'no-full-stops': 'on',
+    'no-full-stop': 'on',
   }
 }
 ```
@@ -528,7 +528,7 @@ Enable the rule and set severity
 ```typescript
 export default {
   rules: {
-    'no-full-stops': 'error',
+    'no-full-stop': 'error',
   }
 }
 ```
