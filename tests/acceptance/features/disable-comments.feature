@@ -162,7 +162,7 @@ Feature: Disabling Comments
       | {"no-unnamed-scenarios": "on"} |
     Then there are 0 files with errors
 
-  Scenario: Disable specific rule regradless of indentation
+  Scenario: Disable specific rule regardless of indentation
     Given the following feature file
         """
               # gherklin-disable no-unnamed-scenarios

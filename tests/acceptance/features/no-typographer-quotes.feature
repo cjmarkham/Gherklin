@@ -1,6 +1,6 @@
 Feature: No Typographer Quotes
 
-  Scenario: Containes Typographer Quotes
+  Scenario: Contains Typographer Quotes
     Given the following feature file
       """
       Feature: Invalid

@@ -127,7 +127,7 @@ export default class Config {
   }
 
   /**
-   * Validates that the configuration contains all the neccessary
+   * Validates that the configuration contains all the necessary
    * information for Gherklin to run.
    */
   public validate = (): void => {
