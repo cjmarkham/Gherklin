@@ -35,7 +35,7 @@ option.
 | [No Scenario Splat](#no-scenario-splat)                 | `no-scenario-splat`         |    ❌    |
 | [No Typographer Quotes](#no-typographer-quotes)         | `no-typographer-quotes`     |    ✅    |
 | [Background Setup Only](#background-setup-only)         | `background-setup-only`     |    ❌    |
-| [Given After Background](#given-after-background)       | `given-after-backgroundy`   |    ❌    |
+| [Given After Background](#given-after-background)       | `given-after-background`    |    ❌    |
 | [No Inconsistent Quotes](#no-inconsistent-quotes)       | `no-inconsistent-quotes`    |    ✅    |
 | [Filename Snake Case](#filename-snake-case)             | `filename-snake-case`       |    ❌    |
 | [Filename Kebab Case](#filename-kebab-case)             | `filename-kebab-case`       |    ❌    |
