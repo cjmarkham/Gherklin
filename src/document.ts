@@ -10,10 +10,23 @@ import { writeFileSync } from 'node:fs'
 import Line from './line'
 import Rule from './rule'
 
+const emptyFeature = (): Feature => ({
+  location: {
+    line: 0,
+    column: 0,
+  },
+  tags: [],
+  language: '',
+  keyword: '',
+  name: '',
+  description: '',
+  children: [],
+})
+
 export default class Document {
   public filename: string
 
-  public feature: Feature
+  public feature: Feature = emptyFeature()
 
   public path: string
 

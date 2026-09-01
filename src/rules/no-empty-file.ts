@@ -16,7 +16,7 @@ export default class NoEmptyFile implements Rule {
   }
 
   public async run(document: Document): Promise<void> {
-    if (!document.feature || document.feature.keyword === '') {
+    if (document.feature.keyword === '') {
       document.addError(this, 'Feature file is empty.', {
         line: 0,
         column: 0,
