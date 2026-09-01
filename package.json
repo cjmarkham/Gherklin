@@ -10,7 +10,7 @@
     "gherklin": "npx tsx ./bin/gherklin"
   },
   "engines": {
-    "node": ">=22"
+    "node": ">=22.12 <23 || >=24"
   },
   "engineStrict": true,
   "keywords": [
