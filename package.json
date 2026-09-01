@@ -47,7 +47,7 @@
     "@types/mocha": "^10.0.7",
     "@types/node": "^22.4.2",
     "@typescript-eslint/eslint-plugin": "^8.2.0",
-    "@typescript-eslint/parser": "^8.2.0",
+    "@typescript-eslint/parser": "^8.69.0",
     "chai-as-promised": "^8.0.0",
     "eslint": "^9.9.0",
     "gherklin": "./",
