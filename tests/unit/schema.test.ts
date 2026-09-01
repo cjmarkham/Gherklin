@@ -2,7 +2,8 @@ import { expect } from 'chai'
 
 import Schema from '../../src/schema'
 import { Severity, Switch } from '../../src'
-import { RawSchema } from '../../src/types'
+
+import type { RawSchema } from '../../src'
 
 describe('Schema', () => {
   describe('parse', () => {

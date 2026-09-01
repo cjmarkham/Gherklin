@@ -1,5 +1,5 @@
 {
   "extension": ["ts"],
   "spec": "tests/unit/*.ts",
-  "node-option": ["import=tsx"]
+  "node-option": ["import=tsx/esm"]
 }
