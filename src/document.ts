@@ -1,17 +1,32 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import { Feature, IdGenerator, GherkinDocument } from '@cucumber/messages'
-import Gherkin from '@cucumber/gherkin'
+import { AstBuilder, GherkinClassicTokenMatcher, Parser } from '@cucumber/gherkin'
+import { IdGenerator } from '@cucumber/messages'
+
+import type { Feature, GherkinDocument } from '@cucumber/messages'
 
 import { LintError, Location } from './types'
 import { writeFileSync } from 'node:fs'
 import Line from './line'
 import Rule from './rule'
 
+const emptyFeature = (): Feature => ({
+  location: {
+    line: 0,
+    column: 0,
+  },
+  tags: [],
+  language: '',
+  keyword: '',
+  name: '',
+  description: '',
+  children: [],
+})
+
 export default class Document {
   public filename: string
 
-  public feature: Feature = new Feature()
+  public feature: Feature = emptyFeature()
 
   public path: string
 
@@ -57,9 +72,9 @@ export default class Document {
   }
 
   private parseGherkin = (content: string): void => {
-    const builder = new Gherkin.AstBuilder(IdGenerator.uuid())
-    const matcher = new Gherkin.GherkinClassicTokenMatcher()
-    const parser = new Gherkin.Parser(builder, matcher)
+    const builder = new AstBuilder(IdGenerator.uuid())
+    const matcher = new GherkinClassicTokenMatcher()
+    const parser = new Parser(builder, matcher)
 
     this.gherkinDocument = parser.parse(content.toString())
     if (this.gherkinDocument.feature) {
