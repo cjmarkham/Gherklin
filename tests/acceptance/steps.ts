@@ -61,9 +61,19 @@ When('Gherklin is ran with the following configuration', async function (table: 
     })
   })
 
-  const runner = new Runner(config)
+  let runner
+  try {
+    runner = new Runner(config)
+  } catch (e) {
+    this.error = e
+    return
+  }
   await runner.init()
   this.runResult = await runner.run()
+})
+
+Then(/the caught error is (.*)/, function (error: string): void {
+  expect(this.error.message).to.eq(error)
 })
 
 Then('there is/are {int} file(s) with errors', function (amount: number): void {
