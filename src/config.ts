@@ -4,7 +4,9 @@ import { pathToFileURL } from 'node:url'
 
 import { parse as yamlParse } from 'yaml'
 
-import { GherklinConfiguration, ReporterConfig, RuleConfiguration } from './types'
+import { resolveBuiltInPreset } from './presets'
+
+import type { GherklinConfiguration, ReporterConfig, RuleConfiguration } from './types'
 
 /**
  * The config class is responsible for loading and parsing config.
@@ -28,7 +30,7 @@ export default class Config {
   public maxErrors?: number
 
   // Configuration for each rule
-  public rules?: RuleConfiguration
+  public rules: RuleConfiguration = {}
 
   // Configuration for the reporter
   public reporter?: ReporterConfig
@@ -51,11 +53,37 @@ export default class Config {
     this.configDirectory = config.configDirectory
     this.customRulesDirectory = config.customRulesDirectory
     this.featureDirectory = config.featureDirectory
-    this.rules = config.rules
     this.reporter = config.reporter
     this.featureFile = config.featureFile
     this.maxErrors = config.maxErrors
     this.fix = config.fix
+
+    if (
+      config.extends !== undefined &&
+      (
+        !Array.isArray(config.extends) ||
+        config.extends.some((preset) => typeof preset !== 'string')
+      )
+    ) {
+      throw new Error('extends must be an array of preset names')
+    }
+
+    const inheritedRules = (config.extends ?? []).reduce<RuleConfiguration>(
+      (rules, presetName) => {
+        const preset = resolveBuiltInPreset(presetName)
+
+        return {
+          ...rules,
+          ...preset.rules,
+        }
+      },
+      {},
+    )
+
+    this.rules = {
+      ...inheritedRules,
+      ...(config.rules ?? {}),
+    }
   }
 
   /**
@@ -135,11 +163,10 @@ export default class Config {
     const hasEnvDir = !!process.env.GHERKLIN_FEATURE_DIR
 
     if (!this.featureDirectory && !this.featureFile && !hasEnvFiles && !hasEnvDir) {
-      throw new Error('Please specify either a featureDirectory or featureFile configuration option, or set GHERKLIN_FEATURE_DIR or GHERKLIN_FEATURE_FILES environment variable.')
-    }
-
-    if (!this.rules) {
-      throw new Error('Please specify a list of rules in your configuration.')
+      throw new Error(
+        'Please specify either a featureDirectory or featureFile configuration option, ' +
+        'or set GHERKLIN_FEATURE_DIR or GHERKLIN_FEATURE_FILES environment variable.',
+      )
     }
 
     if (!Object.keys(this.rules).length) {

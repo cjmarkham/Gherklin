@@ -70,6 +70,7 @@ export interface GherklinConfiguration {
   reporter?: ReporterConfig
   featureFile?: string
   fix?: boolean
+  extends?: Array<string>
 }
 
 export interface Report {
@@ -103,4 +104,8 @@ export interface LintError {
   severity: Severity
   message: string
   location: Location
+}
+
+export interface GherklinPreset {
+  readonly rules: Readonly<RuleConfiguration>
 }

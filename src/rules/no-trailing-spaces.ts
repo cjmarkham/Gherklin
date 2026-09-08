@@ -1,9 +1,9 @@
 import { switchOrSeveritySchema } from '../schemas'
 import Schema from '../schema'
 import Rule from '../rule'
-import { RawSchema, AcceptedSchema } from '../types'
 import Document from '../document'
-import Line from '../line'
+
+import type { RawSchema, AcceptedSchema } from '../types'
 
 export default class NoTrailingSpaces implements Rule {
   public readonly name: string = 'no-trailing-spaces'
@@ -32,11 +32,19 @@ export default class NoTrailingSpaces implements Rule {
   }
 
   public async fix(document: Document): Promise<void> {
-    document.lines.forEach((line: Line, index: number) => {
-      const joined = `${line.keyword}${line.text.trimEnd()}`
-      document.lines[index] = new Line(joined)
+    let changed = false
+
+    document.lines.forEach((line) => {
+      const trimmed = line.text.trimEnd()
+
+      if (trimmed !== line.text) {
+        line.text = trimmed
+        changed = true
+      }
     })
 
-    await document.regenerate()
+    if (changed) {
+      await document.regenerate()
+    }
   }
 }
