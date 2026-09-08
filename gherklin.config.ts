@@ -2,7 +2,6 @@ export default {
   reporter: {
     type: 'stdout',
   },
-  extends: ['gherklin:recommended'],
   featureDirectory: './tests/acceptance/features',
   rules: {
     indentation: [
