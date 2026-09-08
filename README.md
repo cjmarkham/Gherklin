@@ -120,6 +120,20 @@ rules:
 `rules` contains the configuration for each rule, whether built in or custom.
 Check [rules](./src/rules/README.md) for a list of built in rules.
 
+You can also extend presets for rules using the `extends` property.
+
+```yaml
+featureDirectory: './features'
+customRulesDirectory: './custom-rules'
+extends:
+  - gherklin:recommended
+rules:
+  allowed-tags: 'off'
+```
+
+Doing so will load the rules from the `recommended` preset, while any rules you also specify in the configuration
+will override the rules from the preset.
+
 ### Environment Variables
 
 Configuration can also be provided via environment variables:
